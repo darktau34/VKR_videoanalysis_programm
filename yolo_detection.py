@@ -158,7 +158,6 @@ def annotate_detections(frame, frame_df):
     class_id = np.array(frame_df['class_id']).astype(int)
     tracker_id = np.array(frame_df['tracker_id']).astype(int)
 
-
     detections = Detections(xyxy=xyxy, confidence=conf, class_id=class_id, tracker_id=tracker_id)
     box_annotator = BoundingBoxAnnotator()
 
