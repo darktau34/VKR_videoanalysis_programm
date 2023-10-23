@@ -8,17 +8,14 @@ from ultralytics import YOLO
 from supervision.annotators.core import BoundingBoxAnnotator
 from supervision.detection.core import Detections
 
-LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(funcName)s  %(lineno)d: %(message)s'
-DATE_FORMAT = '%H:%M:%S'
-LOGGER = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+logger = logging.getLogger(__name__)
 
 
 def detect_peoples(video_path, show_results, to_csv_path):
     model = YOLO('data/models/yolov8l.pt')
     yolo_df = video_processing(model, video_path)
     yolo_df.to_csv(to_csv_path)
-    LOGGER.info("Results saved to csv: %s", to_csv_path)
+    logger.info("Results saved to csv: %s", to_csv_path)
 
     if show_results:
         yolo_df = pd.read_csv(to_csv_path)
@@ -28,20 +25,20 @@ def detect_peoples(video_path, show_results, to_csv_path):
 def video_processing(yolo, video_path):
     cap = cv.VideoCapture(video_path)
     if not cap.isOpened():
-        LOGGER.critical("Video Capture is not opened")
+        logger.critical("Video Capture is not opened")
 
     fps = cap.get(cv.CAP_PROP_FPS)
     frames = cap.get(cv.CAP_PROP_FRAME_COUNT)
 
-    LOGGER.info("Frames Per Second: %s", fps)
-    LOGGER.info("Number of frames: %s", frames)
-    LOGGER.info("Video length: %s sec", int(frames / fps))
+    logger.info("Frames Per Second: %s", fps)
+    logger.info("Number of frames: %s", frames)
+    logger.info("Video length: %s sec", int(frames / fps))
 
     all_df = pd.DataFrame(columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id'])
     frames_counter = 0
     one_percent = int(frames * 0.01)
     stager = 10
-    LOGGER.info("----Video processing started----")
+    logger.info("----Video processing started----")
     begin_time = time.time()
     while cap.isOpened():
         try:
@@ -57,19 +54,19 @@ def video_processing(yolo, video_path):
 
             if frames_counter >= one_percent * stager:
                 if stager <= 90:
-                    LOGGER.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
+                    logger.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
                     stager += 10
                 elif frames_counter == frames:
-                    LOGGER.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
+                    logger.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
 
         except KeyboardInterrupt:
-            LOGGER.warning("Video processing ended forcibly")
+            logger.warning("Video processing ended forcibly")
             break
 
     end_time = time.time()
-    LOGGER.info("----Video processing completed----")
-    LOGGER.info("Frames processed: %s", frames_counter)
-    LOGGER.info("Processing time: %s seconds", int(end_time - begin_time))
+    logger.info("----Video processing completed----")
+    logger.info("Frames processed: %s", frames_counter)
+    logger.info("Processing time: %s seconds", int(end_time - begin_time))
     cap.release()
     cv.destroyAllWindows()
 
@@ -122,10 +119,10 @@ def frame_processing(frame, yolo, frames_counter):
 
 
 def show_detection_results(video_path, yolo_df):
-    LOGGER.info("----Show result video----")
+    logger.info("----Show result video----")
     cap = cv.VideoCapture(video_path)
     if not cap.isOpened():
-        LOGGER.critical("Video Capture is not opened")
+        logger.critical("Video Capture is not opened")
 
     frames_counter = 0
     while cap.isOpened():
@@ -167,9 +164,14 @@ def annotate_detections(frame, frame_df):
 
 if __name__ == '__main__':
     import torch
+    LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(funcName)s  %(lineno)d: %(message)s'
+    DATE_FORMAT = '%H:%M:%S'
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+
     if torch.cuda.is_available():
-        LOGGER.info("CUDA device's count: %s", torch.cuda.device_count())
-        LOGGER.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
+        logger.info("CUDA device's count: %s", torch.cuda.device_count())
+        logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
 
     parser = argparse.ArgumentParser(description="Mp4 yolo detection")
     parser.add_argument("video_path", type=str, help="Path to video file")

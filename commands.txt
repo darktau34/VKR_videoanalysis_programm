@@ -1,1 +1,3 @@
 python3 yolo_detection.py video/50sec.mp4 True data/50sec.csv
+python3 main.py video/50sec.mp4
+python3 main.py video/50sec.mp4 --show_results
