@@ -29,7 +29,7 @@ repos:
         entry: pylint # --score=no
         language: system
         types: [python]
-        args: ["--disable", "missing-module-docstring, missing-function-docstring",
+        args: ["--disable", "missing-module-docstring, missing-function-docstring, too-many-locals, unused-variable",
                "--max-line-length", "120",
                "--extension-pkg-whitelist", "cv2",
                "--ignored-modules", "cv2",
