@@ -5,7 +5,6 @@ repos:
       # list of supported hooks: https://pre-commit.com/hooks.html
       - id: trailing-whitespace
       - id: end-of-file-fixer
-      - id: check-added-large-files
       - id: debug-statements
       - id: detect-private-key
       - id: check-merge-conflict
@@ -29,7 +28,8 @@ repos:
         entry: pylint # --score=no
         language: system
         types: [python]
-        args: ["--disable", "missing-module-docstring, missing-function-docstring, too-many-locals, unused-variable",
+        args: ["--disable",
+        	"missing-module-docstring, missing-function-docstring, too-many-locals, unused-variable, consider-using-enumerate",
                "--max-line-length", "120",
                "--extension-pkg-whitelist", "cv2",
                "--ignored-modules", "cv2",

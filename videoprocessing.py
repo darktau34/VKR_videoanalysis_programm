@@ -35,7 +35,7 @@ def cut_photobox(video_clip, frame_number, box):
     return photobox
 
 
-def clip_video_fragment(video_path, yolo_df, dir_to_save, max_clip_seconds):
+def clip_video_fragment(video_path, yolo_df, dirs_to_save, max_clip_seconds):
     video = VideoFileClip(video_path)
     fps = video.fps
     max_clip_frames = int(max_clip_seconds * fps)
@@ -46,45 +46,53 @@ def clip_video_fragment(video_path, yolo_df, dir_to_save, max_clip_seconds):
     for person in person_arr:
         only_person_df = yolo_df.loc[yolo_df.tracker_id == person]
         only_person_df.reset_index(drop=True, inplace=True)
-        print(only_person_df)
-        video_clip_df = only_person_df[:max_clip_frames]
-        print(video_clip_df)
+        # print(only_person_df)
+        for i in range(len(dirs_to_save)):
+            if i == 0:
+                video_clip_df = only_person_df[:max_clip_frames]
+            elif i == 1:
+                center_df = int(len(only_person_df) / 2)
+                half_clip_frames = int(max_clip_frames / 2)
+                video_clip_df = only_person_df[center_df - half_clip_frames:center_df + half_clip_frames]
+            else:
+                start = int(len(only_person_df) - max_clip_frames)
+                video_clip_df = only_person_df[start:]
 
-        max_width = 0.0
-        max_height = 0.0
-        for index, row in video_clip_df.iterrows():
-            x1 = row['x1']
-            y1 = row['y1']
-            x2 = row['x2']
-            y2 = row['y2']
-            cur_width = x2 - x1
-            cur_height = y2 - y1
-            if cur_width > max_width:
-                max_width = cur_width
-            if cur_height > max_height:
-                max_height = cur_height
+            # print(video_clip_df)
 
-        max_width = round(max_width)
-        max_height = round(max_height)
-        # print(f'W: {max_width} \t H: {max_height}')
-        images = []
-        for index, row in video_clip_df.iterrows():
-            frame_num = int(row['frame'])
-            x1 = row['x1']
-            y1 = row['y1']
-            x2 = row['x2']
-            y2 = row['y2']
-            box = (x1, y1, x2, y2)
-            box = increase_box(box, max_width, max_height)
-            img = cut_photobox(video, frame_num, box)  # ошибка т.к. это возвращает pil img
-            # print(img)
-            img = np.asarray(img)
-            images.append(img)
-        clip = ImageSequenceClip(images, fps=fps)
-        # clip.write_videofile('test' + str(person) + '.mp4', fps=fps)
-        clip.write_gif(dir_to_save + 'person' + str(person) + '.gif', fps=fps, program='ffmpeg')
-        if person == 13:
-            break
+            max_width = 0.0
+            max_height = 0.0
+            for index, row in video_clip_df.iterrows():
+                x1 = row['x1']
+                y1 = row['y1']
+                x2 = row['x2']
+                y2 = row['y2']
+                cur_width = x2 - x1
+                cur_height = y2 - y1
+                if cur_width > max_width:
+                    max_width = cur_width
+                if cur_height > max_height:
+                    max_height = cur_height
+
+            max_width = round(max_width)
+            max_height = round(max_height)
+            # print(f'W: {max_width} \t H: {max_height}')
+            images = []
+            for index, row in video_clip_df.iterrows():
+                frame_num = int(row['frame'])
+                x1 = row['x1']
+                y1 = row['y1']
+                x2 = row['x2']
+                y2 = row['y2']
+                box = (x1, y1, x2, y2)
+                box = increase_box(box, max_width, max_height)
+                img = cut_photobox(video, frame_num, box)
+                # print(img)
+                img = np.asarray(img)
+                images.append(img)
+            clip = ImageSequenceClip(images, fps=fps)
+            # clip.write_videofile('test' + str(person) + '.mp4', fps=fps)
+            clip.write_gif(dirs_to_save[i] + 'person' + str(person) + '.gif', fps=fps, program='ffmpeg')
 
 
 def increase_box(box, max_width, max_height):
@@ -111,3 +119,8 @@ def increase_box(box, max_width, max_height):
     new_box = (x1, y1, x2, y2)
 
     return new_box
+
+
+def get_video_fps(video_path):
+    video = VideoFileClip(video_path)
+    return video.fps
