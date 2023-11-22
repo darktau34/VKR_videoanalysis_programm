@@ -15,6 +15,10 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save):
         mean_frame = only_person_df.frame.values.mean()
         mean_frame = mean_frame.round().astype(int)
         frame_row = only_person_df.loc[only_person_df.frame == mean_frame]
+        while frame_row.empty:
+            mean_frame += 1
+            frame_row = only_person_df.loc[only_person_df.frame == mean_frame]
+        frame_row.reset_index(drop=True, inplace=True)
         x1 = frame_row.x1.values[0]
         y1 = frame_row.y1.values[0]
         x2 = frame_row.x2.values[0]
@@ -92,7 +96,7 @@ def clip_video_fragment(video_path, yolo_df, dirs_to_save, max_clip_seconds):
                 images.append(img)
             clip = ImageSequenceClip(images, fps=fps)
             # clip.write_videofile('test' + str(person) + '.mp4', fps=fps)
-            clip.write_gif(dirs_to_save[i] + 'person' + str(person) + '.gif', fps=fps, program='ffmpeg')
+            clip.write_gif(dirs_to_save[i] + 'person' + str(person) + '.gif', fps=fps, program='ffmpeg', logger=None)
 
 
 def increase_box(box, max_width, max_height):

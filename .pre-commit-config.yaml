@@ -29,7 +29,7 @@ repos:
         language: system
         types: [python]
         args: ["--disable",
-        	"missing-module-docstring, missing-function-docstring, too-many-locals, unused-variable, consider-using-enumerate",
+        	"missing-module-docstring, missing-function-docstring, too-many-locals, unused-variable, consider-using-enumerate, too-many-arguments, duplicate-code",
                "--max-line-length", "120",
                "--extension-pkg-whitelist", "cv2",
                "--ignored-modules", "cv2",

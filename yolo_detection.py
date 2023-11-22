@@ -8,7 +8,123 @@ from ultralytics import YOLO
 from supervision.annotators.core import BoundingBoxAnnotator
 from supervision.detection.core import Detections
 
+from moviepy.editor import VideoFileClip
+from PIL import Image
+from videoprocessing import cut_photobox
+
 logger = logging.getLogger(__name__)
+
+
+def detect_items(yolo_df, video_path, items_path):
+    model = YOLO('data/models/yolov8l.pt')
+    yolo_df['class_id'] = yolo_df['class_id'].astype(int)
+    yolo_df['tracker_id'] = yolo_df['tracker_id'].astype(int)
+
+    class_items_df = pd.read_csv('data/class_items.csv')
+    class_items = np.asarray(class_items_df['id'])[1:]
+
+    person_arr = yolo_df.tracker_id.unique().astype(int)
+    counter = 1
+    for person_id in person_arr:
+        only_person_df = yolo_df.loc[yolo_df.tracker_id == person_id]
+        only_person_df.reset_index(drop=True, inplace=True)
+
+        video = VideoFileClip(video_path)
+        fps = video.fps
+        only_person_df = only_person_df[(only_person_df.frame % fps) == 0]
+
+        items_df = get_items_df(only_person_df, model, video, class_items)
+        save_items_photoboxes(items_df, only_person_df, video, class_items_df, person_id, items_path)
+
+        logger.info("Detection items for person: %s / %s finished", str(counter), str(len(person_arr)))
+        counter += 1
+
+
+def save_items_photoboxes(items_df, only_person_df, video, class_items_df, person_id, items_path):
+    for index, row in items_df.iterrows():
+        item_x1 = int(row['x1'])
+        item_y1 = int(row['y1'])
+        item_x2 = int(row['x2'])
+        item_y2 = int(row['y2'])
+        item_frame = row['frame']
+        item_class_id = row['class_id']
+        item_conf = row['confidence']
+
+        person_row = only_person_df.loc[only_person_df.frame == item_frame]
+        person_row.reset_index(drop=True, inplace=True)
+
+        frame = person_row['frame'][0]
+        x1 = person_row['x1'][0]
+        y1 = person_row['y1'][0]
+        x2 = person_row['x2'][0]
+        y2 = person_row['y2'][0]
+        box = (x1, y1, x2, y2)
+
+        photobox = cut_photobox(video, frame, box)
+
+        img = np.asarray(photobox)
+        cv.rectangle(img, (item_x1, item_y1), (item_x2, item_y2), (0, 255, 0), 1)
+        img = Image.fromarray(img)
+
+        class_items_row = class_items_df.loc[class_items_df.id == item_class_id]
+        class_name = class_items_row['name'].values[0]
+        filename = str(person_id) + '-' + str(class_name) + '-' + str(int(item_conf * 100)) + '.png'
+        img.save(items_path + filename)
+
+
+def get_items_df(only_person_df, model, video, class_items):
+    items_df = pd.DataFrame(columns=['frame', 'x1', 'y1', 'x2', 'y2', 'confidence', 'class_id'])
+    for index, row in only_person_df.iterrows():
+        x1 = row['x1']
+        y1 = row['y1']
+        x2 = row['x2']
+        y2 = row['y2']
+        box = (x1, y1, x2, y2)
+        frame = row['frame']
+
+        photobox = cut_photobox(video, frame, box)
+
+        results = model.predict(source=photobox, classes=class_items, verbose=False)[0]
+        xyxy = results.boxes.xyxy.cpu().numpy()
+        confidence = results.boxes.conf.cpu().numpy()
+        class_id = results.boxes.cls.cpu().numpy().astype(int)
+
+        if len(class_id) == 0:
+            continue
+
+        data = np.array(
+            [frame, xyxy[0][0], xyxy[0][1], xyxy[0][2], xyxy[0][3], confidence[0], class_id[0]]
+        )
+
+        if (len(class_id)) == 1:
+            data = [data]
+
+        for i in range(1, len(class_id)):
+            item = np.array(
+                [frame, xyxy[i][0], xyxy[i][1], xyxy[i][2], xyxy[i][3], confidence[i], class_id[i]]
+            )
+            data = np.vstack([data, item])
+
+        df = pd.DataFrame(
+            data=data,
+            columns=['frame', 'x1', 'y1', 'x2', 'y2', 'confidence', 'class_id']
+        )
+
+        items_df = (
+            items_df.copy() if df.empty else df.copy() if items_df.empty else pd.concat([items_df, df])
+        )
+
+    items_df.reset_index(drop=True, inplace=True)
+    items_df.frame = items_df.frame.astype(int)
+    items_df.class_id = items_df.class_id.astype(int)
+    items_arr = items_df.class_id.unique().astype(int)
+    true_idx = []
+    for item in items_arr:
+        only_item_df = items_df.loc[items_df.class_id == item]
+        true_idx.append(only_item_df['confidence'].idxmax())
+
+    items_df = items_df.iloc[true_idx]
+    return items_df
 
 
 def detect_peoples(video_path, show_results, to_csv_path):
@@ -49,7 +165,9 @@ def video_processing(yolo, video_path):
             frame_df = frame_processing(frame, yolo, frames_counter)
             frames_counter += 1
 
-            all_df = pd.concat([all_df, frame_df])
+            all_df = (
+                all_df.copy() if frame_df.empty else frame_df.copy() if all_df.empty else pd.concat([all_df, frame_df])
+            )
             all_df.index.rename('frame', inplace=True)
 
             if frames_counter >= one_percent * stager:
