@@ -23,6 +23,8 @@ def detect_items(yolo_df, video_path, items_path):
     class_items_df = pd.read_csv('data/class_items.csv')
     class_items = np.asarray(class_items_df['id'])[1:]
 
+    items_list = []
+
     person_arr = yolo_df.tracker_id.unique().astype(int)
     counter = 1
     for person_id in person_arr:
@@ -34,13 +36,21 @@ def detect_items(yolo_df, video_path, items_path):
         only_person_df = only_person_df[(only_person_df.frame % fps) == 0]
 
         items_df = get_items_df(only_person_df, model, video, class_items)
-        save_items_photoboxes(items_df, only_person_df, video, class_items_df, person_id, items_path)
+        if not items_df.empty:
+            person_items = save_items_photoboxes(items_df, only_person_df, video, class_items_df, person_id, items_path)
+            items_list.append(person_items)
 
         logger.info("Detection items for person: %s / %s finished", str(counter), str(len(person_arr)))
         counter += 1
 
+    return items_list
+
 
 def save_items_photoboxes(items_df, only_person_df, video, class_items_df, person_id, items_path):
+    person_id_list = []
+    item_name_list = []
+    item_conf_list = []
+    item_path_list = []
     for index, row in items_df.iterrows():
         item_x1 = int(row['x1'])
         item_y1 = int(row['y1'])
@@ -68,8 +78,15 @@ def save_items_photoboxes(items_df, only_person_df, video, class_items_df, perso
 
         class_items_row = class_items_df.loc[class_items_df.id == item_class_id]
         class_name = class_items_row['name'].values[0]
-        filename = str(person_id) + '-' + str(class_name) + '-' + str(int(item_conf * 100)) + '.png'
-        img.save(items_path + filename)
+        filepath = items_path + str(person_id) + '-' + str(class_name) + '-' + str(int(item_conf * 100)) + '.png'
+        img.save(filepath)
+
+        person_id_list.append(person_id)
+        item_name_list.append(str(class_name))
+        item_conf_list.append(int(item_conf * 100))
+        item_path_list.append(filepath)
+
+    return [person_id_list, item_name_list, item_conf_list, item_path_list]
 
 
 def get_items_df(only_person_df, model, video, class_items):

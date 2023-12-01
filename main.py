@@ -10,7 +10,11 @@ from videoprocessing import save_photoboxes_from_yolo
 from videoprocessing import clip_video_fragment
 from videoprocessing import get_video_fps
 from appear_time import calculate_appear_time
-
+from db_processing import insert_to_video_table
+from db_processing import insert_to_person_table
+from db_processing import check_video_db_exists
+from db_processing import delete_rows_about_video
+from db_processing import insert_to_items_table
 
 LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
 DATE_FORMAT = '%H:%M:%S'
@@ -107,6 +111,23 @@ def checking_required_files():
         LOGGER.warning("MODELS required files doesn't exists")
 
 
+def sort_items_list(items_list):
+    # [ [tracker_id, item_name, confidence, item_photo], [...]]
+    sorted_items = []
+
+    for i in range(len(items_list)):
+        for j in range(len(items_list[i][0])):
+            elem_arr = [
+                int(items_list[i][0][j]),
+                items_list[i][1][j],
+                int(items_list[i][2][j]),
+                items_list[i][3][j]
+            ]
+            sorted_items.append(elem_arr)
+
+    return sorted_items
+
+
 def main():
     if torch.cuda.is_available():
         LOGGER.info("CUDA device's count: %s", torch.cuda.device_count())
@@ -138,15 +159,30 @@ def main():
     videoclip_dirs = [videoclips_begin, videoclips_middle, videoclips_end]
     items_dir = dirs_dict['items_dir']
 
+    video_id = check_video_db_exists(video_path)
+    if video_id:
+        delete_rows_about_video(video_id)
+
+    items_list = []
+
     detect_peoples(video_path, show_results, to_csv_path)
     yolo_df = pd.read_csv(to_csv_path)
-    save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir)
-    clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
+    tracker_list = yolo_df.tracker_id.unique().astype(int)
+    photoboxes_paths = save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir)
+    videoclips_paths = clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
     video_fps = get_video_fps(video_path)
     time_df = calculate_appear_time(yolo_df, begin_video_time, video_fps)
     time_df.to_csv(time_csv_path)
+    time_list = time_df['appear_time'].values
+
     if need_detection_items:
-        detect_items(yolo_df, video_path, items_dir)
+        items_list = detect_items(yolo_df, video_path, items_dir)
+        items_list = sort_items_list(items_list)
+
+    insert_to_video_table(video_path)
+    insert_to_person_table(video_path, photoboxes_paths, videoclips_paths, time_list, tracker_list)
+    if len(items_list) != 0:
+        insert_to_items_table(items_list, video_path)
 
 
 if __name__ == '__main__':

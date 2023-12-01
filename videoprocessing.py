@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save):
     video = VideoFileClip(video_path)
     person_arr = yolo_df.tracker_id.unique().astype(int)
+    photoboxes_paths_list = []
     logger.info('Persons number: %s', len(person_arr))
     for person in person_arr:
         only_person_df = yolo_df.loc[yolo_df.tracker_id == person]
@@ -25,9 +26,12 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save):
         y2 = frame_row.y2.values[0]
         box = (x1, y1, x2, y2)
         photobox = cut_photobox(video, mean_frame, box)
-        photobox.save(dir_to_save + 'person' + str(person) + '.png')
+        path = dir_to_save + 'person' + str(person) + '.png'
+        photoboxes_paths_list.append(path)
+        photobox.save(path)
 
     logger.info('Photoboxes are saved to path: %s', dir_to_save)
+    return photoboxes_paths_list
 
 
 def cut_photobox(video_clip, frame_number, box):
@@ -44,6 +48,7 @@ def clip_video_fragment(video_path, yolo_df, dirs_to_save, max_clip_seconds):
     fps = video.fps
     max_clip_frames = int(max_clip_seconds * fps)
     person_arr = yolo_df.tracker_id.unique().astype(int)
+    videoclips_paths = [[], [], []]
     logger.info('Video fps: %s', str(fps))
     logger.info('Video fragment in seconds: %s', str(max_clip_seconds))
     logger.info('Video fragment in frames: %s', str(max_clip_frames))
@@ -96,7 +101,11 @@ def clip_video_fragment(video_path, yolo_df, dirs_to_save, max_clip_seconds):
                 images.append(img)
             clip = ImageSequenceClip(images, fps=fps)
             # clip.write_videofile('test' + str(person) + '.mp4', fps=fps)
-            clip.write_gif(dirs_to_save[i] + 'person' + str(person) + '.gif', fps=fps, program='ffmpeg', logger=None)
+            path = dirs_to_save[i] + 'person' + str(person) + '.gif'
+            videoclips_paths[i].append(path)
+            clip.write_gif(path, fps=fps, program='ffmpeg', logger=None)
+
+    return videoclips_paths
 
 
 def increase_box(box, max_width, max_height):
