@@ -97,6 +97,12 @@ def clip_video_fragment(video_path, yolo_df, dirs_to_save, max_clip_seconds):
                 box = increase_box(box, max_width, max_height)
                 img = cut_photobox(video, frame_num, box)
                 # print(img)
+
+                # размер ставится для UI!!!
+                fixed_width = 200
+                fixed_height = 400
+                img = img.resize((fixed_width, fixed_height))
+
                 img = np.asarray(img)
                 images.append(img)
             clip = ImageSequenceClip(images, fps=fps)

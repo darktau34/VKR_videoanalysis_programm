@@ -421,6 +421,28 @@ border-width: 1px;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="label_appear">
+    <property name="geometry">
+     <rect>
+      <x>66</x>
+      <y>430</y>
+      <width>200</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 0, 0, 0.8);
+color: rgb(255, 120, 0);
+text-shadow: Black 0px 0px 5px;
+</string>
+    </property>
+    <property name="text">
+     <string>Appear time: 00:00:00</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

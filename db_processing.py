@@ -4,6 +4,36 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+def select_from_items(person_id):
+    df_items = None
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        df_items = pd.DataFrame()
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT item_name, confidence, item_photo " +
+            "FROM item " +
+            f"WHERE person_id = {person_id}")
+
+        for item in cursor.fetchall():
+            df_item_row = pd.DataFrame({
+                'item_name': item[0],
+                'confidence': int(item[1]),
+                'item_photo': item[2]
+            }, index=[0])
+            df_items = pd.concat([df_items, df_item_row], ignore_index=True)
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return df_items
+
 
 def select_from_persons(video_id):
     df_persons = None
@@ -16,19 +46,20 @@ def select_from_persons(video_id):
         df_persons = pd.DataFrame()
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT tracker_id, photobox, appear_time, videoclip_begin, videoclip_middle, videoclip_end " +
+            "SELECT person_id, tracker_id, photobox, appear_time, videoclip_begin, videoclip_middle, videoclip_end " +
             "FROM person " +
             f"WHERE video_id = {video_id}")
 
         for person in cursor.fetchall():
             df_person_row = pd.DataFrame({
-                'tracker_id': int(person[0]),
-                'photobox': person[1],
-                'appear_time': person[2],
-                'videoclip_begin': person[3],
-                'videoclip_middle': person[4],
-                'videoclip_end': person[5]
-            }, index=[int(person[0])])
+                'person_id': int(person[0]),
+                'tracker_id': int(person[1]),
+                'photobox': person[2],
+                'appear_time': person[3],
+                'videoclip_begin': person[4],
+                'videoclip_middle': person[5],
+                'videoclip_end': person[6]
+            }, index=[int(person[1])])
             df_persons = pd.concat([df_persons, df_person_row], ignore_index=True)
 
         connection.commit()

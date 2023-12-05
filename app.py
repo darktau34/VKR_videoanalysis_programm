@@ -364,7 +364,7 @@ class Ui_MainWindow(object):
         self.form = QtWidgets.QMainWindow()
         self.ui_form = Ui_Form()
         self.ui_form.setupUi(self.form)
-        self.ui_form.my_setup(self.video_id)
+        self.ui_form.my_setup(self.video_id, self.cur_video)
         self.form.show()
 
 
