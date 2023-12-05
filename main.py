@@ -16,10 +16,10 @@ from db_processing import check_video_db_exists
 from db_processing import delete_rows_about_video
 from db_processing import insert_to_items_table
 
-LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
-DATE_FORMAT = '%H:%M:%S'
+# LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
+# DATE_FORMAT = '%H:%M:%S'
 LOGGER = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+# logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
 
 
 def create_data_dirs(video_path):

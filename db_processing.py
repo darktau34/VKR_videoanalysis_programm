@@ -1,7 +1,42 @@
 import logging
 import psycopg2 as ps
+import pandas as pd
 
 logger = logging.getLogger(__name__)
+
+
+def select_from_persons(video_id):
+    df_persons = None
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        df_persons = pd.DataFrame()
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT tracker_id, photobox, appear_time, videoclip_begin, videoclip_middle, videoclip_end " +
+            "FROM person " +
+            f"WHERE video_id = {video_id}")
+
+        for person in cursor.fetchall():
+            df_person_row = pd.DataFrame({
+                'tracker_id': int(person[0]),
+                'photobox': person[1],
+                'appear_time': person[2],
+                'videoclip_begin': person[3],
+                'videoclip_middle': person[4],
+                'videoclip_end': person[5]
+            }, index=[int(person[0])])
+            df_persons = pd.concat([df_persons, df_person_row], ignore_index=True)
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return df_persons
 
 
 def insert_to_items_table(items_list, video_path):

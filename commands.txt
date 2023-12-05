@@ -6,4 +6,7 @@ python3 main.py videos/27sec.mkv 00:00:00
 
 python3 main.py videos/10sec.mkv 00:00:00 --detect_items
 
-pyuic5 -x ready_main_ui.ui -o app.py
+pyuic6 -x ready_main_ui.ui -o app.py
+pyuic6 -x analysis_ui.ui -o app_analysis.py
+
+python3 app.py
