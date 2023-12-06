@@ -16,11 +16,7 @@ from db_processing import check_video_db_exists
 from db_processing import delete_rows_about_video
 from db_processing import insert_to_items_table
 
-LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
-DATE_FORMAT = '%H:%M:%S'
-LOGGER = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
-
+logger = logging.getLogger(__name__)
 
 def create_data_dirs(video_path):
     file = os.path.basename(video_path)
@@ -31,26 +27,26 @@ def create_data_dirs(video_path):
     data_dir = 'data/'
     if not os.path.isdir(data_dir):
         os.makedirs(data_dir)
-        LOGGER.info('Directory %s was created', data_dir)
+        logger.info('Directory %s was created', data_dir)
     else:
-        LOGGER.info('Directory %s already exists', data_dir)
+        logger.info('Directory %s already exists', data_dir)
 
     # models dir
     models_dir = data_dir + 'models'
     if not os.path.isdir(models_dir):
         os.makedirs(models_dir)
-        LOGGER.info('Directory %s was created', models_dir)
+        logger.info('Directory %s was created', models_dir)
     else:
-        LOGGER.info('Directory %s already exists', models_dir)
+        logger.info('Directory %s already exists', models_dir)
 
     # video data dir
     data_dir = 'data/' + filename
     detections_csv_path = data_dir + '/' + 'detections.csv'
     if not os.path.isdir(data_dir):
         os.makedirs(data_dir)
-        LOGGER.info('Directory %s was created', data_dir)
+        logger.info('Directory %s was created', data_dir)
     else:
-        LOGGER.info('Directory %s already exists', data_dir)
+        logger.info('Directory %s already exists', data_dir)
 
     # photoboxes dir
     photoboxes_dir = create_sub_dir(data_dir, 'photoboxes')
@@ -86,9 +82,9 @@ def create_sub_dir(data_dir, name_sub_dir):
     sub_dir = data_dir + '/' + name_sub_dir
     if not os.path.isdir(sub_dir):
         os.makedirs(sub_dir)
-        LOGGER.info('Directory %s was created', sub_dir)
+        logger.info('Directory %s was created', sub_dir)
     else:
-        LOGGER.info('Directory %s already exists', sub_dir)
+        logger.info('Directory %s already exists', sub_dir)
 
     sub_dir += '/'
     return sub_dir
@@ -101,14 +97,14 @@ def checking_required_files():
     yolov8x = 'data/models/yolov8x.pt'
 
     if os.path.isfile(class_items) and os.path.isfile(class_names):
-        LOGGER.info("All .csv required files exists")
+        logger.info("All .csv required files exists")
     else:
-        LOGGER.warning("CSV required files doesn't exists")
+        logger.warning("CSV required files doesn't exists")
 
     if os.path.isfile(yolov8l) and os.path.isfile(yolov8x):
-        LOGGER.info("All models required files exists")
+        logger.info("All models required files exists")
     else:
-        LOGGER.warning("MODELS required files doesn't exists")
+        logger.warning("MODELS required files doesn't exists")
 
 
 def sort_items_list(items_list):
@@ -128,10 +124,10 @@ def sort_items_list(items_list):
     return sorted_items
 
 
-def main():
+def console_analyze():
     if torch.cuda.is_available():
-        LOGGER.info("CUDA device's count: %s", torch.cuda.device_count())
-        LOGGER.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
+        logger.info("CUDA device's count: %s", torch.cuda.device_count())
+        logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
 
     parser = argparse.ArgumentParser(description="Mp4 yolo detection")
     parser.add_argument("video_path", type=str, help="Path to video file")
@@ -185,5 +181,61 @@ def main():
         insert_to_items_table(items_list, video_path)
 
 
+def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar):
+    logger = logging.getLogger(__name__)
+    if torch.cuda.is_available():
+        logger.info("CUDA device's count: %s", torch.cuda.device_count())
+        logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
+    show_results = False  # Хардкод, пока это не нужно
+    max_clip_seconds = 5  # Хардкод, пока это не нужно
+
+    dirs_dict = create_data_dirs(video_path)
+    checking_required_files()
+
+    to_csv_path = dirs_dict['detections_csv_path']
+    photoboxes_dir = dirs_dict['photoboxes_dir']
+    videoclips_begin = dirs_dict['videoclips_begin_dir']
+    videoclips_middle = dirs_dict['videoclips_middle_dir']
+    videoclips_end = dirs_dict['videoclips_end_dir']
+    time_csv_path = dirs_dict['time_csv_path']
+    videoclip_dirs = [videoclips_begin, videoclips_middle, videoclips_end]
+    items_dir = dirs_dict['items_dir']
+
+    video_id = check_video_db_exists(video_path)
+    if video_id:
+        delete_rows_about_video(video_id)
+
+    items_list = []
+    progress_bar.setValue(10)
+
+    detect_peoples(video_path, show_results, to_csv_path)
+    yolo_df = pd.read_csv(to_csv_path)
+    progress_bar.setValue(30)
+    tracker_list = yolo_df.tracker_id.unique().astype(int)
+    photoboxes_paths = save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir)
+    progress_bar.setValue(40)
+    videoclips_paths = clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
+    progress_bar.setValue(60)
+    video_fps = get_video_fps(video_path)
+    time_df = calculate_appear_time(yolo_df, begin_video_time, video_fps)
+    time_df.to_csv(time_csv_path)
+    time_list = time_df['appear_time'].values
+    progress_bar.setValue(70)
+
+    if need_detection_items:
+        items_list = detect_items(yolo_df, video_path, items_dir)
+        items_list = sort_items_list(items_list)
+
+    progress_bar.setValue(90)
+    insert_to_video_table(video_path)
+    insert_to_person_table(video_path, photoboxes_paths, videoclips_paths, time_list, tracker_list)
+    if len(items_list) != 0:
+        insert_to_items_table(items_list, video_path)
+    progress_bar.setValue(100)
+
+
 if __name__ == '__main__':
-    main()
+    LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
+    DATE_FORMAT = '%H:%M:%S'
+    logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+    console_analyze()

@@ -7,18 +7,32 @@
 
 import os
 import logging
+import cv2 as cv
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PIL import Image, ImageQt
+
+from analyze import app_analyze
 from app_analysis import Ui_Form
 from db_processing import check_video_db_exists
 
+LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
+DATE_FORMAT = '%H:%M:%S'
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT, filename='logs.log')
+
+
 class Ui_MainWindow(object):
     def __init__(self):
-            self.video_id = None
-            self.video_path = None
-            self.videos_dir = 'videos/'
-            self.video_list = []
-            self.cur_video = None
-            self.cur_video_num = None
+        self.detect_items = True
+        self.appear_time = ''
+        self.video_id = None
+        self.video_path = None
+        self.videos_dir = 'videos/'
+        self.video_list = []
+        self.cur_video = None
+        self.cur_video_num = None
+        self.cur_video_preview = None
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
@@ -26,8 +40,9 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setBold(False)
         font.setUnderline(False)
-        font.setWeight(50)
         MainWindow.setFont(font)
+        MainWindow.setMouseTracking(False)
+        MainWindow.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
         MainWindow.setStyleSheet("background-color: rgb(239, 239, 239);")
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
@@ -40,25 +55,25 @@ class Ui_MainWindow(object):
         self.list_view.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
         self.list_view.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.list_view.setStyleSheet("QListView{\n"
-"    background-color: rgb(192, 191, 188);\n"
-"    border-color: rgb(0, 0, 0);\n"
-"    border-style: solid;\n"
-"    border-width: 1px;\n"
-"    padding: 5px;\n"
-"    padding-left: 5px;\n"
-"}\n"
-"\n"
-"QListView:item{\n"
-"    border: 2px solid black;\n"
-"    margin:5px;\n"
-"    height:60px;\n"
-"    width:240px;\n"
-"}\n"
-"\n"
-"QListView:item:selected{\n"
-"    border: 1px solid black;\n"
-"    background-color: rgba(255, 120, 0, 171);\n"
-"}")
+                                     "    background-color: rgb(192, 191, 188);\n"
+                                     "    border-color: rgb(0, 0, 0);\n"
+                                     "    border-style: solid;\n"
+                                     "    border-width: 1px;\n"
+                                     "    padding: 5px;\n"
+                                     "    padding-left: 5px;\n"
+                                     "}\n"
+                                     "\n"
+                                     "QListView:item{\n"
+                                     "    border: 2px solid black;\n"
+                                     "    margin:5px;\n"
+                                     "    height:60px;\n"
+                                     "    width:240px;\n"
+                                     "}\n"
+                                     "\n"
+                                     "QListView:item:selected{\n"
+                                     "    border: 1px solid black;\n"
+                                     "    background-color: rgba(255, 120, 0, 171);\n"
+                                     "}")
         self.list_view.setAutoScroll(True)
         self.list_view.setMovement(QtWidgets.QListView.Movement.Static)
         self.list_view.setFlow(QtWidgets.QListView.Flow.LeftToRight)
@@ -77,25 +92,24 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(True)
-        font.setWeight(75)
         self.l_videos.setFont(font)
         self.l_videos.setStyleSheet("background-color: rgb(255, 120, 0);\n"
-"border-color: rgb(0, 0, 0);\n"
-"border-style: solid;\n"
-"border-width: 1px;")
+                                    "border-color: rgb(0, 0, 0);\n"
+                                    "border-style: solid;\n"
+                                    "border-width: 1px;")
         self.l_videos.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.l_videos.setObjectName("l_videos")
         self.l_preview = QtWidgets.QLabel(parent=self.centralwidget)
         self.l_preview.setGeometry(QtCore.QRect(340, 30, 901, 491))
         self.l_preview.setStyleSheet("background-color: rgb(192, 191, 188);\n"
-"border-color: rgb(0, 0, 0);\n"
-"border-style: solid;\n"
-"border-width: 1px;")
+                                     "border-color: rgb(0, 0, 0);\n"
+                                     "border-style: solid;\n"
+                                     "border-width: 1px;")
         self.l_preview.setText("")
         self.l_preview.setObjectName("l_preview")
         self.btn_analyze = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btn_analyze.setEnabled(False)
-        self.btn_analyze.setGeometry(QtCore.QRect(340, 540, 591, 81))
+        self.btn_analyze.setGeometry(QtCore.QRect(340, 540, 591, 61))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.BrushStyle.SolidPattern)
@@ -164,55 +178,53 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(False)
-        font.setWeight(50)
         self.btn_analyze.setFont(font)
         self.btn_analyze.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.btn_analyze.setStyleSheet("QPushButton {\n"
-"    border-radius: 40px;\n"
-"    background-color: rgb(255, 120, 0);\n"
-"    border-style: solid;\n"
-"    border-width: 1px;\n"
-"    border-color: rgb(0, 0, 0);\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"    background-color: rgb(192, 191, 188);\n"
-"    color: rgb(0, 0, 0);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));\n"
-"}")
+                                       "    border-radius: 30px;\n"
+                                       "    background-color: rgb(255, 120, 0);\n"
+                                       "    border-style: solid;\n"
+                                       "    border-width: 1px;\n"
+                                       "    border-color: rgb(0, 0, 0);\n"
+                                       "}\n"
+                                       "\n"
+                                       "QPushButton:disabled {\n"
+                                       "    background-color: rgb(192, 191, 188);\n"
+                                       "    color: rgb(0, 0, 0);\n"
+                                       "}\n"
+                                       "\n"
+                                       "QPushButton:hover {\n"
+                                       "    background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));\n"
+                                       "}")
         self.btn_analyze.setObjectName("btn_analyze")
         self.btn_prev = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btn_prev.setEnabled(False)
-        self.btn_prev.setGeometry(QtCore.QRect(940, 540, 301, 81))
+        self.btn_prev.setGeometry(QtCore.QRect(940, 540, 301, 61))
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(False)
-        font.setWeight(50)
         self.btn_prev.setFont(font)
         self.btn_prev.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.btn_prev.setStyleSheet("QPushButton {\n"
-"    border-radius: 40px;\n"
-"    background-color: rgb(255, 120, 0);\n"
-"    border-style: solid;\n"
-"    border-width: 1px;\n"
-"    border-color: rgb(0, 0, 0);\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"    background-color: rgb(192, 191, 188);\n"
-"    color: rgb(0, 0, 0);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));\n"
-"}")
+                                    "    border-radius: 30px;\n"
+                                    "    background-color: rgb(255, 120, 0);\n"
+                                    "    border-style: solid;\n"
+                                    "    border-width: 1px;\n"
+                                    "    border-color: rgb(0, 0, 0);\n"
+                                    "}\n"
+                                    "\n"
+                                    "QPushButton:disabled {\n"
+                                    "    background-color: rgb(192, 191, 188);\n"
+                                    "    color: rgb(0, 0, 0);\n"
+                                    "}\n"
+                                    "\n"
+                                    "QPushButton:hover {\n"
+                                    "    background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));\n"
+                                    "}")
         self.btn_prev.setObjectName("btn_prev")
         self.progress_bar = QtWidgets.QProgressBar(parent=self.centralwidget)
-        self.progress_bar.setEnabled(False)
-        self.progress_bar.setGeometry(QtCore.QRect(340, 640, 901, 41))
+        self.progress_bar.setEnabled(True)
+        self.progress_bar.setGeometry(QtCore.QRect(340, 640, 591, 41))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.BrushStyle.SolidPattern)
@@ -279,26 +291,26 @@ class Ui_MainWindow(object):
         palette.setBrush(QtGui.QPalette.ColorGroup.Disabled, QtGui.QPalette.ColorRole.PlaceholderText, brush)
         self.progress_bar.setPalette(palette)
         self.progress_bar.setStyleSheet("QProgressBar {\n"
-"    background-color: rgb(192, 191, 188);\n"
-"    border: 2px solid grey;\n"
-"    border-radius: 10px;\n"
-"    text-align: center;\n"
-"    padding-left:4px;\n"
-"    padding-right:4px;\n"
-"}\n"
-"\n"
-"QProgressBar:chunk {\n"
-"    background-color: rgb(255, 120, 0);\n"
-"    width: 10px;\n"
-"    margin: 1px;\n"
-"}\n"
-"\n"
-"QProgressBar:disabled {\n"
-"    background-color: rgb(239, 239, 239);\n"
-"    border: 2px solid rgb(239, 239, 239);\n"
-"    color: rgb(239, 239, 239);\n"
-"}\n"
-"")
+                                        "    background-color: rgb(192, 191, 188);\n"
+                                        "    border: 2px solid grey;\n"
+                                        "    border-radius: 10px;\n"
+                                        "    text-align: center;\n"
+                                        "    padding-left:4px;\n"
+                                        "    padding-right:4px;\n"
+                                        "}\n"
+                                        "\n"
+                                        "QProgressBar:chunk {\n"
+                                        "    background-color: rgb(255, 120, 0);\n"
+                                        "    width: 10px;\n"
+                                        "    margin: 1px;\n"
+                                        "}\n"
+                                        "\n"
+                                        "QProgressBar:disabled {\n"
+                                        "    background-color: rgb(239, 239, 239);\n"
+                                        "    border: 2px solid rgb(239, 239, 239);\n"
+                                        "    color: rgb(239, 239, 239);\n"
+                                        "}\n"
+                                        "")
         self.progress_bar.setProperty("value", 0)
         self.progress_bar.setTextVisible(True)
         self.progress_bar.setInvertedAppearance(False)
@@ -311,6 +323,63 @@ class Ui_MainWindow(object):
         self.l_videoname.setText("")
         self.l_videoname.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.l_videoname.setObjectName("l_videoname")
+        self.l_appear = QtWidgets.QLabel(parent=self.centralwidget)
+        self.l_appear.setGeometry(QtCore.QRect(950, 620, 301, 31))
+        self.l_appear.setStyleSheet("border-color: rgb(154, 153, 150);\n"
+                                    "border-style: solid;\n"
+                                    "border-width: 1px;\n"
+                                    "background-color: rgb(255, 120, 0);")
+        self.l_appear.setObjectName("l_appear")
+        self.l_items = QtWidgets.QLabel(parent=self.centralwidget)
+        self.l_items.setGeometry(QtCore.QRect(950, 650, 301, 31))
+        self.l_items.setStyleSheet("border-color: rgb(154, 153, 150);\n"
+                                   "background-color: rgb(255, 120, 0);\n"
+                                   "border-style: solid;\n"
+                                   "border-width: 1px;")
+        self.l_items.setObjectName("l_items")
+        self.frame = QtWidgets.QFrame(parent=self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(1112, 650, 139, 31))
+        self.frame.setStyleSheet("background-color: rgb(192, 191, 188);\n"
+                                 "border-color: rgb(154, 153, 150);\n"
+                                 "border-style: solid;\n"
+                                 "border-width: 1px;")
+        self.frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame.setObjectName("frame")
+        self.checkbox_items = QtWidgets.QCheckBox(parent=self.frame)
+        self.checkbox_items.setEnabled(True)
+        self.checkbox_items.setGeometry(QtCore.QRect(60, 5, 21, 21))
+        self.checkbox_items.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.checkbox_items.setAutoFillBackground(False)
+        self.checkbox_items.setStyleSheet("QCheckBox::indicator {\n"
+                                          "    width: 20px;\n"
+                                          "    height: 20px;\n"
+                                          "    color: rgb(255, 120, 0);\n"
+                                          "    selection-color: rgb(255, 120, 0);\n"
+                                          "}\n"
+                                          "\n"
+                                          "QCheckBox{\n"
+                                          "    color: rgb(255, 120, 0);\n"
+                                          "}\n"
+                                          "")
+        self.checkbox_items.setText("")
+        self.checkbox_items.setIconSize(QtCore.QSize(16, 16))
+        self.checkbox_items.setCheckable(True)
+        self.checkbox_items.setChecked(True)
+        self.checkbox_items.setTristate(False)
+        self.checkbox_items.setObjectName("checkbox_items")
+        self.input_appear = QtWidgets.QTimeEdit(parent=self.centralwidget)
+        self.input_appear.setGeometry(QtCore.QRect(1112, 620, 139, 31))
+        font = QtGui.QFont()
+        font.setBold(False)
+        self.input_appear.setFont(font)
+        self.input_appear.setStyleSheet("background-color: rgb(192, 191, 188);\n"
+                                        "color: rgb(230, 97, 0);\n"
+                                        "border-color: rgb(0, 0, 0);\n"
+                                        "\n"
+                                        "")
+        self.input_appear.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.input_appear.setObjectName("input_appear")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -325,7 +394,10 @@ class Ui_MainWindow(object):
         self.list_view.setSortingEnabled(False)
         self.l_videos.setText(_translate("MainWindow", "Videos"))
         self.btn_analyze.setText(_translate("MainWindow", "Analyze"))
-        self.btn_prev.setText(_translate("MainWindow", "Show previous analysis"))
+        self.btn_prev.setText(_translate("MainWindow", "Show last analysis"))
+        self.l_appear.setText(_translate("MainWindow", "Appear Time:"))
+        self.l_items.setText(_translate("MainWindow", "Detect Items:"))
+        self.input_appear.setDisplayFormat(_translate("MainWindow", "HH:mm:ss"))
 
     def my_setup_ui(self):
         self.get_video_list()
@@ -336,6 +408,18 @@ class Ui_MainWindow(object):
 
         self.list_view.currentRowChanged.connect(self.currentRowChanged_handler)
         self.btn_prev.clicked.connect(self.show_analysis)
+        self.btn_analyze.clicked.connect(self.start_analyze)
+
+    def start_analyze(self):
+        self.appear_time = self.input_appear.text()
+        self.detect_items = self.checkbox_items.isChecked()
+        app_analyze(self.video_path, self.appear_time, self.detect_items, self.progress_bar)
+        self.video_id = check_video_db_exists(self.video_path)
+        if self.video_id:
+            self.btn_prev.setEnabled(True)
+        else:
+            self.btn_prev.setEnabled(False)
+
 
     def get_video_list(self):
         for file in os.listdir(self.videos_dir):
@@ -360,6 +444,15 @@ class Ui_MainWindow(object):
         else:
             self.btn_prev.setEnabled(False)
 
+        self.cur_video_preview = self.get_preview(self.video_path)
+        if self.cur_video_preview:
+            pixmap = QtGui.QPixmap(self.cur_video_preview)
+            self.l_preview.setPixmap(pixmap)
+        else:
+            logger.critical('Video preview was not created')
+
+        self.progress_bar.setValue(0)
+
     def show_analysis(self):
         self.form = QtWidgets.QMainWindow()
         self.ui_form = Ui_Form()
@@ -367,9 +460,33 @@ class Ui_MainWindow(object):
         self.ui_form.my_setup(self.video_id, self.cur_video)
         self.form.show()
 
+    def get_preview(self, video_path):
+        fixed_width = self.l_preview.width()
+        fixed_height = self.l_preview.height()
+        new_img = False
+        cap = cv.VideoCapture(video_path)
+        if cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                logger.critical("Video frame was not read")
+
+            frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+            img = Image.fromarray(frame)
+            new_img = img.resize((fixed_width, fixed_height))
+            new_img = ImageQt.toqpixmap(new_img).copy()
+
+        else:
+            logger.critical("Video Capture is not opened")
+
+        cap.release()
+        cv.destroyAllWindows()
+
+        return new_img
+
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

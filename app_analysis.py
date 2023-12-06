@@ -258,7 +258,6 @@ class Ui_Form(object):
         self.video_id = video_id
         self.l_videoname.setText(videoname)
         self.df_persons = select_from_persons(self.video_id)
-        print(self.df_persons)
 
         self.cur_df_row = 0
         first_person = self.df_persons.iloc[self.cur_df_row]
@@ -400,7 +399,7 @@ class Ui_Form(object):
         fixed_width = self.l_photobox.width()
         fixed_height = self.l_photobox.height()
         new_image = img.resize((fixed_width, fixed_height))
-        new_img = ImageQt.toqpixmap(new_image)
+        new_img = ImageQt.toqpixmap(new_image).copy()
         return new_img
 
 

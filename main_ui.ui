@@ -20,6 +20,12 @@
     <underline>false</underline>
    </font>
   </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>Video analysis of passersby</string>
   </property>
@@ -120,96 +126,6 @@ QListView:item:selected{
     <property name="sortingEnabled">
      <bool>false</bool>
     </property>
-    <item>
-     <property name="text">
-      <string>path/to/video1</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>path/to/video2.path/to/video1</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video3</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video4</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video5</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video6</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video7</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video8</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video9</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>video10</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../../Downloads/free-icon-play-video-3864763.png</normaloff>../../Downloads/free-icon-play-video-3864763.png</iconset>
-     </property>
-    </item>
    </widget>
    <widget class="QLabel" name="l_videos">
     <property name="geometry">
@@ -268,7 +184,7 @@ border-width: 1px;</string>
       <x>340</x>
       <y>540</y>
       <width>591</width>
-      <height>81</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="palette">
@@ -482,7 +398,7 @@ border-width: 1px;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
-	border-radius: 40px;
+	border-radius: 30px;
 	background-color: rgb(255, 120, 0);
 	border-style: solid;
 	border-width: 1px;
@@ -511,7 +427,7 @@ QPushButton:hover {
       <x>940</x>
       <y>540</y>
       <width>301</width>
-      <height>81</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -526,7 +442,7 @@ QPushButton:hover {
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
-	border-radius: 40px;
+	border-radius: 30px;
 	background-color: rgb(255, 120, 0);
 	border-style: solid;
 	border-width: 1px;
@@ -548,13 +464,13 @@ QPushButton:hover {
    </widget>
    <widget class="QProgressBar" name="progress_bar">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
       <x>340</x>
       <y>640</y>
-      <width>901</width>
+      <width>591</width>
       <height>41</height>
      </rect>
     </property>
@@ -809,6 +725,145 @@ QProgressBar:disabled {
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_appear">
+    <property name="geometry">
+     <rect>
+      <x>950</x>
+      <y>620</y>
+      <width>301</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: rgb(154, 153, 150);
+border-style: solid;
+border-width: 1px;
+background-color: rgb(255, 120, 0);</string>
+    </property>
+    <property name="text">
+     <string>Appear Time:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_items">
+    <property name="geometry">
+     <rect>
+      <x>950</x>
+      <y>650</y>
+      <width>301</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: rgb(154, 153, 150);
+background-color: rgb(255, 120, 0);
+border-style: solid;
+border-width: 1px;</string>
+    </property>
+    <property name="text">
+     <string>Detect Items:</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>650</y>
+      <width>139</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(192, 191, 188);
+border-color: rgb(154, 153, 150);
+border-style: solid;
+border-width: 1px;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QCheckBox" name="checkbox_items">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>5</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+	color: rgb(255, 120, 0);
+	selection-color: rgb(255, 120, 0);
+}
+
+QCheckBox{
+	color: rgb(255, 120, 0);
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="tristate">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QTimeEdit" name="input_appear">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>620</y>
+      <width>139</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(192, 191, 188);
+color: rgb(230, 97, 0);
+border-color: rgb(0, 0, 0);
+
+</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="displayFormat">
+     <string>HH:mm:ss</string>
     </property>
    </widget>
   </widget>

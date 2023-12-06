@@ -1,0 +1,194 @@
+17:32:16   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+17:32:16   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+17:32:32   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/25sec.mkv doesn't exists in DataBase
+17:32:32   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+17:32:38   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:37
+17:32:39   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/25sec.mkv doesn't exists in DataBase
+17:32:40   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:37
+17:34:00   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+17:34:07   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+18:18:33   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+18:18:34   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+18:18:34   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+18:18:35   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+18:38:08   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+18:38:10   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+18:38:13   [INFO] analyze -- app_analyze  186: CUDA device's count: 1
+18:38:13   [INFO] analyze -- app_analyze  187: CUDA current device: NVIDIA GeForce GTX 1650
+18:55:20   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+18:55:22   [INFO] analyze -- app_analyze  194: CUDA device's count: 1
+18:55:22   [INFO] analyze -- app_analyze  195: CUDA current device: NVIDIA GeForce GTX 1650
+18:56:12   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+18:56:15   [INFO] analyze -- app_analyze  186: CUDA device's count: 1
+18:56:15   [INFO] analyze -- app_analyze  187: CUDA current device: NVIDIA GeForce GTX 1650
+19:01:30   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/1min10sec.mkv doesn't exists in DataBase
+19:01:31   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:01:32   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:01:33   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+19:01:41   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/25sec.mkv doesn't exists in DataBase
+19:01:41   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+19:01:42   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/25sec.mkv doesn't exists in DataBase
+19:01:46   [INFO] analyze -- app_analyze  186: CUDA device's count: 1
+19:01:46   [INFO] analyze -- app_analyze  187: CUDA current device: NVIDIA GeForce GTX 1650
+19:04:13   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+19:04:14   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:04:15   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:04:17   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/25sec.mkv doesn't exists in DataBase
+19:04:20   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+19:04:20   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+19:04:20   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+19:04:20   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+19:04:20   [INFO] analyze -- create_data_dirs  49: Directory data/25sec already exists
+19:04:20   [INFO] analyze -- create_sub_dir  87: Directory data/25sec/photoboxes already exists
+19:04:20   [INFO] analyze -- create_sub_dir  87: Directory data/25sec/videoclips already exists
+19:04:20   [INFO] analyze -- create_sub_dir  87: Directory data/25sec/videoclips/begin already exists
+19:04:20   [INFO] analyze -- create_sub_dir  87: Directory data/25sec/videoclips/middle already exists
+19:04:20   [INFO] analyze -- create_sub_dir  87: Directory data/25sec/videoclips/end already exists
+19:04:20   [INFO] analyze -- create_sub_dir  85: Directory data/25sec/items was created
+19:04:20   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+19:04:20   [INFO] analyze -- checking_required_files  105: All models required files exists
+19:04:20   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/25sec.mkv doesn't exists in DataBase
+19:04:20   [INFO] yolo_detection -- video_processing  166: Frames Per Second: 25.0
+19:04:20   [INFO] yolo_detection -- video_processing  167: Number of frames: 615.0
+19:04:20   [INFO] yolo_detection -- video_processing  168: Video length: 24 sec
+19:04:20   [INFO] yolo_detection -- video_processing  174: ----Video processing started----
+19:04:25   [INFO] yolo_detection -- video_processing  192: 10% 	 60 / 615.0 frames
+19:04:28   [INFO] yolo_detection -- video_processing  192: 20% 	 120 / 615.0 frames
+19:04:31   [INFO] yolo_detection -- video_processing  192: 30% 	 180 / 615.0 frames
+19:04:34   [INFO] yolo_detection -- video_processing  192: 40% 	 240 / 615.0 frames
+19:04:37   [INFO] yolo_detection -- video_processing  192: 50% 	 300 / 615.0 frames
+19:04:40   [INFO] yolo_detection -- video_processing  192: 60% 	 360 / 615.0 frames
+19:04:44   [INFO] yolo_detection -- video_processing  192: 70% 	 420 / 615.0 frames
+19:04:47   [INFO] yolo_detection -- video_processing  192: 80% 	 480 / 615.0 frames
+19:04:50   [INFO] yolo_detection -- video_processing  192: 90% 	 540 / 615.0 frames
+19:04:53   [INFO] yolo_detection -- video_processing  195: 100% 	 615 / 615.0 frames
+19:04:53   [INFO] yolo_detection -- video_processing  202: ----Video processing completed----
+19:04:53   [INFO] yolo_detection -- video_processing  203: Frames processed: 615
+19:04:53   [INFO] yolo_detection -- video_processing  204: Processing time: 33 seconds
+19:04:53   [INFO] yolo_detection -- detect_peoples  151: Results saved to csv: data/25sec/detections.csv
+19:04:54   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 8
+19:04:57   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/25sec/photoboxes/
+19:04:57   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 25.0
+19:04:57   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+19:04:57   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 125
+19:05:36   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+19:05:39   [INFO] yolo_detection -- detect_items  43: Detection items for person: 1 / 8 finished
+19:05:45   [INFO] yolo_detection -- detect_items  43: Detection items for person: 2 / 8 finished
+19:05:50   [INFO] yolo_detection -- detect_items  43: Detection items for person: 3 / 8 finished
+19:05:55   [INFO] yolo_detection -- detect_items  43: Detection items for person: 4 / 8 finished
+19:05:59   [INFO] yolo_detection -- detect_items  43: Detection items for person: 5 / 8 finished
+19:06:04   [INFO] yolo_detection -- detect_items  43: Detection items for person: 6 / 8 finished
+19:06:07   [INFO] yolo_detection -- detect_items  43: Detection items for person: 7 / 8 finished
+19:06:08   [INFO] yolo_detection -- detect_items  43: Detection items for person: 8 / 8 finished
+19:06:15   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+19:06:16   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+19:20:19   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:20:21   [INFO] analyze -- app_analyze  188: CUDA device's count: 1
+19:20:21   [INFO] analyze -- app_analyze  189: CUDA current device: NVIDIA GeForce GTX 1650
+19:20:21   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:20:37   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:20:39   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+19:20:39   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+19:20:39   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:24:54   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:24:57   [INFO] analyze -- app_analyze  188: CUDA device's count: 1
+19:24:57   [INFO] analyze -- app_analyze  189: CUDA current device: NVIDIA GeForce GTX 1650
+19:24:57   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+19:24:57   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+19:24:57   [INFO] analyze -- create_data_dirs  49: Directory data/30sec already exists
+19:24:57   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/photoboxes already exists
+19:24:57   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips already exists
+19:24:57   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips/begin already exists
+19:24:57   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips/middle already exists
+19:24:57   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips/end already exists
+19:24:57   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/items already exists
+19:24:57   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+19:24:57   [INFO] analyze -- checking_required_files  105: All models required files exists
+19:24:57   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:24:57   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:28:46   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:28:49   [INFO] analyze -- app_analyze  193: CUDA device's count: 1
+19:28:49   [INFO] analyze -- app_analyze  194: CUDA current device: NVIDIA GeForce GTX 1650
+19:28:49   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+19:28:49   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+19:28:49   [INFO] analyze -- create_data_dirs  49: Directory data/30sec already exists
+19:28:49   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/photoboxes already exists
+19:28:49   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips already exists
+19:28:49   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips/begin already exists
+19:28:49   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips/middle already exists
+19:28:49   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/videoclips/end already exists
+19:28:49   [INFO] analyze -- create_sub_dir  87: Directory data/30sec/items already exists
+19:28:49   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+19:28:49   [INFO] analyze -- checking_required_files  105: All models required files exists
+19:28:49   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:28:49   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:38:01   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+19:38:04   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:38:05   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:38:08   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+19:38:08   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+19:38:08   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+19:38:08   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+19:38:08   [INFO] analyze -- create_data_dirs  49: Directory data/27sec already exists
+19:38:08   [INFO] analyze -- create_sub_dir  87: Directory data/27sec/photoboxes already exists
+19:38:08   [INFO] analyze -- create_sub_dir  87: Directory data/27sec/videoclips already exists
+19:38:08   [INFO] analyze -- create_sub_dir  87: Directory data/27sec/videoclips/begin already exists
+19:38:08   [INFO] analyze -- create_sub_dir  87: Directory data/27sec/videoclips/middle already exists
+19:38:08   [INFO] analyze -- create_sub_dir  87: Directory data/27sec/videoclips/end already exists
+19:38:08   [INFO] analyze -- create_sub_dir  87: Directory data/27sec/items already exists
+19:38:08   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+19:38:08   [INFO] analyze -- checking_required_files  105: All models required files exists
+19:38:08   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/27sec.mkv doesn't exists in DataBase
+19:38:08   [INFO] yolo_detection -- video_processing  166: Frames Per Second: 25.0
+19:38:08   [INFO] yolo_detection -- video_processing  167: Number of frames: 663.0
+19:38:08   [INFO] yolo_detection -- video_processing  168: Video length: 26 sec
+19:38:08   [INFO] yolo_detection -- video_processing  174: ----Video processing started----
+19:38:13   [INFO] yolo_detection -- video_processing  192: 10% 	 60 / 663.0 frames
+19:38:16   [INFO] yolo_detection -- video_processing  192: 20% 	 120 / 663.0 frames
+19:38:19   [INFO] yolo_detection -- video_processing  192: 30% 	 180 / 663.0 frames
+19:38:22   [INFO] yolo_detection -- video_processing  192: 40% 	 240 / 663.0 frames
+19:38:25   [INFO] yolo_detection -- video_processing  192: 50% 	 300 / 663.0 frames
+19:38:28   [INFO] yolo_detection -- video_processing  192: 60% 	 360 / 663.0 frames
+19:38:32   [INFO] yolo_detection -- video_processing  192: 70% 	 420 / 663.0 frames
+19:38:35   [INFO] yolo_detection -- video_processing  192: 80% 	 480 / 663.0 frames
+19:38:38   [INFO] yolo_detection -- video_processing  192: 90% 	 540 / 663.0 frames
+19:38:44   [INFO] yolo_detection -- video_processing  195: 100% 	 663 / 663.0 frames
+19:38:44   [INFO] yolo_detection -- video_processing  202: ----Video processing completed----
+19:38:44   [INFO] yolo_detection -- video_processing  203: Frames processed: 663
+19:38:44   [INFO] yolo_detection -- video_processing  204: Processing time: 36 seconds
+19:38:44   [INFO] yolo_detection -- detect_peoples  151: Results saved to csv: data/27sec/detections.csv
+19:38:45   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 26
+19:38:54   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/27sec/photoboxes/
+19:38:54   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 25.0
+19:38:54   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+19:38:54   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 125
+19:41:00   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+19:41:07   [INFO] yolo_detection -- detect_items  43: Detection items for person: 1 / 26 finished
+19:41:12   [INFO] yolo_detection -- detect_items  43: Detection items for person: 2 / 26 finished
+19:41:18   [INFO] yolo_detection -- detect_items  43: Detection items for person: 3 / 26 finished
+19:41:22   [INFO] yolo_detection -- detect_items  43: Detection items for person: 4 / 26 finished
+19:41:29   [INFO] yolo_detection -- detect_items  43: Detection items for person: 5 / 26 finished
+19:41:32   [INFO] yolo_detection -- detect_items  43: Detection items for person: 6 / 26 finished
+19:41:37   [INFO] yolo_detection -- detect_items  43: Detection items for person: 7 / 26 finished
+19:41:42   [INFO] yolo_detection -- detect_items  43: Detection items for person: 8 / 26 finished
+19:41:49   [INFO] yolo_detection -- detect_items  43: Detection items for person: 9 / 26 finished
+19:41:56   [INFO] yolo_detection -- detect_items  43: Detection items for person: 10 / 26 finished
+19:42:02   [INFO] yolo_detection -- detect_items  43: Detection items for person: 11 / 26 finished
+19:42:08   [INFO] yolo_detection -- detect_items  43: Detection items for person: 12 / 26 finished
+19:42:15   [INFO] yolo_detection -- detect_items  43: Detection items for person: 13 / 26 finished
+19:42:22   [INFO] yolo_detection -- detect_items  43: Detection items for person: 14 / 26 finished
+19:42:26   [INFO] yolo_detection -- detect_items  43: Detection items for person: 15 / 26 finished
+19:42:27   [INFO] yolo_detection -- detect_items  43: Detection items for person: 16 / 26 finished
+19:42:31   [INFO] yolo_detection -- detect_items  43: Detection items for person: 17 / 26 finished
+19:42:34   [INFO] yolo_detection -- detect_items  43: Detection items for person: 18 / 26 finished
+19:42:37   [INFO] yolo_detection -- detect_items  43: Detection items for person: 19 / 26 finished
+19:42:41   [INFO] yolo_detection -- detect_items  43: Detection items for person: 20 / 26 finished
+19:42:44   [INFO] yolo_detection -- detect_items  43: Detection items for person: 21 / 26 finished
+19:42:47   [INFO] yolo_detection -- detect_items  43: Detection items for person: 22 / 26 finished
+19:42:49   [INFO] yolo_detection -- detect_items  43: Detection items for person: 23 / 26 finished
+19:42:51   [INFO] yolo_detection -- detect_items  43: Detection items for person: 24 / 26 finished
+19:42:53   [INFO] yolo_detection -- detect_items  43: Detection items for person: 25 / 26 finished
+19:42:53   [INFO] yolo_detection -- detect_items  43: Detection items for person: 26 / 26 finished
+19:42:53   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+19:43:40   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:43:41   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
