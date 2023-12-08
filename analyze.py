@@ -41,7 +41,7 @@ def create_data_dirs(video_path):
 
     # video data dir
     data_dir = 'data/' + filename
-    detections_csv_path = data_dir + '/' + 'detections.csv'
+    detections_csv_path = data_dir + '/'
     if not os.path.isdir(data_dir):
         os.makedirs(data_dir)
         logger.info('Directory %s was created', data_dir)
@@ -209,7 +209,7 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     progress_bar.setValue(10)
 
     detect_peoples(video_path, show_results, to_csv_path)
-    yolo_df = pd.read_csv(to_csv_path)
+    yolo_df = pd.read_csv(to_csv_path + 'detections.csv')
     progress_bar.setValue(30)
     tracker_list = yolo_df.tracker_id.unique().astype(int)
     photoboxes_paths = save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir)
@@ -223,7 +223,7 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     progress_bar.setValue(70)
 
     if need_detection_items:
-        items_list = detect_items(yolo_df, video_path, items_dir)
+        items_list = detect_items(yolo_df, video_path, items_dir, to_csv_path)
         items_list = sort_items_list(items_list)
 
     progress_bar.setValue(90)

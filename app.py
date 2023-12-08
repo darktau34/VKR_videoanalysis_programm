@@ -390,13 +390,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Video analysis of passersby"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Сбор информации о прохожих с видеозаписи"))
         self.list_view.setSortingEnabled(False)
-        self.l_videos.setText(_translate("MainWindow", "Videos"))
-        self.btn_analyze.setText(_translate("MainWindow", "Analyze"))
-        self.btn_prev.setText(_translate("MainWindow", "Show last analysis"))
-        self.l_appear.setText(_translate("MainWindow", "Appear Time:"))
-        self.l_items.setText(_translate("MainWindow", "Detect Items:"))
+        self.l_videos.setText(_translate("MainWindow", "Видео"))
+        self.btn_analyze.setText(_translate("MainWindow", "Анализировать"))
+        self.btn_prev.setText(_translate("MainWindow", "Показать преыдущий анализ"))
+        self.l_appear.setText(_translate("MainWindow", "Время начала видео:"))
+        self.l_items.setText(_translate("MainWindow", "Обнаруж. предметы:"))
         self.input_appear.setDisplayFormat(_translate("MainWindow", "HH:mm:ss"))
 
     def my_setup_ui(self):

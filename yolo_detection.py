@@ -15,7 +15,7 @@ from videoprocessing import cut_photobox
 logger = logging.getLogger(__name__)
 
 
-def detect_items(yolo_df, video_path, items_path):
+def detect_items(yolo_df, video_path, items_path, to_csv_path):
     model = YOLO('data/models/yolov8l.pt')
     yolo_df['class_id'] = yolo_df['class_id'].astype(int)
     yolo_df['tracker_id'] = yolo_df['tracker_id'].astype(int)
@@ -24,6 +24,7 @@ def detect_items(yolo_df, video_path, items_path):
     class_items = np.asarray(class_items_df['id'])[1:]
 
     items_list = []
+    items_df_to_save = pd.DataFrame()
 
     person_arr = yolo_df.tracker_id.unique().astype(int)
     counter = 1
@@ -36,13 +37,16 @@ def detect_items(yolo_df, video_path, items_path):
         only_person_df = only_person_df[(only_person_df.frame % fps) == 0]
 
         items_df = get_items_df(only_person_df, model, video, class_items)
+
         if not items_df.empty:
+            items_df_to_save = pd.concat([items_df_to_save, items_df], ignore_index=True)
             person_items = save_items_photoboxes(items_df, only_person_df, video, class_items_df, person_id, items_path)
             items_list.append(person_items)
 
         logger.info("Detection items for person: %s / %s finished", str(counter), str(len(person_arr)))
         counter += 1
 
+    items_df_to_save.to_csv(to_csv_path + 'items.csv')
     return items_list
 
 
@@ -147,8 +151,8 @@ def get_items_df(only_person_df, model, video, class_items):
 def detect_peoples(video_path, show_results, to_csv_path):
     model = YOLO('data/models/yolov8l.pt')
     yolo_df = video_processing(model, video_path)
-    yolo_df.to_csv(to_csv_path)
-    logger.info("Results saved to csv: %s", to_csv_path)
+    yolo_df.to_csv(to_csv_path + 'detections.csv')
+    logger.info("Results saved to csv: %s", to_csv_path + 'detections.csv')
 
     if show_results:
         yolo_df = pd.read_csv(to_csv_path)

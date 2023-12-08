@@ -246,8 +246,8 @@ class Ui_Form(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Video analysis of passersby"))
-        self.btn_show_item.setText(_translate("MainWindow", "Show item"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Анализ видео"))
+        self.btn_show_item.setText(_translate("MainWindow", "Показать предмет"))
         self.btn_photobox_right.setText(_translate("MainWindow", ">"))
         self.btn_photobox_left.setText(_translate("MainWindow", "<"))
         self.btn_gif_right.setText(_translate("MainWindow", ">"))
@@ -271,7 +271,7 @@ class Ui_Form(object):
         self.add_items(first_person)
 
         # Устанавливаем все labels для 1-го
-        self.add_labels(first_person, 'Begin')
+        self.add_labels(first_person, 'Начало')
 
         # Активируем кнопки
         if len(self.df_persons) > 1:
@@ -290,13 +290,13 @@ class Ui_Form(object):
 
     def gif_changed(self, df_row):
         gif_mode = 'videoclip_begin'
-        self.label_gif.setText('Begin')
+        self.label_gif.setText('Начало')
         if self.cur_selected_gif == 1:
             gif_mode = 'videoclip_middle'
-            self.label_gif.setText('Middle')
+            self.label_gif.setText('Середина')
         elif self.cur_selected_gif == 2:
             gif_mode = 'videoclip_end'
-            self.label_gif.setText('End')
+            self.label_gif.setText('Конец')
 
         self.add_gif(df_row, gif_mode)
 
@@ -329,7 +329,7 @@ class Ui_Form(object):
         self.add_gif(df_row, 'videoclip_begin')
         self.list_view_items.clear()
         self.add_items(df_row)
-        self.add_labels(df_row, 'Begin')
+        self.add_labels(df_row, 'Начало')
 
     def person_to_right(self):
         max_row = len(self.df_persons) - 1
@@ -355,10 +355,10 @@ class Ui_Form(object):
         self.person_changed(person_df)
 
     def add_labels(self, df_row, gif_label):
-        photobox_label = "Person: " + str(df_row.tracker_id)
+        photobox_label = "Человек: " + str(df_row.tracker_id)
         self.label_photobox.setText(photobox_label)
         self.label_gif.setText(gif_label)
-        self.label_appear.setText('Appear time: ' + df_row.appear_time)
+        self.label_appear.setText('Время появления: ' + df_row.appear_time)
 
     def add_items(self, df_row):
         self.cur_person_id = df_row.person_id
