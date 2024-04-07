@@ -494,3 +494,491 @@
 16:55:00   [INFO] yolo_detection -- detect_items  46: Detection items for person: 14 / 15 finished
 16:55:01   [INFO] yolo_detection -- detect_items  46: Detection items for person: 15 / 15 finished
 16:55:02   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:43
+22:04:08   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+22:04:09   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+22:04:11   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+22:04:12   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+17:20:56   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+17:20:57   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+17:20:59   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+17:21:00   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+17:21:03   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+17:21:04   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+17:23:13   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+17:23:14   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+17:23:15   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+17:23:16   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+17:23:17   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+17:23:18   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+17:23:19   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+17:23:48   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+17:23:48   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+17:23:49   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+17:26:41   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+17:26:41   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+18:51:42   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+18:54:27   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+18:54:28   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+18:54:28   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:43
+18:55:00   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+18:55:11   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+18:55:12   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/37sec.mkv doesn't exists in DataBase
+18:55:13   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:43
+18:55:15   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+18:55:19   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+18:55:21   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+18:55:21   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+18:58:20   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+18:58:36   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+18:58:38   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/37sec.mkv doesn't exists in DataBase
+18:58:39   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:43
+18:58:40   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+18:58:40   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:43
+19:24:48   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:24:49   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+19:24:50   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+19:24:51   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+19:24:53   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+19:25:24   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+19:27:13   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:27:14   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+19:27:15   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+19:27:17   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:27:19   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+19:27:20   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+19:27:23   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/37sec.mkv doesn't exists in DataBase
+19:27:25   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/10sec.mkv exists in DataBase with id:43
+19:27:27   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/50sec.mp4 doesn't exists in DataBase
+19:27:27   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/25sec.mkv exists in DataBase with id:39
+15:04:45   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel.mp4 doesn't exists in DataBase
+15:04:49   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+15:04:49   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+15:04:49   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+15:04:49   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+15:04:49   [INFO] analyze -- create_data_dirs  47: Directory data/aquarel was created
+15:04:49   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel/photoboxes was created
+15:04:49   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel/videoclips was created
+15:04:49   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel/videoclips/begin was created
+15:04:49   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel/videoclips/middle was created
+15:04:49   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel/videoclips/end was created
+15:04:49   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel/items was created
+15:04:49   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+15:04:49   [INFO] analyze -- checking_required_files  105: All models required files exists
+15:04:49   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel.mp4 doesn't exists in DataBase
+15:04:49   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+15:04:49   [INFO] yolo_detection -- video_processing  171: Number of frames: 422.0
+15:04:49   [INFO] yolo_detection -- video_processing  172: Video length: 14 sec
+15:04:49   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+15:04:53   [INFO] yolo_detection -- video_processing  196: 10% 	 40 / 422.0 frames
+15:04:55   [INFO] yolo_detection -- video_processing  196: 20% 	 80 / 422.0 frames
+15:04:57   [INFO] yolo_detection -- video_processing  196: 30% 	 120 / 422.0 frames
+15:04:59   [INFO] yolo_detection -- video_processing  196: 40% 	 160 / 422.0 frames
+15:05:01   [INFO] yolo_detection -- video_processing  196: 50% 	 200 / 422.0 frames
+15:05:03   [INFO] yolo_detection -- video_processing  196: 60% 	 240 / 422.0 frames
+15:05:05   [INFO] yolo_detection -- video_processing  196: 70% 	 280 / 422.0 frames
+15:05:07   [INFO] yolo_detection -- video_processing  196: 80% 	 320 / 422.0 frames
+15:05:09   [INFO] yolo_detection -- video_processing  196: 90% 	 360 / 422.0 frames
+15:05:12   [INFO] yolo_detection -- video_processing  199: 100% 	 422 / 422.0 frames
+15:05:12   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+15:05:12   [INFO] yolo_detection -- video_processing  207: Frames processed: 422
+15:05:12   [INFO] yolo_detection -- video_processing  208: Processing time: 23 seconds
+15:05:12   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel/detections.csv
+15:05:13   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 24
+15:05:18   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel/photoboxes/
+15:05:18   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+15:05:18   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+15:05:18   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+15:06:53   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+15:06:55   [INFO] yolo_detection -- detect_items  46: Detection items for person: 1 / 24 finished
+15:07:00   [INFO] yolo_detection -- detect_items  46: Detection items for person: 2 / 24 finished
+15:07:00   [INFO] yolo_detection -- detect_items  46: Detection items for person: 3 / 24 finished
+15:07:04   [INFO] yolo_detection -- detect_items  46: Detection items for person: 4 / 24 finished
+15:07:06   [INFO] yolo_detection -- detect_items  46: Detection items for person: 5 / 24 finished
+15:07:09   [INFO] yolo_detection -- detect_items  46: Detection items for person: 6 / 24 finished
+15:07:10   [INFO] yolo_detection -- detect_items  46: Detection items for person: 7 / 24 finished
+15:07:11   [INFO] yolo_detection -- detect_items  46: Detection items for person: 8 / 24 finished
+15:07:15   [INFO] yolo_detection -- detect_items  46: Detection items for person: 9 / 24 finished
+15:07:18   [INFO] yolo_detection -- detect_items  46: Detection items for person: 10 / 24 finished
+15:07:23   [INFO] yolo_detection -- detect_items  46: Detection items for person: 11 / 24 finished
+15:07:26   [INFO] yolo_detection -- detect_items  46: Detection items for person: 12 / 24 finished
+15:07:28   [INFO] yolo_detection -- detect_items  46: Detection items for person: 13 / 24 finished
+15:07:29   [INFO] yolo_detection -- detect_items  46: Detection items for person: 14 / 24 finished
+15:07:31   [INFO] yolo_detection -- detect_items  46: Detection items for person: 15 / 24 finished
+15:07:32   [INFO] yolo_detection -- detect_items  46: Detection items for person: 16 / 24 finished
+15:07:33   [INFO] yolo_detection -- detect_items  46: Detection items for person: 17 / 24 finished
+15:07:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 18 / 24 finished
+15:07:35   [INFO] yolo_detection -- detect_items  46: Detection items for person: 19 / 24 finished
+15:07:35   [INFO] yolo_detection -- detect_items  46: Detection items for person: 20 / 24 finished
+15:07:36   [INFO] yolo_detection -- detect_items  46: Detection items for person: 21 / 24 finished
+15:07:37   [INFO] yolo_detection -- detect_items  46: Detection items for person: 22 / 24 finished
+15:07:37   [INFO] yolo_detection -- detect_items  46: Detection items for person: 23 / 24 finished
+15:07:38   [INFO] yolo_detection -- detect_items  46: Detection items for person: 24 / 24 finished
+15:07:38   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel.mp4 exists in DataBase with id:44
+15:12:23   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+15:12:23   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+15:12:24   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel.mp4 exists in DataBase with id:44
+15:12:32   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_1.mp4 doesn't exists in DataBase
+15:12:34   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+15:12:34   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+15:12:34   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+15:12:34   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+15:12:34   [INFO] analyze -- create_data_dirs  47: Directory data/aquarel_1 was created
+15:12:34   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_1/photoboxes was created
+15:12:34   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_1/videoclips was created
+15:12:34   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_1/videoclips/begin was created
+15:12:34   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_1/videoclips/middle was created
+15:12:34   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_1/videoclips/end was created
+15:12:34   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_1/items was created
+15:12:34   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+15:12:34   [INFO] analyze -- checking_required_files  105: All models required files exists
+15:12:34   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_1.mp4 doesn't exists in DataBase
+15:12:34   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+15:12:34   [INFO] yolo_detection -- video_processing  171: Number of frames: 472.0
+15:12:34   [INFO] yolo_detection -- video_processing  172: Video length: 15 sec
+15:12:34   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+15:12:38   [INFO] yolo_detection -- video_processing  196: 10% 	 40 / 472.0 frames
+15:12:40   [INFO] yolo_detection -- video_processing  196: 20% 	 80 / 472.0 frames
+15:12:42   [INFO] yolo_detection -- video_processing  196: 30% 	 120 / 472.0 frames
+15:12:44   [INFO] yolo_detection -- video_processing  196: 40% 	 160 / 472.0 frames
+15:12:47   [INFO] yolo_detection -- video_processing  196: 50% 	 200 / 472.0 frames
+15:12:49   [INFO] yolo_detection -- video_processing  196: 60% 	 240 / 472.0 frames
+15:12:51   [INFO] yolo_detection -- video_processing  196: 70% 	 280 / 472.0 frames
+15:12:53   [INFO] yolo_detection -- video_processing  196: 80% 	 320 / 472.0 frames
+15:12:55   [INFO] yolo_detection -- video_processing  196: 90% 	 360 / 472.0 frames
+15:13:01   [INFO] yolo_detection -- video_processing  199: 100% 	 472 / 472.0 frames
+15:13:01   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+15:13:01   [INFO] yolo_detection -- video_processing  207: Frames processed: 472
+15:13:01   [INFO] yolo_detection -- video_processing  208: Processing time: 26 seconds
+15:13:01   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel_1/detections.csv
+15:13:01   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 50
+15:13:14   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel_1/photoboxes/
+15:13:14   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+15:13:14   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+15:13:14   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+15:15:41   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+15:15:43   [INFO] yolo_detection -- detect_items  46: Detection items for person: 1 / 50 finished
+15:15:44   [INFO] yolo_detection -- detect_items  46: Detection items for person: 2 / 50 finished
+15:15:47   [INFO] yolo_detection -- detect_items  46: Detection items for person: 3 / 50 finished
+15:15:50   [INFO] yolo_detection -- detect_items  46: Detection items for person: 4 / 50 finished
+15:15:55   [INFO] yolo_detection -- detect_items  46: Detection items for person: 5 / 50 finished
+15:15:55   [INFO] yolo_detection -- detect_items  46: Detection items for person: 6 / 50 finished
+15:15:57   [INFO] yolo_detection -- detect_items  46: Detection items for person: 7 / 50 finished
+15:15:57   [INFO] yolo_detection -- detect_items  46: Detection items for person: 8 / 50 finished
+15:15:58   [INFO] yolo_detection -- detect_items  46: Detection items for person: 9 / 50 finished
+15:16:01   [INFO] yolo_detection -- detect_items  46: Detection items for person: 10 / 50 finished
+15:16:02   [INFO] yolo_detection -- detect_items  46: Detection items for person: 11 / 50 finished
+15:16:03   [INFO] yolo_detection -- detect_items  46: Detection items for person: 12 / 50 finished
+15:16:07   [INFO] yolo_detection -- detect_items  46: Detection items for person: 13 / 50 finished
+15:16:08   [INFO] yolo_detection -- detect_items  46: Detection items for person: 14 / 50 finished
+15:16:10   [INFO] yolo_detection -- detect_items  46: Detection items for person: 15 / 50 finished
+15:16:13   [INFO] yolo_detection -- detect_items  46: Detection items for person: 16 / 50 finished
+15:16:15   [INFO] yolo_detection -- detect_items  46: Detection items for person: 17 / 50 finished
+15:16:19   [INFO] yolo_detection -- detect_items  46: Detection items for person: 18 / 50 finished
+15:16:22   [INFO] yolo_detection -- detect_items  46: Detection items for person: 19 / 50 finished
+15:16:24   [INFO] yolo_detection -- detect_items  46: Detection items for person: 20 / 50 finished
+15:16:24   [INFO] yolo_detection -- detect_items  46: Detection items for person: 21 / 50 finished
+15:16:26   [INFO] yolo_detection -- detect_items  46: Detection items for person: 22 / 50 finished
+15:16:27   [INFO] yolo_detection -- detect_items  46: Detection items for person: 23 / 50 finished
+15:16:27   [INFO] yolo_detection -- detect_items  46: Detection items for person: 24 / 50 finished
+15:16:28   [INFO] yolo_detection -- detect_items  46: Detection items for person: 25 / 50 finished
+15:16:29   [INFO] yolo_detection -- detect_items  46: Detection items for person: 26 / 50 finished
+15:16:30   [INFO] yolo_detection -- detect_items  46: Detection items for person: 27 / 50 finished
+15:16:30   [INFO] yolo_detection -- detect_items  46: Detection items for person: 28 / 50 finished
+15:16:31   [INFO] yolo_detection -- detect_items  46: Detection items for person: 29 / 50 finished
+15:16:31   [INFO] yolo_detection -- detect_items  46: Detection items for person: 30 / 50 finished
+15:16:31   [INFO] yolo_detection -- detect_items  46: Detection items for person: 31 / 50 finished
+15:16:33   [INFO] yolo_detection -- detect_items  46: Detection items for person: 32 / 50 finished
+15:16:33   [INFO] yolo_detection -- detect_items  46: Detection items for person: 33 / 50 finished
+15:16:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 34 / 50 finished
+15:16:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 35 / 50 finished
+15:16:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 36 / 50 finished
+15:16:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 37 / 50 finished
+15:16:36   [INFO] yolo_detection -- detect_items  46: Detection items for person: 38 / 50 finished
+15:16:38   [INFO] yolo_detection -- detect_items  46: Detection items for person: 39 / 50 finished
+15:16:39   [INFO] yolo_detection -- detect_items  46: Detection items for person: 40 / 50 finished
+15:16:40   [INFO] yolo_detection -- detect_items  46: Detection items for person: 41 / 50 finished
+15:16:42   [INFO] yolo_detection -- detect_items  46: Detection items for person: 42 / 50 finished
+15:16:42   [INFO] yolo_detection -- detect_items  46: Detection items for person: 43 / 50 finished
+15:16:44   [INFO] yolo_detection -- detect_items  46: Detection items for person: 44 / 50 finished
+15:16:44   [INFO] yolo_detection -- detect_items  46: Detection items for person: 45 / 50 finished
+15:16:45   [INFO] yolo_detection -- detect_items  46: Detection items for person: 46 / 50 finished
+15:16:47   [INFO] yolo_detection -- detect_items  46: Detection items for person: 47 / 50 finished
+15:16:47   [INFO] yolo_detection -- detect_items  46: Detection items for person: 48 / 50 finished
+15:16:47   [INFO] yolo_detection -- detect_items  46: Detection items for person: 49 / 50 finished
+15:16:47   [INFO] yolo_detection -- detect_items  46: Detection items for person: 50 / 50 finished
+15:16:47   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_1.mp4 exists in DataBase with id:45
+15:18:56   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+15:18:58   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+15:18:58   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+15:18:58   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+15:18:58   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+15:18:58   [INFO] analyze -- create_data_dirs  47: Directory data/aquarel_2 was created
+15:18:58   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_2/photoboxes was created
+15:18:58   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_2/videoclips was created
+15:18:58   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_2/videoclips/begin was created
+15:18:58   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_2/videoclips/middle was created
+15:18:58   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_2/videoclips/end was created
+15:18:58   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_2/items was created
+15:18:58   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+15:18:58   [INFO] analyze -- checking_required_files  105: All models required files exists
+15:18:58   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+15:18:58   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+15:18:58   [INFO] yolo_detection -- video_processing  171: Number of frames: 1440.0
+15:18:58   [INFO] yolo_detection -- video_processing  172: Video length: 48 sec
+15:18:58   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+15:19:08   [INFO] yolo_detection -- video_processing  196: 10% 	 140 / 1440.0 frames
+15:19:15   [INFO] yolo_detection -- video_processing  196: 20% 	 280 / 1440.0 frames
+15:19:23   [INFO] yolo_detection -- video_processing  196: 30% 	 420 / 1440.0 frames
+15:19:30   [INFO] yolo_detection -- video_processing  196: 40% 	 560 / 1440.0 frames
+15:19:38   [INFO] yolo_detection -- video_processing  196: 50% 	 700 / 1440.0 frames
+15:19:45   [INFO] yolo_detection -- video_processing  196: 60% 	 840 / 1440.0 frames
+15:19:52   [INFO] yolo_detection -- video_processing  196: 70% 	 980 / 1440.0 frames
+15:20:00   [INFO] yolo_detection -- video_processing  196: 80% 	 1120 / 1440.0 frames
+15:20:07   [INFO] yolo_detection -- video_processing  196: 90% 	 1260 / 1440.0 frames
+15:20:17   [INFO] yolo_detection -- video_processing  199: 100% 	 1440 / 1440.0 frames
+15:20:17   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+15:20:17   [INFO] yolo_detection -- video_processing  207: Frames processed: 1440
+15:20:17   [INFO] yolo_detection -- video_processing  208: Processing time: 78 seconds
+15:20:17   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel_2/detections.csv
+15:20:17   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 21
+15:20:23   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel_2/photoboxes/
+15:20:23   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+15:20:23   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+15:20:23   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+15:22:11   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+15:22:18   [INFO] yolo_detection -- detect_items  46: Detection items for person: 1 / 21 finished
+15:22:29   [INFO] yolo_detection -- detect_items  46: Detection items for person: 2 / 21 finished
+15:22:40   [INFO] yolo_detection -- detect_items  46: Detection items for person: 3 / 21 finished
+15:22:51   [INFO] yolo_detection -- detect_items  46: Detection items for person: 4 / 21 finished
+15:23:02   [INFO] yolo_detection -- detect_items  46: Detection items for person: 5 / 21 finished
+15:23:12   [INFO] yolo_detection -- detect_items  46: Detection items for person: 6 / 21 finished
+15:23:13   [INFO] yolo_detection -- detect_items  46: Detection items for person: 7 / 21 finished
+15:23:14   [INFO] yolo_detection -- detect_items  46: Detection items for person: 8 / 21 finished
+15:23:15   [INFO] yolo_detection -- detect_items  46: Detection items for person: 9 / 21 finished
+15:23:15   [INFO] yolo_detection -- detect_items  46: Detection items for person: 10 / 21 finished
+15:23:17   [INFO] yolo_detection -- detect_items  46: Detection items for person: 11 / 21 finished
+15:23:18   [INFO] yolo_detection -- detect_items  46: Detection items for person: 12 / 21 finished
+15:23:19   [INFO] yolo_detection -- detect_items  46: Detection items for person: 13 / 21 finished
+15:23:19   [INFO] yolo_detection -- detect_items  46: Detection items for person: 14 / 21 finished
+15:23:22   [INFO] yolo_detection -- detect_items  46: Detection items for person: 15 / 21 finished
+15:23:26   [INFO] yolo_detection -- detect_items  46: Detection items for person: 16 / 21 finished
+15:23:26   [INFO] yolo_detection -- detect_items  46: Detection items for person: 17 / 21 finished
+15:23:29   [INFO] yolo_detection -- detect_items  46: Detection items for person: 18 / 21 finished
+15:23:32   [INFO] yolo_detection -- detect_items  46: Detection items for person: 19 / 21 finished
+15:23:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 20 / 21 finished
+15:23:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 21 / 21 finished
+15:23:34   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:46
+15:30:21   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_3.mp4 doesn't exists in DataBase
+15:30:27   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+15:30:27   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+15:30:27   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+15:30:27   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+15:30:27   [INFO] analyze -- create_data_dirs  47: Directory data/aquarel_3 was created
+15:30:27   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_3/photoboxes was created
+15:30:27   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_3/videoclips was created
+15:30:27   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_3/videoclips/begin was created
+15:30:27   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_3/videoclips/middle was created
+15:30:27   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_3/videoclips/end was created
+15:30:27   [INFO] analyze -- create_sub_dir  85: Directory data/aquarel_3/items was created
+15:30:27   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+15:30:27   [INFO] analyze -- checking_required_files  105: All models required files exists
+15:30:27   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_3.mp4 doesn't exists in DataBase
+15:30:27   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+15:30:27   [INFO] yolo_detection -- video_processing  171: Number of frames: 300.0
+15:30:27   [INFO] yolo_detection -- video_processing  172: Video length: 10 sec
+15:30:27   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+15:30:30   [INFO] yolo_detection -- video_processing  196: 10% 	 30 / 300.0 frames
+15:30:32   [INFO] yolo_detection -- video_processing  196: 20% 	 60 / 300.0 frames
+15:30:33   [INFO] yolo_detection -- video_processing  196: 30% 	 90 / 300.0 frames
+15:30:35   [INFO] yolo_detection -- video_processing  196: 40% 	 120 / 300.0 frames
+15:30:36   [INFO] yolo_detection -- video_processing  196: 50% 	 150 / 300.0 frames
+15:30:38   [INFO] yolo_detection -- video_processing  196: 60% 	 180 / 300.0 frames
+15:30:40   [INFO] yolo_detection -- video_processing  196: 70% 	 210 / 300.0 frames
+15:30:41   [INFO] yolo_detection -- video_processing  196: 80% 	 240 / 300.0 frames
+15:30:43   [INFO] yolo_detection -- video_processing  196: 90% 	 270 / 300.0 frames
+15:30:44   [INFO] yolo_detection -- video_processing  199: 100% 	 300 / 300.0 frames
+15:30:44   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+15:30:44   [INFO] yolo_detection -- video_processing  207: Frames processed: 300
+15:30:44   [INFO] yolo_detection -- video_processing  208: Processing time: 17 seconds
+15:30:44   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel_3/detections.csv
+15:30:45   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 25
+15:30:51   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel_3/photoboxes/
+15:30:51   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+15:30:51   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+15:30:51   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+15:32:29   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+15:32:32   [INFO] yolo_detection -- detect_items  46: Detection items for person: 1 / 25 finished
+15:32:33   [INFO] yolo_detection -- detect_items  46: Detection items for person: 2 / 25 finished
+15:32:36   [INFO] yolo_detection -- detect_items  46: Detection items for person: 3 / 25 finished
+15:32:38   [INFO] yolo_detection -- detect_items  46: Detection items for person: 4 / 25 finished
+15:32:40   [INFO] yolo_detection -- detect_items  46: Detection items for person: 5 / 25 finished
+15:32:43   [INFO] yolo_detection -- detect_items  46: Detection items for person: 6 / 25 finished
+15:32:44   [INFO] yolo_detection -- detect_items  46: Detection items for person: 7 / 25 finished
+15:32:47   [INFO] yolo_detection -- detect_items  46: Detection items for person: 8 / 25 finished
+15:32:49   [INFO] yolo_detection -- detect_items  46: Detection items for person: 9 / 25 finished
+15:32:50   [INFO] yolo_detection -- detect_items  46: Detection items for person: 10 / 25 finished
+15:32:51   [INFO] yolo_detection -- detect_items  46: Detection items for person: 11 / 25 finished
+15:32:52   [INFO] yolo_detection -- detect_items  46: Detection items for person: 12 / 25 finished
+15:32:54   [INFO] yolo_detection -- detect_items  46: Detection items for person: 13 / 25 finished
+15:32:56   [INFO] yolo_detection -- detect_items  46: Detection items for person: 14 / 25 finished
+15:32:57   [INFO] yolo_detection -- detect_items  46: Detection items for person: 15 / 25 finished
+15:32:58   [INFO] yolo_detection -- detect_items  46: Detection items for person: 16 / 25 finished
+15:32:59   [INFO] yolo_detection -- detect_items  46: Detection items for person: 17 / 25 finished
+15:32:59   [INFO] yolo_detection -- detect_items  46: Detection items for person: 18 / 25 finished
+15:33:01   [INFO] yolo_detection -- detect_items  46: Detection items for person: 19 / 25 finished
+15:33:02   [INFO] yolo_detection -- detect_items  46: Detection items for person: 20 / 25 finished
+15:33:03   [INFO] yolo_detection -- detect_items  46: Detection items for person: 21 / 25 finished
+15:33:04   [INFO] yolo_detection -- detect_items  46: Detection items for person: 22 / 25 finished
+15:33:05   [INFO] yolo_detection -- detect_items  46: Detection items for person: 23 / 25 finished
+15:33:05   [INFO] yolo_detection -- detect_items  46: Detection items for person: 24 / 25 finished
+15:33:06   [INFO] yolo_detection -- detect_items  46: Detection items for person: 25 / 25 finished
+15:33:06   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_3.mp4 exists in DataBase with id:47
+15:34:47   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:46
+16:07:49   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+16:08:23   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+16:08:23   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+16:08:23   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+16:08:23   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+16:08:23   [INFO] analyze -- create_data_dirs  49: Directory data/aquarel_2 already exists
+16:08:23   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/photoboxes already exists
+16:08:23   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips already exists
+16:08:23   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/begin already exists
+16:08:23   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/middle already exists
+16:08:23   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/end already exists
+16:08:23   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/items already exists
+16:08:23   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+16:08:23   [INFO] analyze -- checking_required_files  105: All models required files exists
+16:08:23   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+16:08:23   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+16:08:23   [INFO] yolo_detection -- video_processing  171: Number of frames: 1440.0
+16:08:23   [INFO] yolo_detection -- video_processing  172: Video length: 48 sec
+16:08:23   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+16:08:33   [INFO] yolo_detection -- video_processing  196: 10% 	 140 / 1440.0 frames
+16:08:40   [INFO] yolo_detection -- video_processing  196: 20% 	 280 / 1440.0 frames
+16:08:48   [INFO] yolo_detection -- video_processing  196: 30% 	 420 / 1440.0 frames
+16:08:55   [INFO] yolo_detection -- video_processing  196: 40% 	 560 / 1440.0 frames
+16:09:03   [INFO] yolo_detection -- video_processing  196: 50% 	 700 / 1440.0 frames
+16:09:11   [INFO] yolo_detection -- video_processing  196: 60% 	 840 / 1440.0 frames
+16:09:18   [INFO] yolo_detection -- video_processing  196: 70% 	 980 / 1440.0 frames
+16:09:26   [INFO] yolo_detection -- video_processing  196: 80% 	 1120 / 1440.0 frames
+16:09:33   [INFO] yolo_detection -- video_processing  196: 90% 	 1260 / 1440.0 frames
+16:09:43   [INFO] yolo_detection -- video_processing  199: 100% 	 1440 / 1440.0 frames
+16:09:43   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+16:09:43   [INFO] yolo_detection -- video_processing  207: Frames processed: 1440
+16:09:43   [INFO] yolo_detection -- video_processing  208: Processing time: 79 seconds
+16:09:43   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel_2/detections.csv
+16:09:43   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 21
+16:09:49   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel_2/photoboxes/
+16:09:49   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+16:09:49   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+16:09:49   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+16:12:00   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+16:15:27   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+16:15:27   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+16:15:27   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+16:15:27   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+16:15:27   [INFO] analyze -- create_data_dirs  49: Directory data/aquarel_2 already exists
+16:15:27   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/photoboxes already exists
+16:15:27   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips already exists
+16:15:27   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/begin already exists
+16:15:27   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/middle already exists
+16:15:27   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/end already exists
+16:15:27   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/items already exists
+16:15:27   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+16:15:27   [INFO] analyze -- checking_required_files  105: All models required files exists
+16:15:27   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+16:15:28   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+16:15:28   [INFO] yolo_detection -- video_processing  171: Number of frames: 1440.0
+16:15:28   [INFO] yolo_detection -- video_processing  172: Video length: 48 sec
+16:15:28   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+16:15:37   [INFO] yolo_detection -- video_processing  196: 10% 	 140 / 1440.0 frames
+16:15:45   [INFO] yolo_detection -- video_processing  196: 20% 	 280 / 1440.0 frames
+16:15:53   [INFO] yolo_detection -- video_processing  196: 30% 	 420 / 1440.0 frames
+16:16:00   [INFO] yolo_detection -- video_processing  196: 40% 	 560 / 1440.0 frames
+16:16:08   [INFO] yolo_detection -- video_processing  196: 50% 	 700 / 1440.0 frames
+16:16:16   [INFO] yolo_detection -- video_processing  196: 60% 	 840 / 1440.0 frames
+16:16:23   [INFO] yolo_detection -- video_processing  196: 70% 	 980 / 1440.0 frames
+16:16:31   [INFO] yolo_detection -- video_processing  196: 80% 	 1120 / 1440.0 frames
+16:16:38   [INFO] yolo_detection -- video_processing  196: 90% 	 1260 / 1440.0 frames
+16:16:48   [INFO] yolo_detection -- video_processing  199: 100% 	 1440 / 1440.0 frames
+16:16:48   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+16:16:48   [INFO] yolo_detection -- video_processing  207: Frames processed: 1440
+16:16:48   [INFO] yolo_detection -- video_processing  208: Processing time: 80 seconds
+16:16:48   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel_2/detections.csv
+16:16:48   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 21
+16:16:54   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel_2/photoboxes/
+16:16:54   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+16:16:54   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+16:16:54   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+16:17:04   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+16:19:13   [INFO] analyze -- app_analyze  187: CUDA device's count: 1
+16:19:13   [INFO] analyze -- app_analyze  188: CUDA current device: NVIDIA GeForce GTX 1650
+16:19:13   [INFO] analyze -- create_data_dirs  32: Directory data/ already exists
+16:19:13   [INFO] analyze -- create_data_dirs  40: Directory data/models already exists
+16:19:13   [INFO] analyze -- create_data_dirs  49: Directory data/aquarel_2 already exists
+16:19:13   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/photoboxes already exists
+16:19:13   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips already exists
+16:19:13   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/begin already exists
+16:19:13   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/middle already exists
+16:19:13   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/videoclips/end already exists
+16:19:13   [INFO] analyze -- create_sub_dir  87: Directory data/aquarel_2/items already exists
+16:19:13   [INFO] analyze -- checking_required_files  100: All .csv required files exists
+16:19:13   [INFO] analyze -- checking_required_files  105: All models required files exists
+16:19:13   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/aquarel_2.mp4 doesn't exists in DataBase
+16:19:13   [INFO] yolo_detection -- video_processing  170: Frames Per Second: 30.0
+16:19:13   [INFO] yolo_detection -- video_processing  171: Number of frames: 1440.0
+16:19:13   [INFO] yolo_detection -- video_processing  172: Video length: 48 sec
+16:19:13   [INFO] yolo_detection -- video_processing  178: ----Video processing started----
+16:19:22   [INFO] yolo_detection -- video_processing  196: 10% 	 140 / 1440.0 frames
+16:19:30   [INFO] yolo_detection -- video_processing  196: 20% 	 280 / 1440.0 frames
+16:19:37   [INFO] yolo_detection -- video_processing  196: 30% 	 420 / 1440.0 frames
+16:19:45   [INFO] yolo_detection -- video_processing  196: 40% 	 560 / 1440.0 frames
+16:19:53   [INFO] yolo_detection -- video_processing  196: 50% 	 700 / 1440.0 frames
+16:20:00   [INFO] yolo_detection -- video_processing  196: 60% 	 840 / 1440.0 frames
+16:20:08   [INFO] yolo_detection -- video_processing  196: 70% 	 980 / 1440.0 frames
+16:20:15   [INFO] yolo_detection -- video_processing  196: 80% 	 1120 / 1440.0 frames
+16:20:23   [INFO] yolo_detection -- video_processing  196: 90% 	 1260 / 1440.0 frames
+16:20:33   [INFO] yolo_detection -- video_processing  199: 100% 	 1440 / 1440.0 frames
+16:20:33   [INFO] yolo_detection -- video_processing  206: ----Video processing completed----
+16:20:33   [INFO] yolo_detection -- video_processing  207: Frames processed: 1440
+16:20:33   [INFO] yolo_detection -- video_processing  208: Processing time: 79 seconds
+16:20:33   [INFO] yolo_detection -- detect_peoples  155: Results saved to csv: data/aquarel_2/detections.csv
+16:20:33   [INFO] videoprocessing -- save_photoboxes_from_yolo  13: Persons number: 21
+16:20:39   [INFO] videoprocessing -- save_photoboxes_from_yolo  33: Photoboxes are saved to path: data/aquarel_2/photoboxes/
+16:20:39   [INFO] videoprocessing -- clip_video_fragment  52: Video fps: 30.0
+16:20:39   [INFO] videoprocessing -- clip_video_fragment  53: Video fragment in seconds: 5
+16:20:39   [INFO] videoprocessing -- clip_video_fragment  54: Video fragment in frames: 150
+16:22:31   [INFO] appear_time -- calculate_appear_time  110: Appear times has been calculated
+16:22:38   [INFO] yolo_detection -- detect_items  46: Detection items for person: 1 / 21 finished
+16:22:50   [INFO] yolo_detection -- detect_items  46: Detection items for person: 2 / 21 finished
+16:23:01   [INFO] yolo_detection -- detect_items  46: Detection items for person: 3 / 21 finished
+16:23:12   [INFO] yolo_detection -- detect_items  46: Detection items for person: 4 / 21 finished
+16:23:24   [INFO] yolo_detection -- detect_items  46: Detection items for person: 5 / 21 finished
+16:23:34   [INFO] yolo_detection -- detect_items  46: Detection items for person: 6 / 21 finished
+16:23:35   [INFO] yolo_detection -- detect_items  46: Detection items for person: 7 / 21 finished
+16:23:36   [INFO] yolo_detection -- detect_items  46: Detection items for person: 8 / 21 finished
+16:23:37   [INFO] yolo_detection -- detect_items  46: Detection items for person: 9 / 21 finished
+16:23:38   [INFO] yolo_detection -- detect_items  46: Detection items for person: 10 / 21 finished
+16:23:39   [INFO] yolo_detection -- detect_items  46: Detection items for person: 11 / 21 finished
+16:23:40   [INFO] yolo_detection -- detect_items  46: Detection items for person: 12 / 21 finished
+16:23:41   [INFO] yolo_detection -- detect_items  46: Detection items for person: 13 / 21 finished
+16:23:42   [INFO] yolo_detection -- detect_items  46: Detection items for person: 14 / 21 finished
+16:23:45   [INFO] yolo_detection -- detect_items  46: Detection items for person: 15 / 21 finished
+16:23:49   [INFO] yolo_detection -- detect_items  46: Detection items for person: 16 / 21 finished
+16:23:49   [INFO] yolo_detection -- detect_items  46: Detection items for person: 17 / 21 finished
+16:23:52   [INFO] yolo_detection -- detect_items  46: Detection items for person: 18 / 21 finished
+16:23:55   [INFO] yolo_detection -- detect_items  46: Detection items for person: 19 / 21 finished
+16:23:57   [INFO] yolo_detection -- detect_items  46: Detection items for person: 20 / 21 finished
+16:23:57   [INFO] yolo_detection -- detect_items  46: Detection items for person: 21 / 21 finished
+16:23:57   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48
+21:36:43   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48
+21:36:46   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_1.mp4 exists in DataBase with id:45
+21:36:47   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min10sec.mkv exists in DataBase with id:41
+21:36:48   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/27sec.mkv exists in DataBase with id:40
+21:36:48   [INFO] db_processing -- check_video_db_exists  179: Video with path videos/30sec.mkv doesn't exists in DataBase
+21:36:49   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/1min20sec.mkv exists in DataBase with id:38
+21:36:50   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48
+21:36:51   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_1.mp4 exists in DataBase with id:45
+21:36:52   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48
+19:37:43   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel.mp4 exists in DataBase with id:44
+19:37:44   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48

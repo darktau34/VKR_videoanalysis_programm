@@ -1,3 +1,7 @@
+"""
+Основной скрипт для запуска проги
+"""
+
 # Form implementation generated from reading ui file 'ready_main_ui.ui'
 #
 # Created by: PyQt6 UI code generator 6.6.1
@@ -454,6 +458,9 @@ class Ui_MainWindow(object):
         self.progress_bar.setValue(0)
 
     def show_analysis(self):
+        """
+        Из app_analysis берется класс и здесь создается. Окно просмотра результатов анализа
+        """
         self.form = QtWidgets.QMainWindow()
         self.ui_form = Ui_Form()
         self.ui_form.setupUi(self.form)

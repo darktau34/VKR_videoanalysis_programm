@@ -171,7 +171,7 @@ def video_processing(yolo, video_path):
     logger.info("Number of frames: %s", frames)
     logger.info("Video length: %s sec", int(frames / fps))
 
-    all_df = pd.DataFrame(columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id'])
+    all_df = pd.DataFrame(columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id', 'box_square'])
     frames_counter = 0
     one_percent = int(frames * 0.01)
     stager = 10
@@ -225,6 +225,7 @@ def frame_processing(frame, yolo, frames_counter):
         confidence = [0]
         class_id = [0]
         tracker_id = [np.nan]
+        box_square = [0]
     else:
         confidence = results.boxes.conf.cpu().numpy()
         class_id = results.boxes.cls.cpu().numpy().astype(int)
@@ -233,16 +234,22 @@ def frame_processing(frame, yolo, frames_counter):
         except AttributeError:
             tracker_id = [np.nan]
 
-    data = np.array(
-        [xyxy[0][0], xyxy[0][1], xyxy[0][2], xyxy[0][3], confidence[0], class_id[0], tracker_id[0]]
-    )
+        box_width = max([xyxy[0][0], xyxy[0][2]]) - min([xyxy[0][0], xyxy[0][2]])
+        box_height = max([xyxy[0][1], xyxy[0][3]]) - min([xyxy[0][1], xyxy[0][3]])
+        box_square = [round(box_width * box_height, 2)]
 
-    if (len(tracker_id)) == 1:
+    if (len(tracker_id)) >= 1:
+        data = np.array(
+            [xyxy[0][0], xyxy[0][1], xyxy[0][2], xyxy[0][3], confidence[0], class_id[0], tracker_id[0], box_square[0]]
+        )
         data = [data]
 
     for i in range(1, len(tracker_id)):
+        box_width = max([xyxy[i][0], xyxy[i][2]]) - min([xyxy[i][0], xyxy[i][2]])
+        box_height = max([xyxy[i][1], xyxy[i][3]]) - min([xyxy[i][1], xyxy[i][3]])
+        box_square = round(box_width * box_height, 2)
         item = np.array(
-            [xyxy[i][0], xyxy[i][1], xyxy[i][2], xyxy[i][3], confidence[i], class_id[i], tracker_id[i]]
+            [xyxy[i][0], xyxy[i][1], xyxy[i][2], xyxy[i][3], confidence[i], class_id[i], tracker_id[i], box_square]
         )
         data = np.vstack([data, item])
 
@@ -250,7 +257,7 @@ def frame_processing(frame, yolo, frames_counter):
 
     df = pd.DataFrame(
         data=data,
-        columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id'],
+        columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id', 'box_square'],
         index=index_list
     )
 
@@ -286,6 +293,7 @@ def show_detection_results(video_path, yolo_df):
 
 
 def annotate_detections(frame, frame_df):
+    # Не работает!!!
     xyxy = np.array([[frame_df['x1'][0], frame_df['y1'][0], frame_df['x2'][0], frame_df['y2'][0]]])
     for i in range(1, len(frame_df)):
         xyxy = np.append(xyxy, [[frame_df['x1'][i], frame_df['y1'][i], frame_df['x2'][i], frame_df['y2'][i]]], axis=0)
@@ -295,7 +303,7 @@ def annotate_detections(frame, frame_df):
     tracker_id = np.array(frame_df['tracker_id']).astype(int)
 
     detections = Detections(xyxy=xyxy, confidence=conf, class_id=class_id, tracker_id=tracker_id)
-    box_annotator = BoundingBoxAnnotator()
+    box_annotator = BoundingBoxAnnotator(color_map='track')
 
     frame = box_annotator.annotate(scene=frame.copy(), detections=detections)
     return frame

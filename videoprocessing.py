@@ -1,34 +1,115 @@
 import logging
 import numpy as np
+import cv2 as cv
 from moviepy.editor import VideoFileClip, ImageSequenceClip
 from PIL import Image
+from facenet_pytorch import MTCNN
+from fer import FER
 
 logger = logging.getLogger(__name__)
 
 
+def detect_fer(photoboxes_paths):
+    fer_detector = FER(mtcnn=True)
+    ph_emotions = []
+    for ph_path in photoboxes_paths:
+        ph = cv.imread(ph_path)
+        ph = cv.cvtColor(ph, cv.COLOR_BGR2RGB)
+
+        fer_result = fer_detector.detect_emotions(ph)
+        if len(fer_result) != 0:
+            result_emotions = fer_result[0]['emotions']
+            result_emotions['photobox_path'] = ph_path
+            result_emotions['recognized'] = True
+        else:
+            result_emotions = {
+                'photobox_path': ph_path,
+                'recognized': False
+            }
+
+        ph_emotions.append(result_emotions)
+
+    return ph_emotions
+
+
 def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save):
+    """
+    анализируем боксы людей, берем наибольший бокс, проверяем чтоб лицо нахоидилось и сохраняем
+    """
     video = VideoFileClip(video_path)
+    mtcnn = MTCNN(select_largest=True, device='cuda:0')
+    step = 5  # каждый 5 кадр берем и смотрим бокс лица
     person_arr = yolo_df.tracker_id.unique().astype(int)
     photoboxes_paths_list = []
+    person_counter = 0
     logger.info('Persons number: %s', len(person_arr))
     for person in person_arr:
+        person_counter += 1
+        logger.info('Person  %s / %s', person_counter, len(person_arr))
         only_person_df = yolo_df.loc[yolo_df.tracker_id == person]
-        mean_frame = only_person_df.frame.values.mean()
-        mean_frame = mean_frame.round().astype(int)
-        frame_row = only_person_df.loc[only_person_df.frame == mean_frame]
-        while frame_row.empty:
-            mean_frame += 1
-            frame_row = only_person_df.loc[only_person_df.frame == mean_frame]
-        frame_row.reset_index(drop=True, inplace=True)
-        x1 = frame_row.x1.values[0]
-        y1 = frame_row.y1.values[0]
-        x2 = frame_row.x2.values[0]
-        y2 = frame_row.y2.values[0]
-        box = (x1, y1, x2, y2)
-        photobox = cut_photobox(video, mean_frame, box)
-        path = dir_to_save + 'person' + str(person) + '.png'
-        photoboxes_paths_list.append(path)
-        photobox.save(path)
+
+        for i in range(0, len(only_person_df), step):
+            frame_row = only_person_df.loc[only_person_df.box_square == only_person_df.box_square.max()]
+            frame_row.reset_index(drop=True, inplace=True)
+            x1 = frame_row.x1.values[0]
+            y1 = frame_row.y1.values[0]
+            x2 = frame_row.x2.values[0]
+            y2 = frame_row.y2.values[0]
+            box = (x1, y1, x2, y2)
+            box_width = x2 - x1
+            box_height = y2 - y1
+            frame_number = int(frame_row.frame.values[0])
+            # print(frame_row)
+
+            photobox = cut_photobox(video, frame_number, box)
+            if i == 0:
+                photobox_start_iter = photobox.copy()
+
+            boxes, probs = mtcnn.detect(photobox)
+            # print(boxes, probs)
+
+            skip = False
+            if boxes is not None:
+                # Если mtccn нашло лицо
+                # Проверяем чтобы координаты бокса mtcnn не были за границами фотобокса
+                for k in range(len(boxes)):  # цикл по массиву найденных боксов
+                    if boxes[k][0] < 0:
+                        skip = True
+                        break
+                    if boxes[k][1] < 0:
+                        skip = True
+                        break
+                    if boxes[k][2] > box_width:
+                        skip = True
+                        break
+                    if boxes[k][3] > box_height:
+                        skip = True
+                        break
+
+                    if (boxes[k][2] - boxes[k][0]) * (boxes[k][3] - boxes[k][1]) < 48 * 48:
+                        skip = True
+                    else:
+                        skip = False
+
+                if not skip:
+                    # сохраняем
+                    path = dir_to_save + 'person' + str(person) + '.png'
+                    photoboxes_paths_list.append(path)
+                    photobox.save(path)
+                    break
+
+            if skip or boxes is None:
+                if i >= 40:  # i >= x,  x -- const.  (x / step) + 1 -- столько кадров максимум анализируется
+                    # Если уже на протяжении N кадров не находит лицо
+                    path = dir_to_save + 'person' + str(person) + '.png'
+                    photoboxes_paths_list.append(path)
+                    photobox_start_iter.save(path)
+                    break
+
+                for _ in range(step - 1):
+                    frame_row = only_person_df.loc[only_person_df.box_square == only_person_df.box_square.max()]
+                    frame_row_idx = frame_row.index
+                    only_person_df = only_person_df.drop(index=frame_row_idx)
 
     logger.info('Photoboxes are saved to path: %s', dir_to_save)
     return photoboxes_paths_list

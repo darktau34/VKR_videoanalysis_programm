@@ -4,3 +4,6 @@ data/
 .idea/
 yolo_items.py
 test/
+deepsort_wts/
+env_fer/
+requirements_save.txt

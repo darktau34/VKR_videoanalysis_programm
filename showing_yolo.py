@@ -1,3 +1,8 @@
+"""
+Скрипт для отображения результатов детектирования YOLO на видео.
+YOLO детектит -> сохраняет csv -> берется csv -> аннотируется каждый кадр -> сохраняется новое видео
+"""
+
 import time
 import logging
 import numpy as np
@@ -13,14 +18,14 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
 
 
-def detect(video_path='videos/1min10sec.mkv', to_csv_path='test/1min10sec.csv'):
+def detect(video_path='videos/30sec.mkv', to_csv_path='test/30sec.csv'):
     model = YOLO('data/models/yolov8l.pt')
     yolo_df = video_processing(model, video_path)
     yolo_df.to_csv(to_csv_path)
     logger.info("Results saved to csv: %s", to_csv_path)
 
 
-def save_res(video_path='videos/1min10sec.mkv', to_csv_path='test/1min10sec.csv', output_name='test/1min10sec.mp4'):
+def save_res(video_path='videos/30sec.mkv', to_csv_path='test/30sec.csv', output_name='test/30sec.mp4'):
     yolo_df = pd.read_csv(to_csv_path)
     model = YOLO('data/models/yolov8l.pt')
     class_names = model.model.names
@@ -84,7 +89,7 @@ def add_yolo_detections(frame, df, bounding_box_annotator, class_names):
     ]
 
     annotated_frame = bounding_box_annotator.annotate(scene=frame.copy(), detections=detections)
-    label_annotator = sv.LabelAnnotator(text_position=sv.Position.CENTER)
+    label_annotator = sv.LabelAnnotator(text_position=sv.Position.CENTER, color_map='track', text_padding=5)
     annotated_frame = label_annotator.annotate(scene=annotated_frame.copy(), detections=detections, labels=labels)
     return annotated_frame
 

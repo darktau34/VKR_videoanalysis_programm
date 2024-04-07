@@ -1,3 +1,8 @@
+"""
+Скрипт основных действий и логики работы анализа
+"""
+
+
 import argparse
 import os
 import logging
@@ -182,6 +187,13 @@ def console_analyze():
 
 
 def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar):
+    """
+    Вызывается в app.py при старте анализа
+    :param video_path: путь к видео
+    :param begin_video_time: время начала видео для расчета времени появления людей
+    :param need_detection_items: bool нужно ли детектировать предметы
+    :param progress_bar: для изменения прогресс бара в ui
+    """
     logger = logging.getLogger(__name__)
     if torch.cuda.is_available():
         logger.info("CUDA device's count: %s", torch.cuda.device_count())
