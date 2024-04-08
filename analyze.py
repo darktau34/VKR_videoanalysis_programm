@@ -3,6 +3,7 @@
 """
 
 
+import time
 import argparse
 import os
 import logging
@@ -220,29 +221,51 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     items_list = []
     progress_bar.setValue(10)
 
+    start_time = time.time()
     detect_peoples(video_path, show_results, to_csv_path)
+    end_time = time.time()
+    logger.info('Detection time: %s sec.', end_time - start_time)
     yolo_df = pd.read_csv(to_csv_path + 'detections.csv')
     progress_bar.setValue(30)
+
+    start_time = time.time()
     tracker_list = yolo_df.tracker_id.unique().astype(int)
     photoboxes_paths = save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir)
+    end_time = time.time()
+    logger.info('Save photoboxes time: %s sec.', end_time - start_time)
     progress_bar.setValue(40)
+
+    start_time = time.time()
     videoclips_paths = clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
+    end_time = time.time()
+    logger.info('Clip video fragments time: %s sec.', end_time - start_time)
     progress_bar.setValue(60)
+
+    start_time = time.time()
     video_fps = get_video_fps(video_path)
     time_df = calculate_appear_time(yolo_df, begin_video_time, video_fps)
     time_df.to_csv(time_csv_path)
     time_list = time_df['appear_time'].values
+    end_time = time.time()
+    logger.info('Calculate appear time, time: %s sec.', end_time - start_time)
     progress_bar.setValue(70)
 
     if need_detection_items:
+        start_time = time.time()
         items_list = detect_items(yolo_df, video_path, items_dir, to_csv_path)
         items_list = sort_items_list(items_list)
+        end_time = time.time()
+        logger.info('Items detection time: %s sec.', end_time - start_time)
 
     progress_bar.setValue(90)
+    start_time = time.time()
     insert_to_video_table(video_path)
     insert_to_person_table(video_path, photoboxes_paths, videoclips_paths, time_list, tracker_list)
     if len(items_list) != 0:
         insert_to_items_table(items_list, video_path)
+
+    end_time = time.time()
+    logger.info('Insert to DataBase time: %s sec.', end_time - start_time)
     progress_bar.setValue(100)
 
 

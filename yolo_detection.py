@@ -1,12 +1,14 @@
 import time
 import argparse
 import logging
+import os
 import numpy as np
 import cv2 as cv
 import pandas as pd
+import supervision as sv
 from ultralytics import YOLO
-from supervision.annotators.core import BoundingBoxAnnotator
-from supervision.detection.core import Detections
+from deep_sort_realtime.deepsort_tracker import DeepSort
+from videoprocessing import get_video_fps
 
 from moviepy.editor import VideoFileClip
 from PIL import Image
@@ -76,7 +78,8 @@ def save_items_photoboxes(items_df, only_person_df, video, class_items_df, perso
 
         photobox = cut_photobox(video, frame, box)
 
-        img = np.asarray(photobox)
+        img_arr = np.asarray(photobox)
+        img = img_arr.copy()
         cv.rectangle(img, (item_x1, item_y1), (item_x2, item_y2), (0, 255, 0), 1)
         img = Image.fromarray(img)
 
@@ -148,18 +151,61 @@ def get_items_df(only_person_df, model, video, class_items):
     return items_df
 
 
-def detect_peoples(video_path, show_results, to_csv_path):
-    model = YOLO('data/models/yolov8l.pt')
-    yolo_df = video_processing(model, video_path)
+def detect_peoples(video_path, save_results, to_csv_path):
+    yolo_model = YOLO('data/models/yolov8l.pt')
+    tracker = DeepSort(max_age=20, embedder='torchreid')
+    yolo_df = video_processing(yolo_model, tracker, video_path)
     yolo_df.to_csv(to_csv_path + 'detections.csv')
+    clear_df(to_csv_path + 'detections.csv', video_path)
     logger.info("Results saved to csv: %s", to_csv_path + 'detections.csv')
 
-    if show_results:
-        yolo_df = pd.read_csv(to_csv_path)
-        show_detection_results(video_path, yolo_df)
+    if save_results:
+        yolo_df = pd.read_csv(to_csv_path + 'detections.csv')
+        save_detection_results(video_path, yolo_df)
 
 
-def video_processing(yolo, video_path):
+def clear_df(yolo_df_path, video_path):
+    """
+    Очищает yolo df от мерцающих tracker id (которые трекаются меньше чем 1 сек. видео, т.е. не непрерывно)
+    """
+    logger.info('DataFrame clearing...')
+    yolo_df = pd.read_csv(yolo_df_path)
+    video_fps = int(get_video_fps(video_path))
+
+    tracker_id_arr = yolo_df.tracker_id.unique().astype(int)
+    for tracker in tracker_id_arr:
+        only_tracker_df = yolo_df.loc[yolo_df.tracker_id == tracker]
+        if len(only_tracker_df) < video_fps:
+            del_indexes = [i for i in only_tracker_df.index.values]
+        else:
+            sequence_counter = 0
+            prev_frame = int(only_tracker_df.iloc[0].frame)
+            prev_positive_frame = 0  # пооследний фрейм удачной последовательности которую не нужно удалять
+            del_indexes = []
+            for index, row in only_tracker_df.iterrows():
+                frame = int(row.frame)
+                difference = frame - prev_frame
+                if difference == 0 or difference == 1:
+                    sequence_counter += 1
+                elif sequence_counter >= video_fps:
+                    sequence_counter = 0
+                    prev_positive_frame = prev_frame
+                else:
+                    temp_df = only_tracker_df.loc[(only_tracker_df.frame < frame) & (only_tracker_df.frame > prev_positive_frame)]
+                    for i in temp_df.index.values:
+                        if i not in del_indexes:
+                            del_indexes.append(i)
+
+                    sequence_counter = 0
+
+                prev_frame = frame
+
+        yolo_df = yolo_df.drop(index=del_indexes)
+
+    yolo_df.to_csv(yolo_df_path, index=False)
+
+
+def video_processing(yolo, tracker, video_path):
     cap = cv.VideoCapture(video_path)
     if not cap.isOpened():
         logger.critical("Video Capture is not opened")
@@ -183,7 +229,7 @@ def video_processing(yolo, video_path):
             if not ret:
                 break
 
-            frame_df = frame_processing(frame, yolo, frames_counter)
+            frame_df = frame_processing(frame, yolo, tracker, frames_counter)
             frames_counter += 1
 
             all_df = (
@@ -212,63 +258,82 @@ def video_processing(yolo, video_path):
     return all_df
 
 
-def frame_processing(frame, yolo, frames_counter):
+def frame_processing(frame, yolo, tracker, frames_counter):
     results = yolo.track(source=frame,
                          tracker='bytetrack.yaml',
                          classes=[0],
+                         conf=0.5,
                          persist=True,
                          verbose=False)[0]
 
     xyxy = results.boxes.xyxy.cpu().numpy()
-    if len(xyxy) == 0:
-        xyxy = [[0, 0, 0, 0]]
-        confidence = [0]
-        class_id = [0]
-        tracker_id = [np.nan]
-        box_square = [0]
-    else:
-        confidence = results.boxes.conf.cpu().numpy()
-        class_id = results.boxes.cls.cpu().numpy().astype(int)
-        try:
-            tracker_id = results.boxes.id.cpu().numpy().astype(int)
-        except AttributeError:
-            tracker_id = [np.nan]
+    confidence = results.boxes.conf.cpu().numpy()
+    class_id = results.boxes.cls.cpu().numpy().astype(int)
 
-        box_width = max([xyxy[0][0], xyxy[0][2]]) - min([xyxy[0][0], xyxy[0][2]])
-        box_height = max([xyxy[0][1], xyxy[0][3]]) - min([xyxy[0][1], xyxy[0][3]])
-        box_square = [round(box_width * box_height, 2)]
+    frame_df = pd.DataFrame(columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id', 'box_square'])
 
-    if (len(tracker_id)) >= 1:
-        data = np.array(
-            [xyxy[0][0], xyxy[0][1], xyxy[0][2], xyxy[0][3], confidence[0], class_id[0], tracker_id[0], box_square[0]]
-        )
-        data = [data]
+    detections = []
+    for i in range(len(xyxy)):
+        left = xyxy[i][0]
+        top = xyxy[i][1]
+        w = xyxy[i][2] - xyxy[i][0]
+        h = xyxy[i][3] - xyxy[i][1]
+        conf = confidence[i]
+        detection_class = class_id[i]
+        detections.append(([left, top, w, h], conf, detection_class))
 
-    for i in range(1, len(tracker_id)):
-        box_width = max([xyxy[i][0], xyxy[i][2]]) - min([xyxy[i][0], xyxy[i][2]])
-        box_height = max([xyxy[i][1], xyxy[i][3]]) - min([xyxy[i][1], xyxy[i][3]])
+    tracks = tracker.update_tracks(detections, frame=frame)
+
+    for track in tracks:
+        if not track.is_confirmed():
+            continue
+
+        if track.det_conf is None:  # не подходит для теста трекера
+            continue
+
+        ltrb = track.to_ltrb()
+        conf = track.det_conf
+        box_width = ltrb[2] - ltrb[0]
+        box_height = ltrb[3] - ltrb[1]
         box_square = round(box_width * box_height, 2)
-        item = np.array(
-            [xyxy[i][0], xyxy[i][1], xyxy[i][2], xyxy[i][3], confidence[i], class_id[i], tracker_id[i], box_square]
-        )
-        data = np.vstack([data, item])
+        frame_dict = {
+            'x1': ltrb[0],
+            'y1': ltrb[1],
+            'x2': ltrb[2],
+            'y2': ltrb[3],
+            'confidence': conf,
+            'class_id': track.det_class,
+            'tracker_id': track.track_id,
+            'box_square': box_square
+        }
 
-    index_list = [str(frames_counter)] * len(class_id)
+        frame_dict_df = pd.DataFrame([frame_dict], index=[str(frames_counter)])
 
-    df = pd.DataFrame(
-        data=data,
-        columns=['x1', 'y1', 'x2', 'y2', 'confidence', 'class_id', 'tracker_id', 'box_square'],
-        index=index_list
-    )
+        if frame_df.empty:
+            frame_df = frame_dict_df.copy()
+        else:
+            frame_df = pd.concat([frame_df, frame_dict_df])
 
-    return df
+    return frame_df
 
 
-def show_detection_results(video_path, yolo_df):
-    logger.info("----Show result video----")
+def save_detection_results(video_path, yolo_df):
+    logger.info("----Save result video----")
+
+    bounding_box_annotator = sv.BoundingBoxAnnotator(color_map='track')
+    label_annotator = sv.LabelAnnotator(text_position=sv.Position.CENTER, color_map='track', text_padding=5)
+
     cap = cv.VideoCapture(video_path)
     if not cap.isOpened():
         logger.critical("Video Capture is not opened")
+
+    out_path = 'test/' + video_path.split('/')[-1]
+    out_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    out_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+    out_fps = int(cap.get(cv.CAP_PROP_FPS))
+    out_fourcc = cv.VideoWriter_fourcc(*'mp4v')
+
+    out_cap = cv.VideoWriter(out_path, out_fourcc, out_fps, (out_width, out_height), isColor=True)
 
     frames_counter = 0
     while cap.isOpened():
@@ -279,34 +344,41 @@ def show_detection_results(video_path, yolo_df):
         frame_df = yolo_df.loc[yolo_df['frame'] == frames_counter]
         if not frame_df.empty:
             frame_df.reset_index(drop=True, inplace=True)
-            frame = annotate_detections(frame, frame_df)
+            frame = annotate_detections(frame, frame_df, bounding_box_annotator, label_annotator, ['person'])
 
         frames_counter += 1
 
-        cv.imshow('Result Video', frame)
-        key = cv.waitKey(10)
-        if key == ord('q'):
-            break
+        out_cap.write(frame)
 
     cap.release()
+    out_cap.release()
     cv.destroyAllWindows()
 
 
-def annotate_detections(frame, frame_df):
-    # Не работает!!!
+def annotate_detections(frame, frame_df, bounding_box_annotator, label_annotator, class_names):
     xyxy = np.array([[frame_df['x1'][0], frame_df['y1'][0], frame_df['x2'][0], frame_df['y2'][0]]])
     for i in range(1, len(frame_df)):
         xyxy = np.append(xyxy, [[frame_df['x1'][i], frame_df['y1'][i], frame_df['x2'][i], frame_df['y2'][i]]], axis=0)
 
-    conf = np.array(frame_df['confidence'])
+    confidence = np.array(frame_df['confidence'])
     class_id = np.array(frame_df['class_id']).astype(int)
     tracker_id = np.array(frame_df['tracker_id']).astype(int)
 
-    detections = Detections(xyxy=xyxy, confidence=conf, class_id=class_id, tracker_id=tracker_id)
-    box_annotator = BoundingBoxAnnotator(color_map='track')
+    detections = sv.Detections(
+        xyxy=xyxy,
+        confidence=confidence,
+        class_id=class_id,
+        tracker_id=tracker_id
+    )
 
-    frame = box_annotator.annotate(scene=frame.copy(), detections=detections)
-    return frame
+    labels = [
+        f"#{tracker_id[i]} {class_names[class_id[i]]} {confidence[i]:0.2f}"
+        for i in range(len(confidence))
+    ]
+
+    annotated_frame = bounding_box_annotator.annotate(scene=frame.copy(), detections=detections)
+    annotated_frame = label_annotator.annotate(scene=annotated_frame.copy(), detections=detections, labels=labels)
+    return annotated_frame
 
 
 if __name__ == '__main__':
@@ -322,7 +394,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Mp4 yolo detection")
     parser.add_argument("video_path", type=str, help="Path to video file")
-    parser.add_argument("show_results", type=bool, help="Will detection results be shown or not")
+    parser.add_argument("save_results", type=bool, help="Will detection results be saved or not")
     parser.add_argument("to_csv_path", type=str, help="Path to csv file which will be consist detection results")
     args = parser.parse_args()
-    detect_peoples(args.video_path, args.show_results, args.to_csv_path)
+    detect_peoples(args.video_path, args.save_results, args.to_csv_path)

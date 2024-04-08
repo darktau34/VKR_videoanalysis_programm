@@ -238,6 +238,32 @@ def yolo_deepsort():
     cv.destroyAllWindows()
 
 
+def others():
+    import pandas as pd
+    import cv2 as cv
+    import matplotlib.pyplot as plt
+    from videoprocessing import save_photoboxes_from_yolo
+
+    yolo_df = pd.read_csv('data/mall/detections.csv')
+    print(yolo_df.tracker_id.unique().astype(int))
+
+    only_person_df = yolo_df.loc[yolo_df.tracker_id == 8]
+    frame_row = only_person_df.loc[only_person_df.box_square == only_person_df.box_square.max()]
+    print(only_person_df)
+    print(frame_row)
+
+    photoboxes = save_photoboxes_from_yolo('videos/mall.mp4', yolo_df, 'test/phbox1/')
+    for i in photoboxes:
+        print(i)
+    # cap = cv.VideoCapture('videos/mall.mp4')
+    # cap.set(cv.CAP_PROP_POS_FRAMES, 78)
+    #
+    # ret, frame = cap.read()
+    # cv.cvtColor(frame, cv.COLOR_BGR2RGB, frame)
+    # cap.release()
+    #
+    # plt.imshow(frame)
+    # plt.show()
 
 
 if __name__ == '__main__':
@@ -248,5 +274,6 @@ if __name__ == '__main__':
     # deepface_main()
     # fer_main()
     # yolo()
-    # test_mtcnn()
-    yolo_deepsort()
+    test_mtcnn()
+    # yolo_deepsort()
+    # others()
