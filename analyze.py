@@ -235,10 +235,10 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     logger.info('Save photoboxes time: %s sec.', end_time - start_time)
     progress_bar.setValue(40)
 
-    start_time = time.time()
-    videoclips_paths = clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
-    end_time = time.time()
-    logger.info('Clip video fragments time: %s sec.', end_time - start_time)
+    # start_time = time.time()
+    # videoclips_paths = clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
+    # end_time = time.time()
+    # logger.info('Clip video fragments time: %s sec.', end_time - start_time)
     progress_bar.setValue(60)
 
     start_time = time.time()
@@ -260,7 +260,7 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     progress_bar.setValue(90)
     start_time = time.time()
     insert_to_video_table(video_path)
-    insert_to_person_table(video_path, photoboxes_paths, videoclips_paths, time_list, tracker_list)
+    insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list)
     if len(items_list) != 0:
         insert_to_items_table(items_list, video_path)
 

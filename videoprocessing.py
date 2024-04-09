@@ -99,7 +99,7 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save):
                     break
 
             if skip or boxes is None:
-                if i >= 40:  # i >= x,  x -- const.  (x / step) + 1 -- столько кадров максимум анализируется
+                if i >= 40 or i + step > len(only_person_df):
                     # Если уже на протяжении N кадров не находит лицо
                     path = dir_to_save + 'person' + str(person) + '.png'
                     photoboxes_paths_list.append(path)

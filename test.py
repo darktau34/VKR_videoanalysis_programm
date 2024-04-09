@@ -274,6 +274,6 @@ if __name__ == '__main__':
     # deepface_main()
     # fer_main()
     # yolo()
-    test_mtcnn()
+    # test_mtcnn()
     # yolo_deepsort()
-    # others()
+    others()

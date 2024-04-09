@@ -268,8 +268,8 @@ class Ui_Form(object):
         # Устанавливаем картинку в фотобокс для 1-го человека
         self.add_photobox(first_person)
 
-        # Устанавливаем гифку для 1-го человека
-        self.add_gif(first_person, 'videoclip_begin')
+        # # Устанавливаем гифку для 1-го человека
+        # self.add_gif(first_person, 'videoclip_begin')
 
         # Добавляем items для 1-го человека
         self.add_items(first_person)
@@ -289,8 +289,8 @@ class Ui_Form(object):
         self.btn_photobox_right.clicked.connect(self.person_to_right)
         self.btn_photobox_left.clicked.connect(self.person_to_left)
 
-        self.btn_gif_right.clicked.connect(self.gif_to_right)
-        self.btn_gif_left.clicked.connect(self.gif_to_left)
+        # self.btn_gif_right.clicked.connect(self.gif_to_right)
+        # self.btn_gif_left.clicked.connect(self.gif_to_left)
 
     def gif_changed(self, df_row):
         gif_mode = 'videoclip_begin'
@@ -330,7 +330,6 @@ class Ui_Form(object):
         self.btn_gif_left.setEnabled(False)
         self.btn_gif_right.setEnabled(True)
         self.add_photobox(df_row)
-        self.add_gif(df_row, 'videoclip_begin')
         self.list_view_items.clear()
         self.add_items(df_row)
         self.add_labels(df_row, 'Начало')

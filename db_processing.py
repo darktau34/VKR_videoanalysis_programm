@@ -4,6 +4,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+
 def select_from_items(person_id):
     df_items = None
     try:
@@ -46,7 +47,7 @@ def select_from_persons(video_id):
         df_persons = pd.DataFrame()
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT person_id, tracker_id, photobox, appear_time, videoclip_begin, videoclip_middle, videoclip_end " +
+            "SELECT person_id, tracker_id, photobox, appear_time " +
             "FROM person " +
             f"WHERE video_id = {video_id}")
 
@@ -55,10 +56,7 @@ def select_from_persons(video_id):
                 'person_id': int(person[0]),
                 'tracker_id': int(person[1]),
                 'photobox': person[2],
-                'appear_time': person[3],
-                'videoclip_begin': person[4],
-                'videoclip_middle': person[5],
-                'videoclip_end': person[6]
+                'appear_time': person[3]
             }, index=[int(person[1])])
             df_persons = pd.concat([df_persons, df_person_row], ignore_index=True)
 
@@ -124,7 +122,7 @@ def insert_to_video_table(video_path):
         connection.close()
 
 
-def insert_to_person_table(video_path, photoboxes_paths, videoclips_paths, time_list, tracker_list):
+def insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
     except ps.Error as e:
@@ -140,18 +138,15 @@ def insert_to_person_table(video_path, photoboxes_paths, videoclips_paths, time_
             persons.append((
                 photoboxes_paths[i],
                 time_list[i],
-                videoclips_paths[0][i],
-                videoclips_paths[1][i],
-                videoclips_paths[2][i],
                 video_id,
                 int(tracker_list[i])
             ))
 
         cursor.executemany(
             "INSERT INTO person (" +
-            "photobox, appear_time, videoclip_begin, videoclip_middle, videoclip_end, video_id, tracker_id" +
+            "photobox, appear_time, video_id, tracker_id" +
             ") " +
-            "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            "VALUES (%s, %s, %s, %s)",
             persons
         )
 
