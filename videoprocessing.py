@@ -32,14 +32,13 @@ def detect_fer(photoboxes_paths):
     return ph_emotions
 
 
-def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save):
+def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr):
     """
     анализируем боксы людей, берем наибольший бокс, проверяем чтоб лицо нахоидилось и сохраняем
     """
     video = VideoFileClip(video_path)
     mtcnn = MTCNN(select_largest=True, device='cuda:0')
     step = 5  # каждый 5 кадр берем и смотрим бокс лица
-    person_arr = yolo_df.tracker_id.unique().astype(int)
     photoboxes_paths_list = []
     person_counter = 0
     logger.info('Persons number: %s', len(person_arr))

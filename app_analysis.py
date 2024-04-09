@@ -358,7 +358,7 @@ class Ui_Form(object):
         self.person_changed(person_df)
 
     def add_labels(self, df_row, gif_label):
-        photobox_label = "Человек: " + str(df_row.tracker_id)
+        photobox_label = "Человек: " + str(df_row.ui_tracker_id)
         self.label_photobox.setText(photobox_label)
         self.label_gif.setText(gif_label)
         self.label_appear.setText('Время появления: ' + df_row.appear_time)

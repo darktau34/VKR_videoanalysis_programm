@@ -17,7 +17,7 @@ from videoprocessing import cut_photobox
 logger = logging.getLogger(__name__)
 
 
-def detect_items(yolo_df, video_path, items_path, to_csv_path):
+def detect_items(yolo_df, video_path, items_path, to_csv_path, person_arr):
     model = YOLO('data/models/yolov8l.pt')
     yolo_df['class_id'] = yolo_df['class_id'].astype(int)
     yolo_df['tracker_id'] = yolo_df['tracker_id'].astype(int)
@@ -28,7 +28,6 @@ def detect_items(yolo_df, video_path, items_path, to_csv_path):
     items_list = []
     items_df_to_save = pd.DataFrame()
 
-    person_arr = yolo_df.tracker_id.unique().astype(int)
     counter = 1
     for person_id in person_arr:
         only_person_df = yolo_df.loc[yolo_df.tracker_id == person_id]
@@ -48,7 +47,7 @@ def detect_items(yolo_df, video_path, items_path, to_csv_path):
         logger.info("Detection items for person: %s / %s finished", str(counter), str(len(person_arr)))
         counter += 1
 
-    items_df_to_save.to_csv(to_csv_path + 'items.csv')
+    items_df_to_save.to_csv(to_csv_path + 'items.csv', index=False)
     return items_list
 
 

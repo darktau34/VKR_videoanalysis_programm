@@ -272,8 +272,8 @@ if __name__ == '__main__':
     DATE_FORMAT = '%H:%M:%S'
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
     # deepface_main()
-    # fer_main()
+    fer_main()
     # yolo()
     # test_mtcnn()
     # yolo_deepsort()
-    others()
+    # others()

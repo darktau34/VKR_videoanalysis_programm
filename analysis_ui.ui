@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>975</width>
-    <height>479</height>
+    <width>1037</width>
+    <height>529</height>
    </rect>
   </property>
   <property name="font">
@@ -21,7 +21,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Video analysis of passersby</string>
+   <string>Анализ людей</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(239, 239, 239);</string>
@@ -30,73 +30,13 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="btn_show_item">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>720</x>
-      <y>410</y>
-      <width>181</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	border-radius: 20px;
-	background-color: rgb(255, 120, 0);
-	border-style: solid;
-	border-width: 1px;
-	border-color: rgb(0, 0, 0);
-}
-
-QPushButton:disabled {
-	background-color: rgb(192, 191, 188);
-	color: rgb(0, 0, 0);
-}
-
-QPushButton:hover {
-	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
-}</string>
-    </property>
-    <property name="text">
-     <string>Show item</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="l_photobox">
     <property name="geometry">
      <rect>
-      <x>66</x>
-      <y>60</y>
-      <width>200</width>
-      <height>400</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(192, 191, 188);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="l_gif">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>60</y>
-      <width>200</width>
-      <height>400</height>
+      <x>50</x>
+      <y>41</y>
+      <width>221</width>
+      <height>441</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -112,10 +52,10 @@ QPushButton:hover {
     </property>
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>230</y>
+      <x>280</x>
+      <y>220</y>
       <width>31</width>
-      <height>51</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -145,10 +85,10 @@ QPushButton:hover {
     </property>
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>230</y>
+      <x>10</x>
+      <y>220</y>
       <width>31</width>
-      <height>51</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -170,176 +110,14 @@ QPushButton:hover {
     </property>
     <property name="text">
      <string>&lt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_gif_right">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>230</y>
-      <width>31</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	background-color: rgb(255, 120, 0);
-	border-style: solid;
-	border-width: 1px;
-	border-color: rgb(0, 0, 0);
-}
-
-QPushButton:disabled {
-	background-color: rgb(192, 191, 188);
-	color: rgb(0, 0, 0);
-}
-
-QPushButton:hover {
-	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
-}</string>
-    </property>
-    <property name="text">
-     <string>&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_gif_left">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>230</y>
-      <width>31</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	background-color: rgb(255, 120, 0);
-	border-style: solid;
-	border-width: 1px;
-	border-color: rgb(0, 0, 0);
-}
-
-QPushButton:disabled {
-	background-color: rgb(192, 191, 188);
-	color: rgb(0, 0, 0);
-}
-
-QPushButton:hover {
-	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
-}</string>
-    </property>
-    <property name="text">
-     <string>&lt;</string>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="list_view_items">
-    <property name="geometry">
-     <rect>
-      <x>700</x>
-      <y>60</y>
-      <width>241</width>
-      <height>331</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <italic>false</italic>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-      <stylestrategy>PreferDefault</stylestrategy>
-      <kerning>true</kerning>
-     </font>
-    </property>
-    <property name="cursor" stdset="0">
-     <cursorShape>ArrowCursor</cursorShape>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QListView{
-	background-color: rgb(192, 191, 188);
-	border-color: rgb(0, 0, 0);
-	border-style: solid;
-	border-width: 1px;
-	padding: 5px;
-	padding-left: 5px;
-}
-
-QListView:item{
-	border: 2px solid black;
-	margin:5px;
-	height:50px;
-	width:200px;
-}
-
-QListView:item:selected{
-	border: 1px solid black;
-	background-color: rgba(255, 120, 0, 171);
-}</string>
-    </property>
-    <property name="autoScroll">
-     <bool>true</bool>
-    </property>
-    <property name="movement">
-     <enum>QListView::Static</enum>
-    </property>
-    <property name="flow">
-     <enum>QListView::LeftToRight</enum>
-    </property>
-    <property name="isWrapping" stdset="0">
-     <bool>true</bool>
-    </property>
-    <property name="resizeMode">
-     <enum>QListView::Fixed</enum>
-    </property>
-    <property name="layoutMode">
-     <enum>QListView::SinglePass</enum>
-    </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <property name="gridSize">
-     <size>
-      <width>120</width>
-      <height>60</height>
-     </size>
-    </property>
-    <property name="viewMode">
-     <enum>QListView::ListMode</enum>
-    </property>
-    <property name="modelColumn">
-     <number>0</number>
-    </property>
-    <property name="uniformItemSizes">
-     <bool>false</bool>
-    </property>
-    <property name="wordWrap">
-     <bool>false</bool>
-    </property>
-    <property name="selectionRectVisible">
-     <bool>true</bool>
-    </property>
-    <property name="currentRow">
-     <number>-1</number>
-    </property>
-    <property name="sortingEnabled">
-     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="label_photobox">
     <property name="geometry">
      <rect>
-      <x>66</x>
-      <y>29</y>
-      <width>201</width>
+      <x>50</x>
+      <y>10</y>
+      <width>221</width>
       <height>31</height>
      </rect>
     </property>
@@ -348,71 +126,6 @@ QListView:item:selected{
 border-color: rgb(0, 0, 0);
 border-style: solid;
 border-width: 1px;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_gif">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>30</y>
-      <width>200</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 120, 0);
-border-color: rgb(0, 0, 0);
-border-style: solid;
-border-width: 1px;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_items">
-    <property name="geometry">
-     <rect>
-      <x>700</x>
-      <y>30</y>
-      <width>241</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 120, 0);
-border-color: rgb(0, 0, 0);
-border-style: solid;
-border-width: 1px;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="l_videoname">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>9</y>
-      <width>871</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
     </property>
     <property name="text">
      <string/>
@@ -424,24 +137,728 @@ border-width: 1px;</string>
    <widget class="QLabel" name="label_appear">
     <property name="geometry">
      <rect>
-      <x>66</x>
-      <y>430</y>
-      <width>200</width>
+      <x>50</x>
+      <y>480</y>
+      <width>221</width>
       <height>30</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgba(0, 0, 0, 0.8);
 color: rgb(255, 120, 0);
-text-shadow: Black 0px 0px 5px;
 </string>
     </property>
     <property name="text">
-     <string>Appear time: 00:00:00</string>
+     <string>Время появления: 00:00:00</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
+   </widget>
+   <widget class="QPushButton" name="btn_items">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>450</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(255, 120, 0);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(0, 0, 0);
+}
+
+QPushButton:disabled {
+	background-color: rgb(192, 191, 188);
+	color: rgb(0, 0, 0);
+}
+
+QPushButton:hover {
+	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
+}</string>
+    </property>
+    <property name="text">
+     <string>Распознавание
+предметов</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_emotion">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>450</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(255, 120, 0);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(0, 0, 0);
+}
+
+QPushButton:disabled {
+	background-color: rgb(192, 191, 188);
+	color: rgb(0, 0, 0);
+}
+
+QPushButton:hover {
+	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
+}</string>
+    </property>
+    <property name="text">
+     <string>Распознавание
+текущей эмоции</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_stats">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>450</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(255, 120, 0);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(0, 0, 0);
+}
+
+QPushButton:disabled {
+	background-color: rgb(192, 191, 188);
+	color: rgb(0, 0, 0);
+}
+
+QPushButton:hover {
+	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
+}</string>
+    </property>
+    <property name="text">
+     <string>Статистика эмоций
+по всем кадрам</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_video">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>450</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(255, 120, 0);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(0, 0, 0);
+}
+
+QPushButton:disabled {
+	background-color: rgb(192, 191, 188);
+	color: rgb(0, 0, 0);
+}
+
+QPushButton:hover {
+	background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));
+}</string>
+    </property>
+    <property name="text">
+     <string>Отрывок видео
+с человеком</string>
+    </property>
+   </widget>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>701</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(222, 221, 218);</string>
+    </property>
+    <property name="currentIndex">
+     <number>4</number>
+    </property>
+    <widget class="QWidget" name="page_items">
+     <widget class="QLabel" name="l_show_item">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>40</y>
+        <width>271</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(119, 118, 123);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_show_item">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>10</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 120, 0);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string>Просмотр предмета</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="list_view_items">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>241</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+        <stylestrategy>PreferDefault</stylestrategy>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListView{
+	background-color: rgb(119, 118, 123);
+	border-color: rgb(0, 0, 0);
+	border-style: solid;
+	border-width: 2px;
+	padding: 5px;
+	padding-left: 5px;
+}
+
+QListView:item{
+	border: 2px solid black;
+	background-color: rgb(192, 191, 188);
+	margin:5px;
+	height:50px;
+	width:200px;
+}
+
+QListView:item:selected{
+	border: 1px solid black;
+	background-color: rgba(255, 120, 0, 171);
+}</string>
+      </property>
+      <property name="autoScroll">
+       <bool>true</bool>
+      </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
+      </property>
+      <property name="flow">
+       <enum>QListView::LeftToRight</enum>
+      </property>
+      <property name="isWrapping" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="resizeMode">
+       <enum>QListView::Fixed</enum>
+      </property>
+      <property name="layoutMode">
+       <enum>QListView::SinglePass</enum>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>120</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="viewMode">
+       <enum>QListView::ListMode</enum>
+      </property>
+      <property name="modelColumn">
+       <number>0</number>
+      </property>
+      <property name="uniformItemSizes">
+       <bool>false</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <property name="selectionRectVisible">
+       <bool>true</bool>
+      </property>
+      <property name="currentRow">
+       <number>-1</number>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_items">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>241</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 120, 0);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string>Предметы</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_emotion">
+     <widget class="QLabel" name="l_facebox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>221</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(119, 118, 123);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_facebox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>221</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 120, 0);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string>Обнаруженное лицо</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="list_view_emotions">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>40</y>
+        <width>191</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+        <stylestrategy>PreferDefault</stylestrategy>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListView{
+	background-color: rgb(119, 118, 123);
+	border-color: rgb(0, 0, 0);
+	border-style: solid;
+	border-width: 2px;
+	padding: 8px;
+	padding-left: 0px;
+}
+
+QListView:item{
+	border: 2px solid black;
+	background-color: rgb(192, 191, 188);
+	margin:5px;
+	height:50px;
+	width:170px;
+}
+
+QListView:item:selected{
+	border: 1px solid black;
+	background-color: rgba(255, 120, 0, 171);
+}</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="autoScroll">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
+      </property>
+      <property name="flow">
+       <enum>QListView::LeftToRight</enum>
+      </property>
+      <property name="isWrapping" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="resizeMode">
+       <enum>QListView::Fixed</enum>
+      </property>
+      <property name="layoutMode">
+       <enum>QListView::SinglePass</enum>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>120</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="viewMode">
+       <enum>QListView::ListMode</enum>
+      </property>
+      <property name="modelColumn">
+       <number>0</number>
+      </property>
+      <property name="uniformItemSizes">
+       <bool>false</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <property name="selectionRectVisible">
+       <bool>true</bool>
+      </property>
+      <property name="currentRow">
+       <number>-1</number>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>Злость - 69%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Отвращение - 0%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Испуг - 8%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Радость - 34%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Удивление - 0%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Нейтрально - 29%</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_emotions">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>10</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 120, 0);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string>Распознанные эмоции</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_emotionbox">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>90</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 120, 0);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string>Преобладающая эмоция</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="l_emotionbox">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>140</y>
+        <width>151</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(119, 118, 123);
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>pyqt_resources/icon_neutral.png</pixmap>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_emotionname">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>120</y>
+        <width>211</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(119, 118, 123);
+color: rgb(255, 120, 0);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string>Нейтрально</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+      </property>
+     </widget>
+     <zorder>l_facebox</zorder>
+     <zorder>label_facebox</zorder>
+     <zorder>list_view_emotions</zorder>
+     <zorder>label_emotions</zorder>
+     <zorder>label_emotionbox</zorder>
+     <zorder>label_emotionname</zorder>
+     <zorder>l_emotionbox</zorder>
+    </widget>
+    <widget class="QWidget" name="page_stats">
+     <widget class="QLabel" name="l_statsbox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>681</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(119, 118, 123);
+border-color: rgb(0, 0, 0);
+border-style: solid;
+border-width: 2px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_video"/>
+    <widget class="QWidget" name="page_loading">
+     <widget class="QLabel" name="l_loading">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>220</y>
+        <width>301</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_loading">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>180</y>
+        <width>221</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Загрузка</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>

@@ -95,9 +95,7 @@ class EntryTime:
                     self._hours = 0
 
 
-def calculate_appear_time(df, begin_video_time, fps):
-    df['tracker_id'] = df['tracker_id'].astype(int)
-    person_list = df.tracker_id.unique()
+def calculate_appear_time(df, begin_video_time, fps, person_list):
     time_df = pd.DataFrame(columns=['tracker_id', 'appear_time'])
     time_df['tracker_id'] = person_list
 

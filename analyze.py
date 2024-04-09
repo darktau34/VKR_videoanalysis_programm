@@ -60,11 +60,6 @@ def create_data_dirs(video_path):
     # videoclips dir
     videoclips_dir = create_sub_dir(data_dir, 'videoclips')
 
-    # videoclips begin, middle, end
-    videoclips_begin_dir = create_sub_dir(videoclips_dir, 'begin')
-    videoclips_middle_dir = create_sub_dir(videoclips_dir, 'middle')
-    videoclips_end_dir = create_sub_dir(videoclips_dir, 'end')
-
     # items dir
     items_dir = create_sub_dir(data_dir, 'items')
 
@@ -73,9 +68,6 @@ def create_data_dirs(video_path):
     return {
         'detections_csv_path': detections_csv_path,
         'photoboxes_dir': photoboxes_dir,
-        'videoclips_begin_dir': videoclips_begin_dir,
-        'videoclips_middle_dir': videoclips_middle_dir,
-        'videoclips_end_dir': videoclips_end_dir,
         'time_csv_path': time_csv_path,
         'items_dir': items_dir
     }
@@ -200,18 +192,13 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
         logger.info("CUDA device's count: %s", torch.cuda.device_count())
         logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
     show_results = False  # Хардкод, пока это не нужно
-    max_clip_seconds = 5  # Хардкод, пока это не нужно
 
     dirs_dict = create_data_dirs(video_path)
     checking_required_files()
 
     to_csv_path = dirs_dict['detections_csv_path']
     photoboxes_dir = dirs_dict['photoboxes_dir']
-    videoclips_begin = dirs_dict['videoclips_begin_dir']
-    videoclips_middle = dirs_dict['videoclips_middle_dir']
-    videoclips_end = dirs_dict['videoclips_end_dir']
     time_csv_path = dirs_dict['time_csv_path']
-    videoclip_dirs = [videoclips_begin, videoclips_middle, videoclips_end]
     items_dir = dirs_dict['items_dir']
 
     video_id = check_video_db_exists(video_path)
@@ -228,9 +215,12 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     yolo_df = pd.read_csv(to_csv_path + 'detections.csv')
     progress_bar.setValue(30)
 
-    start_time = time.time()
     tracker_list = yolo_df.tracker_id.unique().astype(int)
-    photoboxes_paths = save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir)
+    tracker_list.sort()
+    ui_tracker_list = [i+1 for i in range(len(tracker_list))]
+
+    start_time = time.time()
+    photoboxes_paths = save_photoboxes_from_yolo(video_path, yolo_df, photoboxes_dir, tracker_list)
     end_time = time.time()
     logger.info('Save photoboxes time: %s sec.', end_time - start_time)
     progress_bar.setValue(40)
@@ -243,7 +233,7 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
 
     start_time = time.time()
     video_fps = get_video_fps(video_path)
-    time_df = calculate_appear_time(yolo_df, begin_video_time, video_fps)
+    time_df = calculate_appear_time(yolo_df, begin_video_time, video_fps, tracker_list)
     time_df.to_csv(time_csv_path)
     time_list = time_df['appear_time'].values
     end_time = time.time()
@@ -252,7 +242,7 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
 
     if need_detection_items:
         start_time = time.time()
-        items_list = detect_items(yolo_df, video_path, items_dir, to_csv_path)
+        items_list = detect_items(yolo_df, video_path, items_dir, to_csv_path, tracker_list)
         items_list = sort_items_list(items_list)
         end_time = time.time()
         logger.info('Items detection time: %s sec.', end_time - start_time)
@@ -260,7 +250,7 @@ def app_analyze(video_path, begin_video_time, need_detection_items, progress_bar
     progress_bar.setValue(90)
     start_time = time.time()
     insert_to_video_table(video_path)
-    insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list)
+    insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list, ui_tracker_list)
     if len(items_list) != 0:
         insert_to_items_table(items_list, video_path)
 
