@@ -32,7 +32,7 @@ def detect_fer(photoboxes_paths):
     return ph_emotions
 
 
-def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr):
+def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr, ui_progress_bar):
     """
     анализируем боксы людей, берем наибольший бокс, проверяем чтоб лицо нахоидилось и сохраняем
     """
@@ -46,6 +46,16 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr):
         person_counter += 1
         logger.info('Person  %s / %s', person_counter, len(person_arr))
         only_person_df = yolo_df.loc[yolo_df.tracker_id == person]
+
+        if ui_progress_bar is not None:
+            if person_counter == int(len(person_arr) / 4):
+                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
+            elif person_counter == int(len(person_arr) / 3):
+                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
+            elif person_counter == int(len(person_arr) / 2):
+                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
+            else:
+                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
 
         for i in range(0, len(only_person_df), step):
             frame_row = only_person_df.loc[only_person_df.box_square == only_person_df.box_square.max()]

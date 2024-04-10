@@ -150,10 +150,10 @@ def get_items_df(only_person_df, model, video, class_items):
     return items_df
 
 
-def detect_peoples(video_path, save_results, to_csv_path):
+def detect_peoples(video_path, save_results, to_csv_path, ui_progress_bar):
     yolo_model = YOLO('data/models/yolov8l.pt')
     tracker = DeepSort(max_age=20, embedder='torchreid')
-    yolo_df = video_processing(yolo_model, tracker, video_path)
+    yolo_df = video_processing(yolo_model, tracker, video_path, ui_progress_bar)
     yolo_df.to_csv(to_csv_path + 'detections.csv')
     clear_df(to_csv_path + 'detections.csv', video_path)
     logger.info("Results saved to csv: %s", to_csv_path + 'detections.csv')
@@ -204,7 +204,7 @@ def clear_df(yolo_df_path, video_path):
     yolo_df.to_csv(yolo_df_path, index=False)
 
 
-def video_processing(yolo, tracker, video_path):
+def video_processing(yolo, tracker, video_path, ui_progress_bar):
     cap = cv.VideoCapture(video_path)
     if not cap.isOpened():
         logger.critical("Video Capture is not opened")
@@ -240,6 +240,8 @@ def video_processing(yolo, tracker, video_path):
                 if stager <= 90:
                     logger.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
                     stager += 10
+                    if ui_progress_bar is not None:
+                        ui_progress_bar.setValue(ui_progress_bar.value() + 6)
                 elif frames_counter == frames:
                     logger.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
 
