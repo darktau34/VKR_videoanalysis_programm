@@ -70,7 +70,7 @@ QListView:item{
 	border: 2px solid black;
 	margin:5px;
 	height:60px;
-	width:240px;
+	width:255px;
 }
 
 QListView:item:selected{
@@ -80,6 +80,12 @@ QListView:item:selected{
     </property>
     <property name="autoScroll">
      <bool>true</bool>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>35</width>
+      <height>35</height>
+     </size>
     </property>
     <property name="movement">
      <enum>QListView::Static</enum>
@@ -126,6 +132,80 @@ QListView:item:selected{
     <property name="sortingEnabled">
      <bool>false</bool>
     </property>
+    <item>
+     <property name="text">
+      <string>New Item New Item New Item</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>pyqt_resources/video_icon.png</normaloff>pyqt_resources/video_icon.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLabel" name="l_videos">
     <property name="geometry">

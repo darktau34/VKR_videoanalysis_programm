@@ -341,7 +341,7 @@ QPushButton:hover {
      <string notr="true">background-color: rgb(222, 221, 218);</string>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page_items">
      <widget class="QLabel" name="l_show_item">
@@ -427,7 +427,7 @@ border-width: 2px;</string>
 QListView:item{
 	border: 2px solid black;
 	background-color: rgb(192, 191, 188);
-	margin:5px;
+	margin:10px;
 	height:50px;
 	width:200px;
 }
@@ -485,6 +485,31 @@ QListView:item:selected{
       <property name="sortingEnabled">
        <bool>false</bool>
       </property>
+      <item>
+       <property name="text">
+        <string>New Item - 30%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="label_items">
       <property name="geometry">
@@ -565,7 +590,7 @@ border-width: 2px;</string>
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>11</pointsize>
         <italic>false</italic>
         <underline>false</underline>
         <strikeout>false</strikeout>
@@ -585,15 +610,16 @@ border-width: 2px;</string>
 	border-color: rgb(0, 0, 0);
 	border-style: solid;
 	border-width: 2px;
-	padding: 8px;
+	padding: 0px;
 	padding-left: 0px;
+	padding-bottom: 0px;
 }
 
 QListView:item{
 	border: 2px solid black;
 	background-color: rgb(192, 191, 188);
-	margin:5px;
-	height:50px;
+	margin:6px;
+	height:45px;
 	width:170px;
 }
 
@@ -635,7 +661,7 @@ QListView:item:selected{
       <property name="gridSize">
        <size>
         <width>120</width>
-        <height>60</height>
+        <height>53</height>
        </size>
       </property>
       <property name="viewMode">
@@ -662,6 +688,11 @@ QListView:item:selected{
       <item>
        <property name="text">
         <string>Злость - 69%</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Грусть - 0%</string>
        </property>
       </item>
       <item>
@@ -859,6 +890,7 @@ border-width: 2px;</string>
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="page_empty"/>
    </widget>
   </widget>
  </widget>

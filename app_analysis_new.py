@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_analyze(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
@@ -227,7 +227,7 @@ class Ui_MainWindow(object):
 "QListView:item{\n"
 "    border: 2px solid black;\n"
 "    background-color: rgb(192, 191, 188);\n"
-"    margin:5px;\n"
+"    margin:10px;\n"
 "    height:50px;\n"
 "    width:200px;\n"
 "}\n"
@@ -249,6 +249,16 @@ class Ui_MainWindow(object):
         self.list_view_items.setWordWrap(False)
         self.list_view_items.setSelectionRectVisible(True)
         self.list_view_items.setObjectName("list_view_items")
+        item = QtWidgets.QListWidgetItem()
+        self.list_view_items.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.list_view_items.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.list_view_items.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.list_view_items.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.list_view_items.addItem(item)
         self.label_items = QtWidgets.QLabel(parent=self.page_items)
         self.label_items.setGeometry(QtCore.QRect(20, 10, 241, 31))
         self.label_items.setStyleSheet("background-color: rgb(255, 120, 0);\n"
@@ -280,7 +290,7 @@ class Ui_MainWindow(object):
         self.list_view_emotions.setEnabled(True)
         self.list_view_emotions.setGeometry(QtCore.QRect(260, 40, 191, 381))
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setPointSize(11)
         font.setItalic(False)
         font.setUnderline(False)
         font.setStrikeOut(False)
@@ -294,15 +304,16 @@ class Ui_MainWindow(object):
 "    border-color: rgb(0, 0, 0);\n"
 "    border-style: solid;\n"
 "    border-width: 2px;\n"
-"    padding: 8px;\n"
+"    padding: 0px;\n"
 "    padding-left: 0px;\n"
+"    padding-bottom: 0px;\n"
 "}\n"
 "\n"
 "QListView:item{\n"
 "    border: 2px solid black;\n"
 "    background-color: rgb(192, 191, 188);\n"
-"    margin:5px;\n"
-"    height:50px;\n"
+"    margin:6px;\n"
+"    height:45px;\n"
 "    width:170px;\n"
 "}\n"
 "\n"
@@ -319,13 +330,15 @@ class Ui_MainWindow(object):
         self.list_view_emotions.setProperty("isWrapping", True)
         self.list_view_emotions.setResizeMode(QtWidgets.QListView.ResizeMode.Fixed)
         self.list_view_emotions.setLayoutMode(QtWidgets.QListView.LayoutMode.SinglePass)
-        self.list_view_emotions.setGridSize(QtCore.QSize(120, 60))
+        self.list_view_emotions.setGridSize(QtCore.QSize(120, 53))
         self.list_view_emotions.setViewMode(QtWidgets.QListView.ViewMode.ListMode)
         self.list_view_emotions.setModelColumn(0)
         self.list_view_emotions.setUniformItemSizes(False)
         self.list_view_emotions.setWordWrap(False)
         self.list_view_emotions.setSelectionRectVisible(True)
         self.list_view_emotions.setObjectName("list_view_emotions")
+        item = QtWidgets.QListWidgetItem()
+        self.list_view_emotions.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.list_view_emotions.addItem(item)
         item = QtWidgets.QListWidgetItem()
@@ -398,13 +411,34 @@ class Ui_MainWindow(object):
         self.page_video = QtWidgets.QWidget()
         self.page_video.setObjectName("page_video")
         self.stackedWidget.addWidget(self.page_video)
+        self.page_loading = QtWidgets.QWidget()
+        self.page_loading.setObjectName("page_loading")
+        self.l_loading = QtWidgets.QLabel(parent=self.page_loading)
+        self.l_loading.setGeometry(QtCore.QRect(210, 220, 301, 41))
+        self.l_loading.setStyleSheet("")
+        self.l_loading.setText("")
+        self.l_loading.setObjectName("l_loading")
+        self.label_loading = QtWidgets.QLabel(parent=self.page_loading)
+        self.label_loading.setGeometry(QtCore.QRect(250, 180, 221, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_loading.setFont(font)
+        self.label_loading.setStyleSheet("")
+        self.label_loading.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_loading.setObjectName("label_loading")
+        self.stackedWidget.addWidget(self.page_loading)
+        self.page_empty = QtWidgets.QWidget()
+        self.page_empty.setObjectName("page_empty")
+        self.stackedWidget.addWidget(self.page_empty)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(1)
         self.list_view_items.setCurrentRow(-1)
         self.list_view_emotions.setCurrentRow(-1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        self.my_setup()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -412,9 +446,9 @@ class Ui_MainWindow(object):
         self.btn_photobox_right.setText(_translate("MainWindow", ">"))
         self.btn_photobox_left.setText(_translate("MainWindow", "<"))
         self.label_appear.setText(_translate("MainWindow", "Время появления: 00:00:00"))
-        self.btn_items.setText(_translate("MainWindow", "Распознавание \n"
+        self.btn_items.setText(_translate("MainWindow", "Распознавание\n"
 "предметов"))
-        self.btn_emotion.setText(_translate("MainWindow", "Распознавание \n"
+        self.btn_emotion.setText(_translate("MainWindow", "Распознавание\n"
 "текущей эмоции"))
         self.btn_stats.setText(_translate("MainWindow", "Статистика эмоций\n"
 "по всем кадрам"))
@@ -422,6 +456,19 @@ class Ui_MainWindow(object):
 "с человеком"))
         self.label_show_item.setText(_translate("MainWindow", "Просмотр предмета"))
         self.list_view_items.setSortingEnabled(False)
+        __sortingEnabled = self.list_view_items.isSortingEnabled()
+        self.list_view_items.setSortingEnabled(False)
+        item = self.list_view_items.item(0)
+        item.setText(_translate("MainWindow", "New Item - 30%"))
+        item = self.list_view_items.item(1)
+        item.setText(_translate("MainWindow", "New Item"))
+        item = self.list_view_items.item(2)
+        item.setText(_translate("MainWindow", "New Item"))
+        item = self.list_view_items.item(3)
+        item.setText(_translate("MainWindow", "New Item"))
+        item = self.list_view_items.item(4)
+        item.setText(_translate("MainWindow", "New Item"))
+        self.list_view_items.setSortingEnabled(__sortingEnabled)
         self.label_items.setText(_translate("MainWindow", "Предметы"))
         self.label_facebox.setText(_translate("MainWindow", "Обнаруженное лицо"))
         self.list_view_emotions.setSortingEnabled(False)
@@ -430,26 +477,31 @@ class Ui_MainWindow(object):
         item = self.list_view_emotions.item(0)
         item.setText(_translate("MainWindow", "Злость - 69%"))
         item = self.list_view_emotions.item(1)
-        item.setText(_translate("MainWindow", "Отвращение - 0%"))
+        item.setText(_translate("MainWindow", "Грусть - 0%"))
         item = self.list_view_emotions.item(2)
-        item.setText(_translate("MainWindow", "Испуг - 8%"))
+        item.setText(_translate("MainWindow", "Отвращение - 0%"))
         item = self.list_view_emotions.item(3)
-        item.setText(_translate("MainWindow", "Радость - 34%"))
+        item.setText(_translate("MainWindow", "Испуг - 8%"))
         item = self.list_view_emotions.item(4)
-        item.setText(_translate("MainWindow", "Удивление - 0%"))
+        item.setText(_translate("MainWindow", "Радость - 34%"))
         item = self.list_view_emotions.item(5)
+        item.setText(_translate("MainWindow", "Удивление - 0%"))
+        item = self.list_view_emotions.item(6)
         item.setText(_translate("MainWindow", "Нейтрально - 29%"))
         self.list_view_emotions.setSortingEnabled(__sortingEnabled)
         self.label_emotions.setText(_translate("MainWindow", "Распознанные эмоции"))
         self.label_emotionbox.setText(_translate("MainWindow", "Преобладающая эмоция"))
         self.label_emotionname.setText(_translate("MainWindow", "Нейтрально"))
+        self.label_loading.setText(_translate("MainWindow", "Загрузка"))
 
+    def my_setup(self):
+        pass
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_analyze()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec())

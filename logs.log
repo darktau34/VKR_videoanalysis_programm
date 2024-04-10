@@ -982,3 +982,46 @@
 21:36:52   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48
 19:37:43   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel.mp4 exists in DataBase with id:44
 19:37:44   [INFO] db_processing -- check_video_db_exists  176: Video with path videos/aquarel_2.mp4 exists in DataBase with id:48
+12:00:20   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:00:21   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_2.mp4 doesn't exists in DataBase
+12:00:22   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:00:23   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:00:24   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/mall.mp4 doesn't exists in DataBase
+12:00:25   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_2.mp4 doesn't exists in DataBase
+12:00:26   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:00:26   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:00:27   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/mall.mp4 doesn't exists in DataBase
+12:00:28   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/27sec.mkv doesn't exists in DataBase
+12:00:28   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/30sec.mkv doesn't exists in DataBase
+12:00:29   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min20sec.mkv doesn't exists in DataBase
+12:00:30   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel.mp4 doesn't exists in DataBase
+12:00:31   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/25sec.mkv doesn't exists in DataBase
+12:00:32   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel.mp4 doesn't exists in DataBase
+12:00:34   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:00:36   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/50sec.mp4 doesn't exists in DataBase
+12:00:37   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/25sec.mkv doesn't exists in DataBase
+12:00:38   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/tokyo1.mp4 doesn't exists in DataBase
+12:00:39   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/10sec.mkv doesn't exists in DataBase
+12:00:41   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/37sec.mkv doesn't exists in DataBase
+12:00:48   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/mall.mp4 doesn't exists in DataBase
+12:00:51   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:00:53   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_2.mp4 doesn't exists in DataBase
+12:02:13   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:05:23   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_2.mp4 doesn't exists in DataBase
+12:05:24   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:06:38   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:06:42   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:07:27   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_2.mp4 doesn't exists in DataBase
+12:07:28   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_1.mp4 doesn't exists in DataBase
+12:07:29   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:07:31   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/aquarel_2.mp4 doesn't exists in DataBase
+12:07:33   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/mall.mp4 doesn't exists in DataBase
+12:07:35   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/27sec.mkv doesn't exists in DataBase
+12:07:35   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/30sec.mkv doesn't exists in DataBase
+12:07:43   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/test/seconds.mp4 doesn't exists in DataBase
+12:07:45   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/test/seconds.mp4 doesn't exists in DataBase
+12:07:46   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/test/seconds_cutted.mp4 doesn't exists in DataBase
+12:08:08   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:09:51   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/1min10sec.mkv doesn't exists in DataBase
+12:09:52   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/mall.mp4 doesn't exists in DataBase
+12:09:52   [INFO] db_processing -- check_video_db_exists  179: Video with path /home/slava/projects/nir_7sem/videos/30sec.mkv doesn't exists in DataBase
