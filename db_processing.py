@@ -47,7 +47,7 @@ def select_from_persons(video_id):
         df_persons = pd.DataFrame()
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT person_id, tracker_id, photobox, appear_time, ui_tracker_id " +
+            "SELECT person_id, tracker_id, photobox, appear_time, video_id, ui_tracker_id " +
             "FROM person " +
             f"WHERE video_id = {video_id}")
 
@@ -57,8 +57,9 @@ def select_from_persons(video_id):
                 'tracker_id': int(person[1]),
                 'photobox': person[2],
                 'appear_time': person[3],
-                'ui_tracker_id': int(person[4])
-            }, index=[int(person[4])])
+                'video_id': int(person[4]),
+                'ui_tracker_id': int(person[5])
+            }, index=[int(person[5])])
             df_persons = pd.concat([df_persons, df_person_row], ignore_index=True)
 
         df_persons.sort_values('ui_tracker_id', inplace=True)
@@ -160,8 +161,31 @@ def insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list
         cursor.close()
         connection.close()
 
+def check_items_exists(person_id):
+    value = False
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT item_id FROM item WHERE person_id = '{person_id}'")
+        if cursor.rowcount != 0:
+            video_id, = cursor.fetchone()
+            logger.info("Items with person id %s exists id DataBase", str(person_id))
+            value = True
+        else:
+            logger.info("Items with person id %s doesn't exists in DataBase", str(person_id))
 
-def check_video_db_exists(video_path):
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return value
+
+def check_video_db_exists_bypath(video_path):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
     except ps.Error as e:

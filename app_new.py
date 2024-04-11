@@ -14,7 +14,7 @@ from PIL import Image, ImageQt
 
 from analyze import app_analyze
 from app_analysis_new import Ui_analyze
-from db_processing import check_video_db_exists
+from db_processing import check_video_db_exists_bypath
 
 LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
 DATE_FORMAT = '%H:%M:%S'
@@ -517,7 +517,7 @@ class Ui_MainWindow(object):
         self.btn_analyze.setEnabled(True)
         self.input_appear.setEnabled(True)
 
-        self.video_id = check_video_db_exists(self.video_path)
+        self.video_id = check_video_db_exists_bypath(self.video_path)
         if self.video_id:
             self.btn_prev.setEnabled(True)
         else:
@@ -554,7 +554,7 @@ class Ui_MainWindow(object):
         """
         self.form = QtWidgets.QMainWindow()
         self.ui_analyze_window = Ui_analyze()
-        self.ui_analyze_window.setupUi(self.form, self.video_id, self.cur_video)
+        self.ui_analyze_window.setupUi(self.form, self.video_id, self.cur_video, self.video_path)
         self.form.show()
 
     def currentRowChanged_handler(self):
@@ -566,7 +566,7 @@ class Ui_MainWindow(object):
             self.btn_analyze.setEnabled(True)
 
             self.video_path = os.path.join(self.videos_dir, self.cur_video)
-            self.video_id = check_video_db_exists(self.video_path)
+            self.video_id = check_video_db_exists_bypath(self.video_path)
             if self.video_id:
                 self.btn_prev.setEnabled(True)
             else:

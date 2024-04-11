@@ -18,7 +18,7 @@ from videoprocessing import get_video_fps
 from appear_time import calculate_appear_time
 from db_processing import insert_to_video_table
 from db_processing import insert_to_person_table
-from db_processing import check_video_db_exists
+from db_processing import check_video_db_exists_bypath
 from db_processing import delete_rows_about_video
 from db_processing import insert_to_items_table
 
@@ -200,11 +200,10 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     time_csv_path = dirs_dict['time_csv_path']
     items_dir = dirs_dict['items_dir']
 
-    video_id = check_video_db_exists(video_path)
+    video_id = check_video_db_exists_bypath(video_path)
     if video_id:
         delete_rows_about_video(video_id)
 
-    items_list = []
     progress_bar.setValue(10)
 
     start_time = time.time()
@@ -245,12 +244,47 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     start_time = time.time()
     insert_to_video_table(video_path)
     insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list, ui_tracker_list)
-    if len(items_list) != 0:
-        insert_to_items_table(items_list, video_path)
 
     end_time = time.time()
     logger.info('Insert to DataBase time: %s sec.', end_time - start_time)
     progress_bar.setValue(100)
+
+
+def app_items_detect(person_db_df, video_path):
+    logger = logging.getLogger(__name__)
+    if torch.cuda.is_available():
+        logger.info("CUDA device's count: %s", torch.cuda.device_count())
+        logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
+
+    tracker_id = person_db_df.tracker_id
+    photobox_path = person_db_df.photobox
+
+    photobox_path = photobox_path.split('/')
+    yolo_df_path = os.path.join(photobox_path[0], photobox_path[1], 'detections.csv')
+    items_dir = os.path.join(photobox_path[0], photobox_path[1], 'items')
+    to_csv_path = os.path.join(items_dir, f'{tracker_id}-items.csv')
+
+    yolo_df = pd.read_csv(yolo_df_path)
+
+    start_time = time.time()
+    items_list = detect_items(yolo_df, video_path, items_dir, to_csv_path, [tracker_id])
+    items_list = sort_items_list(items_list)
+    end_time = time.time()
+    logger.info('Items detection time: %s sec.', end_time - start_time)
+
+    if len(items_list) != 0:
+        insert_to_items_table(items_list, video_path)
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

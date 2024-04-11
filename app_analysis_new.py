@@ -8,11 +8,43 @@
 import pandas as pd
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PIL import Image, ImageQt
-from db_processing import select_from_persons, select_from_items
+from db_processing import select_from_persons, select_from_items, check_items_exists
+from analyze import app_items_detect
+
+
+class WorkerSignals(QtCore.QObject):
+    """
+    Signals from running worker thread
+    error signal
+    finished signal
+    """
+    finished = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal(object)
+
+
+class WorkerItems(QtCore.QObject):
+    """
+    Worker thread for long tasks
+    """
+    def __init__(self, func, person_df, video_path):
+        super(WorkerItems, self).__init__()
+        self.func = func
+        self.video_path = video_path
+        self.person_df = person_df
+        self.signals = WorkerSignals()
+
+    @QtCore.pyqtSlot()
+    def run(self):
+        self.func(self.person_df, self.video_path)
+        self.signals.finished.emit()
+
 
 class Ui_analyze(object):
     def __init__(self):
+        self.cur_item_num = None
         self.video_id = None
+        self.video_path = None
+        self.tracker_id = None
         self.main_window = None
         self.videoname = ''
         self.pages_dict = {
@@ -28,8 +60,15 @@ class Ui_analyze(object):
         self.cur_img_path = None
         self.cur_img = None
         self.cur_img_pixmap = None
+        self.all_btns_list = None
+        self.loading_gif = QtGui.QMovie('pyqt_resources/gif_loading.gif')
+        self.cur_items_img = None
+        self.cur_person_id = None
 
-    def setupUi(self, MainWindow, video_id, videoname):
+        self.thread = None
+        self.worker_items = None
+
+    def setupUi(self, MainWindow, video_id, videoname, video_path):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
         MainWindow.resize(1037, 529)
@@ -458,6 +497,7 @@ class Ui_analyze(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.video_id = video_id
+        self.video_path = video_path
         self.videoname = videoname
         MainWindow.setWindowTitle(f'Анализ людей - {videoname}')
         self.my_setup()
@@ -523,6 +563,7 @@ class Ui_analyze(object):
 
         self.cur_df_row = 0
         first_person = self.df_persons.iloc[self.cur_df_row]
+        self.cur_person_id = first_person.person_id
         # Устанавливаем картинку в фотобокс для 1-го человека
         self.add_photobox(first_person)
         # Устанавливаем все labels для 1-го
@@ -534,12 +575,97 @@ class Ui_analyze(object):
 
         self.btn_photobox_right.clicked.connect(self.person_to_right)
         self.btn_photobox_left.clicked.connect(self.person_to_left)
+        self.btn_items.clicked.connect(self.start_items_recognition)
+        self.list_view_items.currentRowChanged.connect(self.items_currentRowChanged_handler)
+
+        self.l_loading.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.l_loading.setMovie(self.loading_gif)
+
+
+        self.all_btns_list = [self.btn_items, self.btn_emotion, self.btn_stats, self.btn_video, self.btn_photobox_right, self.btn_photobox_left]
+
+    def items_currentRowChanged_handler(self):
+        self.cur_item_num = self.list_view_items.currentRow()
+        img_path = self.cur_items_img[self.cur_item_num]
+        cur_img = self.resize_image(img_path, self.l_show_item)
+        cur_img_pixmap = QtGui.QPixmap(cur_img)
+        self.l_show_item.setPixmap(cur_img_pixmap)
+
+    def add_items(self):
+        self.list_view_items.clear()
+        self.l_show_item.clear()
+        df_items = select_from_items(self.cur_person_id)
+        self.cur_items_img = []
+        if not df_items.empty:
+            for item_row in df_items.iterrows():
+                item_name = item_row[1].item_name
+                conf = item_row[1].confidence
+                item_img = item_row[1].item_photo
+                self.cur_items_img.append(item_img)
+                item = QtWidgets.QListWidgetItem(item_name + ' - ' + str(conf) + '%')
+                self.list_view_items.addItem(item)
+
+    def items_recognition_finished(self):
+        for btn in self.all_btns_list:
+            btn.setEnabled(True)
+
+        self.loading_gif.stop()
+        self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_items'))
+        self.add_items()
+
+    def start_items_recognition(self):
+        if not check_items_exists(self.cur_person_id):
+            for btn in self.all_btns_list:
+                btn.setEnabled(False)
+
+            self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_loading'))
+            self.loading_gif.start()
+
+            person_df = self.df_persons.iloc[self.cur_df_row]
+
+            self.thread = QtCore.QThread()
+            self.worker_items = WorkerItems(app_items_detect, person_df, self.video_path)
+
+            self.worker_items.moveToThread(self.thread)
+            self.worker_items.signals.finished.connect(self.items_recognition_finished)
+            self.worker_items.signals.finished.connect(self.thread.quit)
+            self.worker_items.signals.finished.connect(self.worker_items.deleteLater)
+
+            self.thread.started.connect(self.worker_items.run)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+        else:
+            self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_items'))
+            self.add_items()
+
+    def person_changed(self, df_row):
+        self.add_photobox(df_row)
+        self.add_labels(df_row)
+        self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_empty'))
+        self.cur_person_id = df_row.person_id
 
     def person_to_right(self):
-        pass
+        max_row = len(self.df_persons) - 1
+        if self.cur_df_row != max_row:
+            self.cur_df_row += 1
+        if self.cur_df_row == max_row:
+            self.btn_photobox_right.setEnabled(False)
+
+        self.btn_photobox_left.setEnabled(True)
+
+        person_df = self.df_persons.iloc[self.cur_df_row]
+        self.person_changed(person_df)
 
     def person_to_left(self):
-        pass
+        min_row = 0
+        if self.cur_df_row != min_row:
+            self.cur_df_row -= 1
+        if self.cur_df_row == min_row:
+            self.btn_photobox_left.setEnabled(False)
+
+        self.btn_photobox_right.setEnabled(True)
+        person_df = self.df_persons.iloc[self.cur_df_row]
+        self.person_changed(person_df)
 
     def add_labels(self, df_row):
         photobox_label = "Человек: " + str(df_row.ui_tracker_id)

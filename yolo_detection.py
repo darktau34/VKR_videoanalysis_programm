@@ -47,7 +47,7 @@ def detect_items(yolo_df, video_path, items_path, to_csv_path, person_arr):
         logger.info("Detection items for person: %s / %s finished", str(counter), str(len(person_arr)))
         counter += 1
 
-    items_df_to_save.to_csv(to_csv_path + 'items.csv', index=False)
+    items_df_to_save.to_csv(to_csv_path, index=False)
     return items_list
 
 
