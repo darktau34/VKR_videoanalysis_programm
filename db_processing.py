@@ -1,8 +1,90 @@
 import logging
 import psycopg2 as ps
 import pandas as pd
+from psycopg2.extras import Json, DictCursor
 
 logger = logging.getLogger(__name__)
+
+
+def check_emotions_exists(person_id):
+    value = False
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT emotion_id FROM emotion WHERE person_id = '{person_id}'")
+        if cursor.rowcount != 0:
+            emotion_id, = cursor.fetchone()
+            logger.info("Emotion of person id %s exists id DataBase", str(person_id))
+            value = True
+        else:
+            logger.info("Emotion of person id %s doesn't exists in DataBase", str(person_id))
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return value
+
+
+def select_from_emotions_table(person_id):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor(cursor_factory=DictCursor)
+        cursor.execute(
+            "SELECT facebox, emotions_dict, top_emotion, is_recognized, need_warning " +
+            "FROM emotion " +
+            f"WHERE person_id = {person_id}")
+
+        row = cursor.fetchone()
+
+        facebox_path = row[0]
+        emotions_dict = row[1]
+        top_emotion = row[2]
+        is_recognized = row[3]
+        need_warning = row[4]
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        if is_recognized:
+            return facebox_path, emotions_dict, top_emotion, need_warning
+        else:
+            return False
+
+
+def insert_to_emotions_table(emotion_row):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+
+        if emotion_row[4]:  # is recognized
+            cursor.execute("INSERT INTO emotion (person_id, facebox, emotions_dict, top_emotion, is_recognized, need_warning) " +
+                           "VALUES (%s, %s, %s, %s, %s, %s)",
+                           [int(emotion_row[0]), emotion_row[1], Json(emotion_row[2]), emotion_row[3], emotion_row[4], emotion_row[5]])
+        else:
+            cursor.execute("INSERT INTO emotion (person_id, is_recognized) " +
+                           "VALUES (%s, %s)",
+                           [int(emotion_row[0]), emotion_row[4]])
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
 
 
 def select_from_items(person_id):

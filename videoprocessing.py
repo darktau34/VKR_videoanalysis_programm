@@ -9,29 +9,6 @@ from fer import FER
 logger = logging.getLogger(__name__)
 
 
-def detect_fer(photoboxes_paths):
-    fer_detector = FER(mtcnn=True)
-    ph_emotions = []
-    for ph_path in photoboxes_paths:
-        ph = cv.imread(ph_path)
-        ph = cv.cvtColor(ph, cv.COLOR_BGR2RGB)
-
-        fer_result = fer_detector.detect_emotions(ph)
-        if len(fer_result) != 0:
-            result_emotions = fer_result[0]['emotions']
-            result_emotions['photobox_path'] = ph_path
-            result_emotions['recognized'] = True
-        else:
-            result_emotions = {
-                'photobox_path': ph_path,
-                'recognized': False
-            }
-
-        ph_emotions.append(result_emotions)
-
-    return ph_emotions
-
-
 def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr, ui_progress_bar):
     """
     анализируем боксы людей, берем наибольший бокс, проверяем чтоб лицо нахоидилось и сохраняем

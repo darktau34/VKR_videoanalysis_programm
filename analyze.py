@@ -24,6 +24,7 @@ from db_processing import insert_to_items_table
 
 logger = logging.getLogger(__name__)
 
+
 def create_data_dirs(video_path):
     file = os.path.basename(video_path)
     file = os.path.splitext(file)
@@ -57,11 +58,11 @@ def create_data_dirs(video_path):
     # photoboxes dir
     photoboxes_dir = create_sub_dir(data_dir, 'photoboxes')
 
-    # videoclips dir
-    videoclips_dir = create_sub_dir(data_dir, 'videoclips')
-
     # items dir
     items_dir = create_sub_dir(data_dir, 'items')
+
+    # emitions dir
+    emotions_dir = create_sub_dir(data_dir, 'emotions')
 
     time_csv_path = data_dir + '/' + 'time.csv'
 
@@ -69,7 +70,8 @@ def create_data_dirs(video_path):
         'detections_csv_path': detections_csv_path,
         'photoboxes_dir': photoboxes_dir,
         'time_csv_path': time_csv_path,
-        'items_dir': items_dir
+        'items_dir': items_dir,
+        'emotions_dir': emotions_dir
     }
 
 
@@ -198,7 +200,6 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     to_csv_path = dirs_dict['detections_csv_path']
     photoboxes_dir = dirs_dict['photoboxes_dir']
     time_csv_path = dirs_dict['time_csv_path']
-    items_dir = dirs_dict['items_dir']
 
     video_id = check_video_db_exists_bypath(video_path)
     if video_id:
@@ -274,17 +275,6 @@ def app_items_detect(person_db_df, video_path):
 
     if len(items_list) != 0:
         insert_to_items_table(items_list, video_path)
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
