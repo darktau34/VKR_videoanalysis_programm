@@ -61,8 +61,11 @@ def create_data_dirs(video_path):
     # items dir
     items_dir = create_sub_dir(data_dir, 'items')
 
-    # emitions dir
+    # emotions dir
     emotions_dir = create_sub_dir(data_dir, 'emotions')
+
+    # diagramms dir
+    emotions_dir = create_sub_dir(data_dir, 'diagramms')
 
     time_csv_path = data_dir + '/' + 'time.csv'
 
@@ -222,11 +225,6 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     end_time = time.time()
     logger.info('Save photoboxes time: %s sec.', end_time - start_time)
 
-    # start_time = time.time()
-    # videoclips_paths = clip_video_fragment(video_path, yolo_df, videoclip_dirs, max_clip_seconds)
-    # end_time = time.time()
-    # logger.info('Clip video fragments time: %s sec.', end_time - start_time)
-
     start_time = time.time()
     video_fps = get_video_fps(video_path)
     time_df = calculate_appear_time(yolo_df, begin_video_time, video_fps, tracker_list)
@@ -234,13 +232,6 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     time_list = time_df['appear_time'].values
     end_time = time.time()
     logger.info('Calculate appear time, time: %s sec.', end_time - start_time)
-
-    # if need_detection_items:
-    #     start_time = time.time()
-    #     items_list = detect_items(yolo_df, video_path, items_dir, to_csv_path, tracker_list)
-    #     items_list = sort_items_list(items_list)
-    #     end_time = time.time()
-    #     logger.info('Items detection time: %s sec.', end_time - start_time)
 
     start_time = time.time()
     insert_to_video_table(video_path)
@@ -262,7 +253,7 @@ def app_items_detect(person_db_df, video_path):
 
     photobox_path = photobox_path.split('/')
     yolo_df_path = os.path.join(photobox_path[0], photobox_path[1], 'detections.csv')
-    items_dir = os.path.join(photobox_path[0], photobox_path[1], 'items')
+    items_dir = os.path.join(photobox_path[0], photobox_path[1], 'items') + '/'
     to_csv_path = os.path.join(items_dir, f'{tracker_id}-items.csv')
 
     yolo_df = pd.read_csv(yolo_df_path)

@@ -6,6 +6,25 @@ from psycopg2.extras import Json, DictCursor
 logger = logging.getLogger(__name__)
 
 
+def insert_to_diagramm_table(person_id, diag_path):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+
+        cursor.execute("INSERT INTO diagramm (person_id, diagramm_path) " +
+                       "VALUES (%s, %s)",
+                       [int(person_id), diag_path])
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+
 def check_emotions_exists(person_id):
     value = False
     try:
@@ -305,6 +324,8 @@ def delete_rows_about_video(video_id):
         if cursor.rowcount != 0:
             for person_id in cursor.fetchall():
                 cursor.execute(f"DELETE FROM item WHERE person_id = {person_id[0]}")
+                cursor.execute(f"DELETE FROM emotion WHERE person_id = {person_id[0]}")
+
 
         cursor.execute(f"DELETE FROM person WHERE video_id = {video_id}")
         cursor.execute(f"DELETE FROM video WHERE video_id = {video_id}")

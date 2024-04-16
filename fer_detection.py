@@ -2,8 +2,146 @@ import time
 import os
 import cv2 as cv
 import logging
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import random
 from fer import FER
-from db_processing import insert_to_emotions_table
+
+from db_processing import insert_to_emotions_table, insert_to_diagramm_table
+from videoprocessing import cut_photobox
+
+
+def fer_all_frames(video_path, person_id, tracker_id):
+    logger = logging.getLogger(__name__)
+
+    videonameext = video_path.split('/')[-1]
+    videoname = videonameext.split('.')[0]
+
+    yolo_df_path = os.path.join('data', videoname, 'detections.csv')
+    yolo_df = pd.read_csv(yolo_df_path)
+
+    only_tracker_df = yolo_df.loc[yolo_df.tracker_id == tracker_id]
+    print(only_tracker_df)
+
+    cap = cv.VideoCapture(video_path)
+    if not cap.isOpened():
+        logger.error("Video Capture is not opened")
+
+    width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+
+    emotions_number_dict = {
+        'angry': 0,
+        'sad': 0,
+        'fear': 0,
+        'disgust': 0,
+        'happy': 0,
+        'surprise': 0,
+        'neutral': 0,
+        'not_recognized': 0
+    }
+
+    max_detection_frames = 100
+    detection_step = int(len(only_tracker_df) / max_detection_frames)
+
+    fer_detector = FER(mtcnn=True)
+    frame_counter = 0
+    for index, row in only_tracker_df.iterrows():
+        if frame_counter >= detection_step:
+            frame_counter = 0
+
+        if frame_counter != 0:
+            frame_counter += 1
+            continue
+
+        frame_number = row.frame
+
+        x1 = 0 if int(row.x1) < 0 else int(row.x1)
+        y1 = 0 if int(row.y1) < 0 else int(row.y1)
+        x2 = width if int(row.x2) > width else int(row.x2)
+        y2 = height if int(row.y2) > height else int(row.y2)
+
+        print(x1, y1, x2, y2)
+
+        cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+        ret, frame = cap.read()
+        if not ret:
+            logger.error("Read frame error")
+
+        photobox = frame[y1:y2, x1:x2]
+        photobox = cv.cvtColor(photobox, cv.COLOR_BGR2RGB, photobox)
+
+        fer_result = fer_detector.detect_emotions(photobox)
+        print(fer_result)
+
+        if len(fer_result) != 0:
+            top_emotion = max(fer_result[0]['emotions'], key=fer_result[0]['emotions'].get)
+            emotions_number_dict[top_emotion] += 1
+        else:
+            emotions_number_dict['not_recognized'] += 1
+
+        frame_counter += 1
+
+    cap.release()
+
+    save_path = os.path.join('data', videoname, 'diagramms', f'{tracker_id}-diag_emotions.png')
+    try:
+        plot_emotion_stats(emotions_number_dict, save_path)
+    except Exception as e:
+        logger.error('Plot emotion diagramm error')
+        logger.error(e)
+    else:
+        insert_to_diagramm_table(person_id, save_path)
+
+
+def pie_format(pct, allvals):
+    # absolute = int(np.round(pct/100.*np.sum(allvals)))
+    # return "{:.1f}% ({:d})".format(pct, absolute)
+    return "{:.1f}%".format(pct)
+
+
+def translate_emotions(emotions_list):
+    translated_emotions = {
+        'angry': 'Злость',
+        'sad': 'Грусть',
+        'fear': 'Испуг',
+        'disgust': 'Отвращение',
+        'happy': 'Радость',
+        'surprise': 'Удивление',
+        'neutral': 'Нейтрально',
+        'not_recognized': 'Не обнаружено'
+    }
+
+    new_list = []
+    for em in emotions_list:
+        new_em = translated_emotions.get(em)
+        new_list.append(new_em)
+
+    return new_list
+
+
+def plot_emotion_stats(emotions_number_dict, save_path):
+    values = list(emotions_number_dict.values())
+    labels = list(emotions_number_dict.keys())
+
+    x = []
+    y = []
+    for i in range(len(values)):
+        if values[i] != 0:
+            x.append(values[i])
+            y.append(labels[i])
+
+    y = translate_emotions(y)
+
+    fig, ax = plt.subplots(figsize=(12, 7), subplot_kw=dict(aspect="equal"), dpi=80)
+    wedges, texts, autotexts = ax.pie(x, autopct=lambda pct: pie_format(pct, x), textprops=dict(color="w"), startangle=270)
+
+    ax.legend(wedges, y, title="Эмоции", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+    plt.text(0, 1.1, "Диаграмма эмоций человека на видео", horizontalalignment='center', verticalalignment='bottom', fontdict={'fontweight': 500, 'size': 12})
+    plt.setp(autotexts, size=10, weight=700)
+
+    plt.savefig(save_path)
 
 
 def fer_photobox_main(photobox_path, person_id):
@@ -78,3 +216,8 @@ if __name__ == '__main__':
 
     # fer_photobox_main('data/mall/items/41-handbag-51.png', 877)
     # print(select_from_emotions_table(877))
+
+    start_time = time.time()
+    fer_all_frames('/home/slava/projects/nir_7sem/videos/aquarel_2.mp4', 905, 21)
+    end_time = time.time()
+    print(end_time - start_time)
