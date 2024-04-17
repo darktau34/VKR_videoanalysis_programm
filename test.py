@@ -1,6 +1,7 @@
 """
 Скрипт для теста анализа настроений
 """
+import os
 
 
 def deepface_main():
@@ -251,10 +252,65 @@ def others():
     #     delete_rows_about_video(video_id)
 
 
+def video(video_path, tracker_id):
+    import pandas as pd
+    import cv2 as cv
+    videonameext = video_path.split('/')[-1]
+    videoname = videonameext.split('.')[0]
+
+    yolo_df_path = os.path.join('data', videoname, 'detections.csv')
+    yolo_df = pd.read_csv(yolo_df_path)
+
+    only_tracker_df = yolo_df.loc[yolo_df.tracker_id == tracker_id]
+    only_tracker_df.reset_index(drop=True, inplace=True)
+    print(only_tracker_df)
+
+    cap = cv.VideoCapture(video_path)
+    if not cap.isOpened():
+        # logger.error("Video Capture is not opened")
+        print('Video Capture is not opened')
+
+    width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+
+    out_path = 'test.mp4'
+    out_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    out_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+    out_fps = int(cap.get(cv.CAP_PROP_FPS))
+    out_fourcc = cv.VideoWriter_fourcc(*'mp4v')
+    out_cap = cv.VideoWriter(out_path, out_fourcc, out_fps, (out_width, out_height), isColor=True)
+
+    prev_frame_number = 0
+    for index, row in only_tracker_df.iterrows():
+        frame_number = int(row.frame)
+        x1 = 0 if int(row.x1) < 0 else int(row.x1)
+        y1 = 0 if int(row.y1) < 0 else int(row.y1)
+        x2 = width if int(row.x2) > width else int(row.x2)
+        y2 = height if int(row.y2) > height else int(row.y2)
+
+        if index == 0:
+            cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+
+        if index != 0 and frame_number - 1 != prev_frame_number:
+            cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+
+        ret, frame = cap.read()
+        if not ret:
+            # logger.error("Read frame error")
+            print('Read frame error')
+
+        cv.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 1)
+        out_cap.write(frame)
+        prev_frame_number = frame_number
+
+    cap.release()
+    out_cap.release()
+    cv.destroyAllWindows()
 
 
 if __name__ == '__main__':
     import logging
+    import time
     LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
     DATE_FORMAT = '%H:%M:%S'
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
@@ -263,4 +319,8 @@ if __name__ == '__main__':
     # yolo()
     # test_mtcnn()
     # yolo_deepsort()
-    others()
+    # others()
+    start_time = time.time()
+    video('videos/aquarel_2.mp4', 2)
+    end_time = time.time()
+    print(end_time - start_time)
