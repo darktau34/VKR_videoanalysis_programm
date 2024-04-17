@@ -6,6 +6,56 @@ from psycopg2.extras import Json, DictCursor
 logger = logging.getLogger(__name__)
 
 
+def select_from_diagramm_table(person_id):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT diagramm_path " +
+            "FROM diagramm " +
+            f"WHERE person_id = {person_id}")
+
+        row = cursor.fetchone()
+
+        diagramm_path = row[0]
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return diagramm_path
+
+
+def check_diagramm_exists(person_id):
+    value = False
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT diagramm_id FROM diagramm WHERE person_id = '{person_id}'")
+        if cursor.rowcount != 0:
+            diagramm_id, = cursor.fetchone()
+            logger.info("Diagramm of person id %s exists id DataBase", str(person_id))
+            value = True
+        else:
+            logger.info("Diagramm of person id %s doesn't exists in DataBase", str(person_id))
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return value
+
+
 def insert_to_diagramm_table(person_id, diag_path):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')

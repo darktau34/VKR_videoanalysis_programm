@@ -4,6 +4,7 @@ import cv2 as cv
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 import random
 from fer import FER
@@ -14,6 +15,8 @@ from videoprocessing import cut_photobox
 
 def fer_all_frames(video_path, person_id, tracker_id):
     logger = logging.getLogger(__name__)
+    logger.info('Diagramms - person id: %s', person_id)
+    logger.info('Diagramms - tracker id: %s', tracker_id)
 
     videonameext = video_path.split('/')[-1]
     videoname = videonameext.split('.')[0]
@@ -22,7 +25,6 @@ def fer_all_frames(video_path, person_id, tracker_id):
     yolo_df = pd.read_csv(yolo_df_path)
 
     only_tracker_df = yolo_df.loc[yolo_df.tracker_id == tracker_id]
-    print(only_tracker_df)
 
     cap = cv.VideoCapture(video_path)
     if not cap.isOpened():
@@ -62,8 +64,6 @@ def fer_all_frames(video_path, person_id, tracker_id):
         x2 = width if int(row.x2) > width else int(row.x2)
         y2 = height if int(row.y2) > height else int(row.y2)
 
-        print(x1, y1, x2, y2)
-
         cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
         ret, frame = cap.read()
         if not ret:
@@ -73,7 +73,6 @@ def fer_all_frames(video_path, person_id, tracker_id):
         photobox = cv.cvtColor(photobox, cv.COLOR_BGR2RGB, photobox)
 
         fer_result = fer_detector.detect_emotions(photobox)
-        print(fer_result)
 
         if len(fer_result) != 0:
             top_emotion = max(fer_result[0]['emotions'], key=fer_result[0]['emotions'].get)
@@ -122,6 +121,8 @@ def translate_emotions(emotions_list):
 
 
 def plot_emotion_stats(emotions_number_dict, save_path):
+    matplotlib.use('agg')
+
     values = list(emotions_number_dict.values())
     labels = list(emotions_number_dict.keys())
 
@@ -141,7 +142,7 @@ def plot_emotion_stats(emotions_number_dict, save_path):
     plt.text(0, 1.1, "Диаграмма эмоций человека на видео", horizontalalignment='center', verticalalignment='bottom', fontdict={'fontweight': 500, 'size': 12})
     plt.setp(autotexts, size=10, weight=700)
 
-    plt.savefig(save_path)
+    plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
 
 
 def fer_photobox_main(photobox_path, person_id):

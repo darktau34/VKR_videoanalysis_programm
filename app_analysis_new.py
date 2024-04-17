@@ -13,8 +13,9 @@ from PIL import Image, ImageQt
 from db_processing import select_from_persons
 from db_processing import select_from_items, check_items_exists
 from db_processing import select_from_emotions_table, check_emotions_exists
+from db_processing import select_from_diagramm_table, check_diagramm_exists
 from analyze import app_items_detect
-from fer_detection import fer_photobox_main
+from fer_detection import fer_photobox_main, fer_all_frames
 
 
 class DialogWindowMessage(QtWidgets.QDialog):
@@ -43,6 +44,24 @@ class WorkerSignals(QtCore.QObject):
     """
     finished = QtCore.pyqtSignal()
     error = QtCore.pyqtSignal(object)
+
+
+class WorkerDiag(QtCore.QObject):
+    """
+    Worker thread for long tasks (emotion diagramms)
+    """
+    def __init__(self, func, video_path, person_id, tracker_id):
+        super(WorkerDiag, self).__init__()
+        self.func = func
+        self.video_path = video_path
+        self.person_id = person_id
+        self.tracker_id = tracker_id
+        self.signals = WorkerSignals()
+
+    @QtCore.pyqtSlot()
+    def run(self):
+        self.func(self.video_path, self.person_id, self.tracker_id)
+        self.signals.finished.emit()
 
 
 class WorkerFER(QtCore.QObject):
@@ -81,6 +100,7 @@ class WorkerItems(QtCore.QObject):
 
 class Ui_analyze(object):
     def __init__(self):
+        self.worker_diag = None
         self.cur_item_num = None
         self.video_id = None
         self.video_path = None
@@ -561,7 +581,7 @@ class Ui_analyze(object):
 "предметов"))
         self.btn_emotion.setText(_translate("MainWindow", "Распознавание\n"
 "текущей эмоции"))
-        self.btn_stats.setText(_translate("MainWindow", "Статистика эмоций\n"
+        self.btn_stats.setText(_translate("MainWindow", "Диаграмма эмоций\n"
 "по всем кадрам"))
         self.btn_video.setText(_translate("MainWindow", "Отрывок видео\n"
 "с человеком"))
@@ -613,6 +633,7 @@ class Ui_analyze(object):
         self.cur_df_row = 0
         first_person = self.df_persons.iloc[self.cur_df_row]
         self.cur_person_id = first_person.person_id
+        self.tracker_id = first_person.tracker_id
         # Устанавливаем картинку в фотобокс для 1-го человека
         self.add_photobox(first_person)
         # Устанавливаем все labels для 1-го
@@ -626,12 +647,55 @@ class Ui_analyze(object):
         self.btn_photobox_left.clicked.connect(self.person_to_left)
         self.btn_items.clicked.connect(self.start_items_recognition)
         self.btn_emotion.clicked.connect(self.start_emotion_recognition)
+        self.btn_stats.clicked.connect(self.start_diagramms)
         self.list_view_items.currentRowChanged.connect(self.items_currentRowChanged_handler)
 
         self.l_loading.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.l_loading.setMovie(self.loading_gif)
 
         self.all_btns_list = [self.btn_items, self.btn_emotion, self.btn_stats, self.btn_video, self.btn_photobox_right, self.btn_photobox_left]
+
+    def add_diagramm(self):
+        self.l_statsbox.clear()
+
+        diagramm_path = select_from_diagramm_table(self.cur_person_id)
+        diagramm = self.resize_image(diagramm_path, self.l_statsbox)
+        diagramm_pixmap = QtGui.QPixmap(diagramm)
+        self.l_statsbox.setPixmap(diagramm_pixmap)
+
+
+    def diagramms_finished(self):
+        for btn in self.all_btns_list:
+            btn.setEnabled(True)
+
+        self.loading_gif.stop()
+        self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_stats'))
+        self.add_diagramm()
+
+    def start_diagramms(self):
+        if not check_diagramm_exists(self.cur_person_id):
+            for btn in self.all_btns_list:
+                btn.setEnabled(False)
+
+            self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_loading'))
+            self.loading_gif.start()
+
+            self.thread = QtCore.QThread()
+            self.worker_diag = WorkerDiag(fer_all_frames, self.video_path, self.cur_person_id, self.tracker_id)
+
+            self.worker_diag.moveToThread(self.thread)
+            self.worker_diag.signals.finished.connect(self.diagramms_finished)
+            self.worker_diag.signals.finished.connect(self.thread.quit)
+            self.worker_diag.signals.finished.connect(self.worker_diag.deleteLater)
+
+            self.thread.started.connect(self.worker_diag.run)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.start()
+        else:
+            self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_stats'))
+            self.add_diagramm()
+
+
 
     def add_emotion(self):
         self.list_view_emotions.clear()
@@ -780,6 +844,7 @@ class Ui_analyze(object):
         self.add_labels(df_row)
         self.stackedWidget.setCurrentIndex(self.pages_dict.get('page_empty'))
         self.cur_person_id = df_row.person_id
+        self.tracker_id = df_row.tracker_id
 
     def person_to_right(self):
         max_row = len(self.df_persons) - 1
