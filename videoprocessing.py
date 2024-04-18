@@ -1,10 +1,13 @@
 import logging
+import os
 import numpy as np
 import cv2 as cv
+import pandas as pd
 from moviepy.editor import VideoFileClip, ImageSequenceClip
 from PIL import Image
 from facenet_pytorch import MTCNN
 from fer import FER
+from db_processing import insert_to_videoclip_table
 
 logger = logging.getLogger(__name__)
 
@@ -110,75 +113,59 @@ def cut_photobox(video_clip, frame_number, box):
     return photobox
 
 
-def clip_video_fragment(video_path, yolo_df, dirs_to_save, max_clip_seconds):
-    video = VideoFileClip(video_path)
-    fps = video.fps
-    max_clip_frames = int(max_clip_seconds * fps)
-    person_arr = yolo_df.tracker_id.unique().astype(int)
-    videoclips_paths = [[], [], []]
-    logger.info('Video fps: %s', str(fps))
-    logger.info('Video fragment in seconds: %s', str(max_clip_seconds))
-    logger.info('Video fragment in frames: %s', str(max_clip_frames))
-    for person in person_arr:
-        only_person_df = yolo_df.loc[yolo_df.tracker_id == person]
-        only_person_df.reset_index(drop=True, inplace=True)
-        # print(only_person_df)
-        for i in range(len(dirs_to_save)):
-            if i == 0:
-                video_clip_df = only_person_df[:max_clip_frames]
-            elif i == 1:
-                center_df = int(len(only_person_df) / 2)
-                half_clip_frames = int(max_clip_frames / 2)
-                video_clip_df = only_person_df[center_df - half_clip_frames:center_df + half_clip_frames]
-            else:
-                start = int(len(only_person_df) - max_clip_frames)
-                video_clip_df = only_person_df[start:]
+def clip_video_fragment(video_path, person_id, tracker_id):
+    videonameext = video_path.split('/')[-1]
+    videoname = videonameext.split('.')[0]
 
-            # print(video_clip_df)
+    yolo_df_path = os.path.join('data', videoname, 'detections.csv')
+    yolo_df = pd.read_csv(yolo_df_path)
 
-            max_width = 0.0
-            max_height = 0.0
-            for index, row in video_clip_df.iterrows():
-                x1 = row['x1']
-                y1 = row['y1']
-                x2 = row['x2']
-                y2 = row['y2']
-                cur_width = x2 - x1
-                cur_height = y2 - y1
-                if cur_width > max_width:
-                    max_width = cur_width
-                if cur_height > max_height:
-                    max_height = cur_height
+    only_tracker_df = yolo_df.loc[yolo_df.tracker_id == tracker_id]
+    only_tracker_df.reset_index(drop=True, inplace=True)
 
-            max_width = round(max_width)
-            max_height = round(max_height)
-            # print(f'W: {max_width} \t H: {max_height}')
-            images = []
-            for index, row in video_clip_df.iterrows():
-                frame_num = int(row['frame'])
-                x1 = row['x1']
-                y1 = row['y1']
-                x2 = row['x2']
-                y2 = row['y2']
-                box = (x1, y1, x2, y2)
-                box = increase_box(box, max_width, max_height)
-                img = cut_photobox(video, frame_num, box)
-                # print(img)
+    logger.info('Needs processing %s frames', len(only_tracker_df))
 
-                # размер ставится для UI!!!
-                fixed_width = 200
-                fixed_height = 400
-                img = img.resize((fixed_width, fixed_height))
+    cap = cv.VideoCapture(video_path)
+    if not cap.isOpened():
+        logger.error("Video Capture is not opened")
 
-                img = np.asarray(img)
-                images.append(img)
-            clip = ImageSequenceClip(images, fps=fps)
-            # clip.write_videofile('test' + str(person) + '.mp4', fps=fps)
-            path = dirs_to_save[i] + 'person' + str(person) + '.gif'
-            videoclips_paths[i].append(path)
-            clip.write_gif(path, fps=fps, program='ffmpeg', logger=None)
+    width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 
-    return videoclips_paths
+    out_path = os.path.join('data', videoname, 'videoclips', f'person{tracker_id}.mp4')
+    out_width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    out_height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+    out_fps = int(cap.get(cv.CAP_PROP_FPS))
+    out_fourcc = cv.VideoWriter_fourcc(*'mp4v')
+    out_cap = cv.VideoWriter(out_path, out_fourcc, out_fps, (out_width, out_height), isColor=True)
+
+    prev_frame_number = 0
+    for index, row in only_tracker_df.iterrows():
+        frame_number = int(row.frame)
+        x1 = 0 if int(row.x1) < 0 else int(row.x1)
+        y1 = 0 if int(row.y1) < 0 else int(row.y1)
+        x2 = width if int(row.x2) > width else int(row.x2)
+        y2 = height if int(row.y2) > height else int(row.y2)
+
+        if index == 0:
+            cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+
+        if index != 0 and frame_number - 1 != prev_frame_number:
+            cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
+
+        ret, frame = cap.read()
+        if not ret:
+            logger.error("Read frame error")
+
+        cv.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        out_cap.write(frame)
+        prev_frame_number = frame_number
+
+    cap.release()
+    out_cap.release()
+    cv.destroyAllWindows()
+
+    insert_to_videoclip_table(person_id, out_path)
 
 
 def increase_box(box, max_width, max_height):

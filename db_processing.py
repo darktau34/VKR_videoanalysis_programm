@@ -6,6 +6,76 @@ from psycopg2.extras import Json, DictCursor
 logger = logging.getLogger(__name__)
 
 
+def select_from_videoclip_table(person_id):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT videoclip_path " +
+            "FROM videoclip " +
+            f"WHERE person_id = {person_id}")
+
+        row = cursor.fetchone()
+
+        videoclip_path = row[0]
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return videoclip_path
+
+
+
+def check_videoclip_exists(person_id):
+    value = False
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT videoclip_id FROM videoclip WHERE person_id = '{person_id}'")
+        if cursor.rowcount != 0:
+            videoclip_id, = cursor.fetchone()
+            logger.info("Videoclip of person id %s exists id DataBase", str(person_id))
+            value = True
+        else:
+            logger.info("Videoclip of person id %s doesn't exists in DataBase", str(person_id))
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return value
+
+
+def insert_to_videoclip_table(person_id, video_path):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+
+        cursor.execute("INSERT INTO videoclip (person_id, videoclip_path) " +
+                       "VALUES (%s, %s)",
+                       [int(person_id), video_path])
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+
 def select_from_diagramm_table(person_id):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
@@ -263,7 +333,7 @@ def insert_to_items_table(items_list, video_path):
         connection.close()
 
 
-def insert_to_video_table(video_path):
+def insert_to_video_table(video_path, data_dir):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
     except ps.Error as e:
@@ -271,7 +341,7 @@ def insert_to_video_table(video_path):
         logger.critical(e)
     else:
         cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO video (video_path) VALUES ('{video_path}')")
+        cursor.execute(f"INSERT INTO video (video_path, data_path) VALUES (%s, %s)", [video_path, data_dir])
         connection.commit()
 
         cursor.close()
@@ -344,10 +414,13 @@ def check_video_db_exists_bypath(video_path):
         logger.critical(e)
     else:
         value = False
-        cursor = connection.cursor()
-        cursor.execute(f"SELECT video_id FROM video WHERE video_path = '{video_path}'")
+        data_path = None
+        cursor = connection.cursor(cursor_factory=DictCursor)
+        cursor.execute(f"SELECT video_id, data_path FROM video WHERE video_path = '{video_path}'")
         if cursor.rowcount != 0:
-            video_id, = cursor.fetchone()
+            row = cursor.fetchone()
+            video_id = row[0]
+            data_path = row[1]
             logger.info("Video with path %s exists in DataBase with id:%s", video_path, str(video_id))
             value = video_id
         else:
@@ -357,7 +430,7 @@ def check_video_db_exists_bypath(video_path):
 
         cursor.close()
         connection.close()
-        return value
+        return value, data_path
     return None
 
 
@@ -375,6 +448,8 @@ def delete_rows_about_video(video_id):
             for person_id in cursor.fetchall():
                 cursor.execute(f"DELETE FROM item WHERE person_id = {person_id[0]}")
                 cursor.execute(f"DELETE FROM emotion WHERE person_id = {person_id[0]}")
+                cursor.execute(f"DELETE FROM diagramm WHERE person_id = {person_id[0]}")
+                cursor.execute(f"DELETE FROM videoclip WHERE person_id = {person_id[0]}")
 
 
         cursor.execute(f"DELETE FROM person WHERE video_id = {video_id}")

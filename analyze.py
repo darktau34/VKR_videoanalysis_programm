@@ -8,6 +8,7 @@ import argparse
 import os
 import logging
 import torch
+import shutil
 import pandas as pd
 
 from yolo_detection import detect_peoples
@@ -65,16 +66,22 @@ def create_data_dirs(video_path):
     emotions_dir = create_sub_dir(data_dir, 'emotions')
 
     # diagramms dir
-    emotions_dir = create_sub_dir(data_dir, 'diagramms')
+    diagramms_dir = create_sub_dir(data_dir, 'diagramms')
+
+    # videoclips dir
+    videoclips_dir = create_sub_dir(data_dir, 'videoclips')
 
     time_csv_path = data_dir + '/' + 'time.csv'
 
     return {
+        'data_dir': data_dir,
         'detections_csv_path': detections_csv_path,
         'photoboxes_dir': photoboxes_dir,
         'time_csv_path': time_csv_path,
         'items_dir': items_dir,
-        'emotions_dir': emotions_dir
+        'emotions_dir': emotions_dir,
+        'diagramms_dir': diagramms_dir,
+        'videoclips_dir': videoclips_dir
     }
 
 
@@ -158,7 +165,7 @@ def console_analyze():
     videoclip_dirs = [videoclips_begin, videoclips_middle, videoclips_end]
     items_dir = dirs_dict['items_dir']
 
-    video_id = check_video_db_exists(video_path)
+    video_id, data_path = check_video_db_exists_bypath(video_path)
     if video_id:
         delete_rows_about_video(video_id)
 
@@ -197,16 +204,19 @@ def app_analyze(video_path, begin_video_time, progress_bar):
         logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
     show_results = False  # Хардкод, пока это не нужно
 
+    video_id, data_path = check_video_db_exists_bypath(video_path)
+    if video_id:
+        shutil.rmtree(data_path)
+        delete_rows_about_video(video_id)
+        logger.info("Data dir %s was deleted", data_path)
+
     dirs_dict = create_data_dirs(video_path)
     checking_required_files()
 
+    data_dir = dirs_dict['data_dir']
     to_csv_path = dirs_dict['detections_csv_path']
     photoboxes_dir = dirs_dict['photoboxes_dir']
     time_csv_path = dirs_dict['time_csv_path']
-
-    video_id = check_video_db_exists_bypath(video_path)
-    if video_id:
-        delete_rows_about_video(video_id)
 
     progress_bar.setValue(10)
 
@@ -234,7 +244,7 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     logger.info('Calculate appear time, time: %s sec.', end_time - start_time)
 
     start_time = time.time()
-    insert_to_video_table(video_path)
+    insert_to_video_table(video_path, data_dir)
     insert_to_person_table(video_path, photoboxes_paths, time_list, tracker_list, ui_tracker_list)
 
     end_time = time.time()

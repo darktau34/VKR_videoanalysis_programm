@@ -27,7 +27,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Video analysis of passersby</string>
+   <string>Анализ людей на видеозаписи</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(239, 239, 239);</string>
@@ -39,9 +39,9 @@
    <widget class="QListWidget" name="list_view">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>30</y>
-      <width>281</width>
+      <width>301</width>
       <height>661</height>
      </rect>
     </property>
@@ -70,7 +70,7 @@ QListView:item{
 	border: 2px solid black;
 	margin:5px;
 	height:60px;
-	width:240px;
+	width:255px;
 }
 
 QListView:item:selected{
@@ -80,6 +80,12 @@ QListView:item:selected{
     </property>
     <property name="autoScroll">
      <bool>true</bool>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>35</width>
+      <height>35</height>
+     </size>
     </property>
     <property name="movement">
      <enum>QListView::Static</enum>
@@ -126,13 +132,87 @@ QListView:item:selected{
     <property name="sortingEnabled">
      <bool>false</bool>
     </property>
+    <item>
+     <property name="text">
+      <string>New Item New Item New Item</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>pyqt_resources/video_icon.png</normaloff>pyqt_resources/video_icon.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLabel" name="l_videos">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>0</y>
-      <width>281</width>
+      <width>241</width>
       <height>30</height>
      </rect>
     </property>
@@ -147,10 +227,11 @@ QListView:item:selected{
      <string notr="true">background-color: rgb(255, 120, 0);
 border-color: rgb(0, 0, 0);
 border-style: solid;
-border-width: 1px;</string>
+border-width: 1px;
+</string>
     </property>
     <property name="text">
-     <string>Videos</string>
+     <string>Видео</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -415,7 +496,7 @@ QPushButton:hover {
 }</string>
     </property>
     <property name="text">
-     <string>Analyze</string>
+     <string>Распознать людей</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_prev">
@@ -459,7 +540,7 @@ QPushButton:hover {
 }</string>
     </property>
     <property name="text">
-     <string>Show previous analysis</string>
+     <string>Показать анализ</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="progress_bar">
@@ -730,8 +811,8 @@ QProgressBar:disabled {
    <widget class="QLabel" name="l_appear">
     <property name="geometry">
      <rect>
-      <x>950</x>
-      <y>620</y>
+      <x>940</x>
+      <y>640</y>
       <width>301</width>
       <height>31</height>
      </rect>
@@ -743,105 +824,14 @@ border-width: 1px;
 background-color: rgb(255, 120, 0);</string>
     </property>
     <property name="text">
-     <string>Appear Time:</string>
+     <string>Время начала видео:</string>
     </property>
-   </widget>
-   <widget class="QLabel" name="l_items">
-    <property name="geometry">
-     <rect>
-      <x>950</x>
-      <y>650</y>
-      <width>301</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-color: rgb(154, 153, 150);
-background-color: rgb(255, 120, 0);
-border-style: solid;
-border-width: 1px;</string>
-    </property>
-    <property name="text">
-     <string>Detect Items:</string>
-    </property>
-   </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>1112</x>
-      <y>650</y>
-      <width>139</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(192, 191, 188);
-border-color: rgb(154, 153, 150);
-border-style: solid;
-border-width: 1px;</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QCheckBox" name="checkbox_items">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>5</y>
-       <width>21</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QCheckBox::indicator {
-    width: 20px;
-    height: 20px;
-	color: rgb(255, 120, 0);
-	selection-color: rgb(255, 120, 0);
-}
-
-QCheckBox{
-	color: rgb(255, 120, 0);
-}
-</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>16</width>
-       <height>16</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
    </widget>
    <widget class="QTimeEdit" name="input_appear">
     <property name="geometry">
      <rect>
-      <x>1112</x>
-      <y>620</y>
+      <x>1102</x>
+      <y>640</y>
       <width>139</width>
       <height>31</height>
      </rect>
@@ -864,6 +854,73 @@ border-color: rgb(0, 0, 0);
     </property>
     <property name="displayFormat">
      <string>HH:mm:ss</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_dir">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>0</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(119, 118, 123);
+	border-style: solid;
+	border-width: 2px;
+	border-color: rgb(0, 0, 0);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>pyqt_resources/icon_directory.svg</normaloff>pyqt_resources/icon_directory.svg</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>21</width>
+      <height>21</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_refresh">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>0</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(119, 118, 123);
+	border-style: solid;
+	border-width: 2px;
+	border-color: rgb(0, 0, 0);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>pyqt_resources/icon_refresh.svg</normaloff>pyqt_resources/icon_refresh.svg</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>21</width>
+      <height>21</height>
+     </size>
     </property>
    </widget>
   </widget>

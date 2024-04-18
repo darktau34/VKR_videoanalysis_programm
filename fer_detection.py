@@ -152,7 +152,6 @@ def fer_photobox_main(photobox_path, person_id):
     results = fer_detect_photoboxes([photobox_path])
     end_time = time.time()
     logger.info('Emotion recognition time: %s', str(end_time - start_time))
-    print(results)
 
     facebox = cv.imread(photobox_path)
 
