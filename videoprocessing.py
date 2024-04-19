@@ -54,7 +54,11 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr, ui_p
             if i == 0:
                 photobox_start_iter = photobox.copy()
 
-            boxes, probs = mtcnn.detect(photobox)
+            boxes = None
+            try:
+                boxes, probs = mtcnn.detect(photobox)
+            except RuntimeError:
+                pass
             # print(boxes, probs)
 
             skip = False
