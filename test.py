@@ -308,6 +308,69 @@ def video(video_path, tracker_id):
     cv.destroyAllWindows()
 
 
+def fer_new():
+    from hsemotion.facial_emotions import HSEmotionRecognizer
+    from facenet_pytorch import MTCNN
+    import matplotlib.pyplot as plt
+    import cv2 as cv
+    import time
+
+    model_name = 'enet_b0_8_best_afew'
+    # model_name = 'enet_b2_7'
+    fer_hsemotion = HSEmotionRecognizer(model_name=model_name, device='cuda')
+
+    # mtcnn = MTCNN(select_largest=True, device='cuda:0')
+    mtcnn = MTCNN(select_largest=True, min_face_size=20)
+
+    img = cv.imread('data/tokyo1/photoboxes/person2.png')
+    img = cv.cvtColor(img, cv.COLOR_BGR2RGB, img)
+
+    start_time = time.time()
+    boxes, probs = mtcnn.detect(img)
+    end_time = time.time()
+    print(f'MTCNN time: {end_time - start_time}')
+    print(boxes)
+    print(probs)
+
+    if boxes is not None:
+        y1, y2, x1, x2 = int(boxes[0][1]), int(boxes[0][3]), int(boxes[0][0]), int(boxes[0][2])
+        face_img = img[y1:y2, x1:x2]
+        plt.imshow(face_img)
+        plt.show()
+
+        emotion_name_dict = {
+            0: 'Anger',
+            1: 'Contempt',
+            2: 'Disgust',
+            3: 'Fear',
+            4: 'Happiness',
+            5: 'Neutral',
+            6: 'Sadness',
+            7: 'Surprise'
+        }
+
+        start_time = time.time()
+        _, scores_hsemotions = fer_hsemotion.predict_emotions(face_img, logits=False)
+        end_time = time.time()
+        print(f'HSemotion time: {end_time - start_time}')
+
+        emotion_score_dict = dict()
+        for i in range(len(scores_hsemotions)):
+            em_name = emotion_name_dict.get(i)
+            em_score = round(scores_hsemotions[i], 2)
+            # em_score.astype(float)
+            emotion_score_dict[em_name] = em_score
+
+        fer_result_dict = [{
+            'emotions': emotion_score_dict
+        }]
+        print(fer_result_dict)
+
+    #
+
+
+
+
 if __name__ == '__main__':
     import logging
     import time
@@ -320,7 +383,6 @@ if __name__ == '__main__':
     # test_mtcnn()
     # yolo_deepsort()
     # others()
-    start_time = time.time()
-    video('videos/aquarel_2.mp4', 2)
-    end_time = time.time()
-    print(end_time - start_time)
+    # video('videos/aquarel_2.mp4', 2)
+    fer_new()
+

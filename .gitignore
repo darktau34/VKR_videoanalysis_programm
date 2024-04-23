@@ -7,3 +7,5 @@ test/
 deepsort_wts/
 env_fer/
 requirements_save.txt
+videos/
+fer_ml/

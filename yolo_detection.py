@@ -1,7 +1,6 @@
 import time
 import argparse
 import logging
-import os
 import numpy as np
 import cv2 as cv
 import pandas as pd
@@ -152,7 +151,9 @@ def get_items_df(only_person_df, model, video, class_items):
 
 def detect_peoples(video_path, save_results, to_csv_path, ui_progress_bar):
     yolo_model = YOLO('data/models/yolov8l.pt')
+    print(1)
     tracker = DeepSort(max_age=20, embedder='torchreid')
+    print(1)
     yolo_df = video_processing(yolo_model, tracker, video_path, ui_progress_bar)
     yolo_df.to_csv(to_csv_path + 'detections.csv')
     clear_df(to_csv_path + 'detections.csv', video_path)

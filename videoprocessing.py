@@ -3,10 +3,9 @@ import os
 import numpy as np
 import cv2 as cv
 import pandas as pd
-from moviepy.editor import VideoFileClip, ImageSequenceClip
+from moviepy.editor import VideoFileClip
 from PIL import Image
 from facenet_pytorch import MTCNN
-from fer import FER
 from db_processing import insert_to_videoclip_table
 
 logger = logging.getLogger(__name__)
@@ -17,7 +16,7 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr, ui_p
     анализируем боксы людей, берем наибольший бокс, проверяем чтоб лицо нахоидилось и сохраняем
     """
     video = VideoFileClip(video_path)
-    mtcnn = MTCNN(select_largest=True, device='cuda:0')
+    mtcnn = MTCNN(select_largest=True)
     step = 5  # каждый 5 кадр берем и смотрим бокс лица
     photoboxes_paths_list = []
     person_counter = 0

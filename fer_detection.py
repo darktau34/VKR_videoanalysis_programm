@@ -7,10 +7,40 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import random
-from fer import FER
+
+from hsemotion.facial_emotions import HSEmotionRecognizer
+from facenet_pytorch import MTCNN
 
 from db_processing import insert_to_emotions_table, insert_to_diagramm_table
 from videoprocessing import cut_photobox
+
+fer_detector = HSEmotionRecognizer(model_name='enet_b0_8_best_afew', device='cuda')
+mtcnn = MTCNN(select_largest=True, min_face_size=20)
+
+emotion_name_dict = {
+    0: 'angry',
+    1: 'contempt',
+    2: 'disgust',
+    3: 'fear',
+    4: 'happy',
+    5: 'neutral',
+    6: 'sad',
+    7: 'surprise'
+}
+
+
+def transform_emotions(scores_hsemotions):
+    emotion_score_dict = dict()
+    for i in range(len(scores_hsemotions)):
+        em_name = emotion_name_dict.get(i)
+        em_score = round(scores_hsemotions[i], 2)
+        em_score = float(em_score)
+        emotion_score_dict[em_name] = em_score
+
+    fer_result_dict = [{
+        'emotions': emotion_score_dict
+    }]
+    return fer_result_dict
 
 
 def fer_all_frames(video_path, person_id, tracker_id):
@@ -159,8 +189,8 @@ def fer_photobox_main(photobox_path, person_id):
     if is_recognized:
         x1 = results[0]['box'][0]
         y1 = results[0]['box'][1]
-        x2 = x1 + results[0]['box'][2]
-        y2 = y1 + results[0]['box'][3]
+        x2 = results[0]['box'][2]
+        y2 = results[0]['box'][3]
         cv.rectangle(facebox, (x1, y1), (x2, y2), (0, 255, 0), 1)
 
         if (x2 - x1) * (y2 - y1) < 48 * 48:
@@ -185,17 +215,21 @@ def fer_photobox_main(photobox_path, person_id):
 
 
 def fer_detect_photoboxes(photoboxes_paths):
-    fer_detector = FER(mtcnn=True)
-
     ph_emotions = []
     for ph_path in photoboxes_paths:
         ph = cv.imread(ph_path)
         ph = cv.cvtColor(ph, cv.COLOR_BGR2RGB)
 
-        fer_result = fer_detector.detect_emotions(ph)
+        boxes, _ = mtcnn.detect(ph)
 
-        if len(fer_result) != 0:
-            result_emotions = fer_result[0]
+        if boxes is not None:
+            y1, y2, x1, x2 = int(boxes[0][1]), int(boxes[0][3]), int(boxes[0][0]), int(boxes[0][2])
+            face_img = ph[y1:y2, x1:x2]
+
+            _, scores_hsemotions = fer_detector.predict_emotions(face_img, logits=False)
+
+            result_emotions = transform_emotions(scores_hsemotions)[0]
+            result_emotions['box'] = [x1, y1, x2, y2]
             result_emotions['photobox_path'] = ph_path
             result_emotions['recognized'] = True
         else:
