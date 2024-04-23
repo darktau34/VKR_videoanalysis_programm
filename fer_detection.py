@@ -5,14 +5,13 @@ import logging
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
-import numpy as np
-import random
+
+from moviepy.editor import VideoFileClip
 
 from hsemotion.facial_emotions import HSEmotionRecognizer
 from facenet_pytorch import MTCNN
 
 from db_processing import insert_to_emotions_table, insert_to_diagramm_table
-from videoprocessing import cut_photobox
 
 fer_detector = HSEmotionRecognizer(model_name='enet_b0_8_best_afew', device='cuda')
 mtcnn = MTCNN(select_largest=True, min_face_size=20)
@@ -48,6 +47,8 @@ def fer_all_frames(video_path, person_id, tracker_id):
     logger.info('Diagramms - person id: %s', person_id)
     logger.info('Diagramms - tracker id: %s', tracker_id)
 
+    start_time = time.time()
+
     videonameext = video_path.split('/')[-1]
     videoname = videonameext.split('.')[0]
 
@@ -56,12 +57,16 @@ def fer_all_frames(video_path, person_id, tracker_id):
 
     only_tracker_df = yolo_df.loc[yolo_df.tracker_id == tracker_id]
 
-    cap = cv.VideoCapture(video_path)
+    cap = cv.VideoCapture(video_path, cv.CAP_FFMPEG)
     if not cap.isOpened():
         logger.error("Video Capture is not opened")
 
     width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+
+    cap.release()
+
+    video = VideoFileClip(video_path)
 
     emotions_number_dict = {
         'angry': 0,
@@ -71,13 +76,13 @@ def fer_all_frames(video_path, person_id, tracker_id):
         'happy': 0,
         'surprise': 0,
         'neutral': 0,
+        'contempt': 0,
         'not_recognized': 0
     }
 
     max_detection_frames = 100
     detection_step = int(len(only_tracker_df) / max_detection_frames)
 
-    fer_detector = FER(mtcnn=True)
     frame_counter = 0
     for index, row in only_tracker_df.iterrows():
         if frame_counter >= detection_step:
@@ -89,30 +94,39 @@ def fer_all_frames(video_path, person_id, tracker_id):
 
         frame_number = row.frame
 
-        x1 = 0 if int(row.x1) < 0 else int(row.x1)
-        y1 = 0 if int(row.y1) < 0 else int(row.y1)
-        x2 = width if int(row.x2) > width else int(row.x2)
-        y2 = height if int(row.y2) > height else int(row.y2)
+        x1_ph = 0 if int(row.x1) < 0 else int(row.x1)
+        y1_ph = 0 if int(row.y1) < 0 else int(row.y1)
+        x2_ph = width if int(row.x2) > width else int(row.x2)
+        y2_ph = height if int(row.y2) > height else int(row.y2)
 
-        cap.set(cv.CAP_PROP_POS_FRAMES, frame_number)
-        ret, frame = cap.read()
-        if not ret:
-            logger.error("Read frame error")
+        width_ph = x2_ph - x1_ph
+        height_ph = y2_ph - y1_ph
 
-        photobox = frame[y1:y2, x1:x2]
-        photobox = cv.cvtColor(photobox, cv.COLOR_BGR2RGB, photobox)
+        fps = video.fps
+        frame_sec = (1 / fps) * frame_number
+        frame = video.get_frame(frame_sec)
+        photobox = frame[y1_ph:y2_ph, x1_ph:x2_ph]
 
-        fer_result = fer_detector.detect_emotions(photobox)
+        boxes, _ = mtcnn.detect(photobox)
 
-        if len(fer_result) != 0:
+        if boxes is not None:
+            x1_bb = 0 if int(boxes[0][0]) < 0 else int(boxes[0][0])
+            x2_bb = width_ph if int(boxes[0][2]) > width_ph else int(boxes[0][2])
+            y1_bb = 0 if int(boxes[0][1]) < 0 else int(boxes[0][1])
+            y2_bb = height_ph if int(boxes[0][3]) > height_ph else int(boxes[0][3])
+
+            face_img = photobox[y1_bb:y2_bb, x1_bb:x2_bb]
+
+            _, scores_hsemotions = fer_detector.predict_emotions(face_img, logits=False)
+
+            fer_result = transform_emotions(scores_hsemotions)
+
             top_emotion = max(fer_result[0]['emotions'], key=fer_result[0]['emotions'].get)
             emotions_number_dict[top_emotion] += 1
         else:
             emotions_number_dict['not_recognized'] += 1
 
         frame_counter += 1
-
-    cap.release()
 
     save_path = os.path.join('data', videoname, 'diagramms', f'{tracker_id}-diag_emotions.png')
     try:
@@ -122,6 +136,9 @@ def fer_all_frames(video_path, person_id, tracker_id):
         logger.error(e)
     else:
         insert_to_diagramm_table(person_id, save_path)
+
+    end_time = time.time()
+    logger.info('Create Emotions Diagramm time: %s', end_time - start_time)
 
 
 def pie_format(pct, allvals):
@@ -139,6 +156,7 @@ def translate_emotions(emotions_list):
         'happy': 'Радость',
         'surprise': 'Удивление',
         'neutral': 'Нейтрально',
+        'contempt': 'Презрение',
         'not_recognized': 'Не обнаружено'
     }
 
@@ -219,17 +237,22 @@ def fer_detect_photoboxes(photoboxes_paths):
     for ph_path in photoboxes_paths:
         ph = cv.imread(ph_path)
         ph = cv.cvtColor(ph, cv.COLOR_BGR2RGB)
+        height_ph, width_ph = ph.shape[:2]
 
         boxes, _ = mtcnn.detect(ph)
 
         if boxes is not None:
-            y1, y2, x1, x2 = int(boxes[0][1]), int(boxes[0][3]), int(boxes[0][0]), int(boxes[0][2])
-            face_img = ph[y1:y2, x1:x2]
+            x1_bb = 0 if int(boxes[0][0]) < 0 else int(boxes[0][0])
+            x2_bb = width_ph if int(boxes[0][2]) > width_ph else int(boxes[0][2])
+            y1_bb = 0 if int(boxes[0][1]) < 0 else int(boxes[0][1])
+            y2_bb = height_ph if int(boxes[0][3]) > height_ph else int(boxes[0][3])
+
+            face_img = ph[y1_bb:y2_bb, x1_bb:x2_bb]
 
             _, scores_hsemotions = fer_detector.predict_emotions(face_img, logits=False)
 
             result_emotions = transform_emotions(scores_hsemotions)[0]
-            result_emotions['box'] = [x1, y1, x2, y2]
+            result_emotions['box'] = [x1_bb, y1_bb, x2_bb, y2_bb]
             result_emotions['photobox_path'] = ph_path
             result_emotions['recognized'] = True
         else:
@@ -251,7 +274,7 @@ if __name__ == '__main__':
     # fer_photobox_main('data/mall/items/41-handbag-51.png', 877)
     # print(select_from_emotions_table(877))
 
-    start_time = time.time()
-    fer_all_frames('/home/slava/projects/nir_7sem/videos/aquarel_2.mp4', 905, 21)
-    end_time = time.time()
-    print(end_time - start_time)
+    # start_time = time.time()
+    # fer_all_frames('/home/slava/projects/nir_7sem/videos/aquarel_2.mp4', 905, 21)
+    # end_time = time.time()
+    # print(end_time - start_time)
