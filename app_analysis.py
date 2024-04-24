@@ -172,6 +172,8 @@ class Ui_analyze(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
         MainWindow.resize(1037, 529)
+        MainWindow.setFixedWidth(1037)
+        MainWindow.setFixedHeight(529)
         font = QtGui.QFont()
         font.setBold(False)
         font.setUnderline(False)

@@ -13,15 +13,22 @@ import pandas as pd
 
 from yolo_detection import detect_peoples
 from yolo_detection import detect_items
+
 from videoprocessing import save_photoboxes_from_yolo
 from videoprocessing import clip_video_fragment
 from videoprocessing import get_video_fps
+
+from target_detection import target_video_detection
+
 from appear_time import calculate_appear_time
+
 from db_processing import insert_to_video_table
 from db_processing import insert_to_person_table
+from db_processing import insert_to_target_table
 from db_processing import check_video_db_exists_bypath
 from db_processing import delete_rows_about_video
 from db_processing import insert_to_items_table
+from db_processing import check_target_exists
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +205,6 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     :param begin_video_time: время начала видео для расчета времени появления людей
     :param progress_bar: для изменения прогресс бара в ui
     """
-    logger = logging.getLogger(__name__)
     if torch.cuda.is_available():
         logger.info("CUDA device's count: %s", torch.cuda.device_count())
         logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
@@ -217,8 +223,6 @@ def app_analyze(video_path, begin_video_time, progress_bar):
     to_csv_path = dirs_dict['detections_csv_path']
     photoboxes_dir = dirs_dict['photoboxes_dir']
     time_csv_path = dirs_dict['time_csv_path']
-
-    progress_bar.setValue(10)
 
     start_time = time.time()
     detect_peoples(video_path, show_results, to_csv_path, progress_bar)
@@ -253,7 +257,6 @@ def app_analyze(video_path, begin_video_time, progress_bar):
 
 
 def app_items_detect(person_db_df, video_path):
-    logger = logging.getLogger(__name__)
     if torch.cuda.is_available():
         logger.info("CUDA device's count: %s", torch.cuda.device_count())
         logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
@@ -278,8 +281,41 @@ def app_items_detect(person_db_df, video_path):
         insert_to_items_table(items_list, video_path)
 
 
+def app_target_analyze(video_path, progress_bar):
+    if torch.cuda.is_available():
+        logger.info("CUDA device's count: %s", torch.cuda.device_count())
+        logger.info("CUDA current device: %s", torch.cuda.get_device_name(torch.cuda.current_device()))
+
+    video_id, data_path = check_video_db_exists_bypath(video_path)
+
+    if video_id:
+        # Если уже был обычный анализ видео
+        if not check_target_exists(video_id):
+            # Если не было таргет анализа
+
+            detections_path = os.path.join(data_path, 'detections.csv')
+            start_time = time.time()
+            target_items_df, target_emotions_df = target_video_detection(video_path, detections_path, progress_bar)
+            end_time = time.time()
+            logger.info("Target detection time: %s", end_time - start_time)
+
+            target_items_path = os.path.join(data_path, 'target_items.csv')
+            target_emotions_path = os.path.join(data_path, 'target_emotions.csv')
+
+            target_items_df.to_csv(target_items_path, index=False)
+            target_emotions_df.to_csv(target_emotions_path, index=False)
+
+            insert_to_target_table(video_id, target_items_path, target_emotions_path)
+            progress_bar.setValue(100)
+
+        else:
+            logger.info("Target analysis was performed earlier")
+    else:
+        logger.info("Regular video analysis was not performed, target analysis is not possible")
+
+
 if __name__ == '__main__':
     LOG_FORMAT = '%(asctime)s   [%(levelname)s] %(name)s -- %(funcName)s  %(lineno)d: %(message)s'
     DATE_FORMAT = '%H:%M:%S'
     logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
-    console_analyze()
+    app_target_analyze('/home/slava/projects/nir_7sem/videos/27sec.mkv')

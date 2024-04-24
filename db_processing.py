@@ -6,6 +6,77 @@ from psycopg2.extras import Json, DictCursor
 logger = logging.getLogger(__name__)
 
 
+def select_from_target_table(target_id):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT video_id, target_items_path, target_emotions_path " +
+            "FROM target " +
+            f"WHERE target_id = {target_id}")
+
+        row = cursor.fetchone()
+
+        video_id = row[0]
+        target_items_path = row[1]
+        target_emotions_path = row[2]
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return video_id, target_items_path, target_emotions_path
+
+
+def insert_to_target_table(video_id, items_path, emotions_path):
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+
+        cursor.execute("INSERT INTO target (video_id, target_items_path, target_emotions_path) " +
+                       "VALUES (%s, %s, %s)",
+                       [int(video_id), items_path, emotions_path])
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+
+def check_target_exists(video_id):
+    value = False
+    try:
+        connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
+    except ps.Error as e:
+        logger.critical('Connection to DataBase is failed')
+        logger.critical(e)
+    else:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT target_id FROM target WHERE video_id = '{video_id}'")
+        if cursor.rowcount != 0:
+            target_id, = cursor.fetchone()
+            logger.info("Target analyze of video id %s exists id DataBase", str(video_id))
+            value = True
+        else:
+            logger.info("Target analyze of video id %s doesn't exists in DataBase", str(video_id))
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    return value
+
+
 def select_from_videoclip_table(person_id):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
@@ -453,6 +524,7 @@ def delete_rows_about_video(video_id):
 
 
         cursor.execute(f"DELETE FROM person WHERE video_id = {video_id}")
+        cursor.execute(f"DELETE FROM target WHERE video_id = {video_id}")
         cursor.execute(f"DELETE FROM video WHERE video_id = {video_id}")
         connection.commit()
 

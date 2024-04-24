@@ -6,7 +6,9 @@ import pandas as pd
 from moviepy.editor import VideoFileClip
 from PIL import Image
 from facenet_pytorch import MTCNN
+
 from db_processing import insert_to_videoclip_table
+
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,8 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr, ui_p
     step = 5  # каждый 5 кадр берем и смотрим бокс лица
     photoboxes_paths_list = []
     person_counter = 0
+    upd_pb = 28 / len(person_arr)
+    pb_value = ui_progress_bar.value()
     logger.info('Persons number: %s', len(person_arr))
     for person in person_arr:
         person_counter += 1
@@ -27,14 +31,9 @@ def save_photoboxes_from_yolo(video_path, yolo_df, dir_to_save, person_arr, ui_p
         only_person_df = yolo_df.loc[yolo_df.tracker_id == person]
 
         if ui_progress_bar is not None:
-            if person_counter == int(len(person_arr) / 4):
-                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
-            elif person_counter == int(len(person_arr) / 3):
-                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
-            elif person_counter == int(len(person_arr) / 2):
-                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
-            else:
-                ui_progress_bar.setValue(ui_progress_bar.value() + 5)
+            pb_value += upd_pb
+            pb_value_int = round(pb_value)
+            ui_progress_bar.setValue(pb_value_int)
 
         for i in range(0, len(only_person_df), step):
             frame_row = only_person_df.loc[only_person_df.box_square == only_person_df.box_square.max()]

@@ -151,9 +151,7 @@ def get_items_df(only_person_df, model, video, class_items):
 
 def detect_peoples(video_path, save_results, to_csv_path, ui_progress_bar):
     yolo_model = YOLO('data/models/yolov8l.pt')
-    print(1)
     tracker = DeepSort(max_age=20, embedder='torchreid')
-    print(1)
     yolo_df = video_processing(yolo_model, tracker, video_path, ui_progress_bar)
     yolo_df.to_csv(to_csv_path + 'detections.csv')
     clear_df(to_csv_path + 'detections.csv', video_path)
@@ -211,7 +209,7 @@ def video_processing(yolo, tracker, video_path, ui_progress_bar):
         logger.critical("Video Capture is not opened")
 
     fps = cap.get(cv.CAP_PROP_FPS)
-    frames = cap.get(cv.CAP_PROP_FRAME_COUNT)
+    frames = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
 
     logger.info("Frames Per Second: %s", fps)
     logger.info("Number of frames: %s", frames)
@@ -221,6 +219,8 @@ def video_processing(yolo, tracker, video_path, ui_progress_bar):
     frames_counter = 0
     one_percent = int(frames * 0.01)
     stager = 10
+    upd_pb = 70 / frames
+    pb_value = 0
     logger.info("----Video processing started----")
     begin_time = time.time()
     while cap.isOpened():
@@ -241,10 +241,13 @@ def video_processing(yolo, tracker, video_path, ui_progress_bar):
                 if stager <= 90:
                     logger.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
                     stager += 10
-                    if ui_progress_bar is not None:
-                        ui_progress_bar.setValue(ui_progress_bar.value() + 6)
                 elif frames_counter == frames:
                     logger.info("%s%% \t %s / %s frames", stager, frames_counter, frames)
+
+            if ui_progress_bar is not None:
+                pb_value += upd_pb
+                pb_value_int = round(pb_value)
+                ui_progress_bar.setValue(pb_value_int)
 
         except KeyboardInterrupt:
             logger.warning("Video processing ended forcibly")

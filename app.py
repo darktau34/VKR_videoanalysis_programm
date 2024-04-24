@@ -6,8 +6,11 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PIL import Image, ImageQt
 
 from analyze import app_analyze
+from analyze import app_target_analyze
 from app_analysis import Ui_analyze
+from app_target_form import Ui_TargetForm
 from db_processing import check_video_db_exists_bypath
+from db_processing import check_target_exists
 
 LOG_FORMAT = '%(asctime)s [%(levelname)s] %(name)s %(funcName)s %(lineno)d: %(message)s'
 DATE_FORMAT = '%H:%M:%S'
@@ -25,11 +28,31 @@ class WorkerSignals(QtCore.QObject):
     error = QtCore.pyqtSignal(object)
 
 
+class WorkerTarget(QtCore.QObject):
+    """
+    Worker thread for long tasks
+    """
+    def __init__(self, func, video_path, progress_bar):
+        super(WorkerTarget, self).__init__()
+        self.func = func
+        self.video_path = video_path
+        self.progress_bar = progress_bar
+        self.signals = WorkerSignals()
+
+    @QtCore.pyqtSlot()
+    def run(self):
+        try:
+            self.func(self.video_path, self.progress_bar)
+        except Exception as e:
+            self.signals.error.emit(e)
+        finally:
+            self.signals.finished.emit()
+
+
 class Worker(QtCore.QObject):
     """
     Worker thread for long tasks
     """
-
     def __init__(self, func, video_path, appear_time, progress_bar):
         super(Worker, self).__init__()
         self.func = func
@@ -61,17 +84,16 @@ class Ui_MainWindow(object):
         self.cur_video_num = None
         self.cur_video_preview = None
 
-        # self.threadpool = QtCore.QThreadPool()
-        # self.threadpool.setMaxThreadCount(1)
-        # logger.info("Multithreading with maximum %d threads", self.threadpool.maxThreadCount())
-
         self.thread = None
         self.worker = None
+        self.worker_target = None
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
         MainWindow.resize(1280, 698)
+        MainWindow.setFixedWidth(1280)
+        MainWindow.setFixedHeight(698)
         font = QtGui.QFont()
         font.setBold(True)
         font.setUnderline(False)
@@ -177,7 +199,7 @@ class Ui_MainWindow(object):
         self.l_preview.setObjectName("l_preview")
         self.btn_analyze = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btn_analyze.setEnabled(False)
-        self.btn_analyze.setGeometry(QtCore.QRect(340, 540, 591, 61))
+        self.btn_analyze.setGeometry(QtCore.QRect(340, 540, 471, 61))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.BrushStyle.SolidPattern)
@@ -245,7 +267,7 @@ class Ui_MainWindow(object):
         self.btn_analyze.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(14)
-        font.setBold(True)
+        font.setBold(False)
         self.btn_analyze.setFont(font)
         self.btn_analyze.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.btn_analyze.setStyleSheet("QPushButton {\n"
@@ -267,10 +289,10 @@ class Ui_MainWindow(object):
         self.btn_analyze.setObjectName("btn_analyze")
         self.btn_prev = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btn_prev.setEnabled(False)
-        self.btn_prev.setGeometry(QtCore.QRect(940, 540, 301, 61))
+        self.btn_prev.setGeometry(QtCore.QRect(830, 540, 201, 61))
         font = QtGui.QFont()
         font.setPointSize(14)
-        font.setBold(True)
+        font.setBold(False)
         self.btn_prev.setFont(font)
         self.btn_prev.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.btn_prev.setStyleSheet("QPushButton {\n"
@@ -290,6 +312,31 @@ class Ui_MainWindow(object):
 "    background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));\n"
 "}")
         self.btn_prev.setObjectName("btn_prev")
+        self.btn_start_target = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.btn_start_target.setEnabled(False)
+        self.btn_start_target.setGeometry(QtCore.QRect(1040, 540, 201, 61))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        font.setBold(False)
+        self.btn_start_target.setFont(font)
+        self.btn_start_target.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.btn_start_target.setStyleSheet("QPushButton {\n"
+                                    "    border-radius: 30px;\n"
+                                    "    background-color: rgb(255, 120, 0);\n"
+                                    "    border-style: solid;\n"
+                                    "    border-width: 1px;\n"
+                                    "    border-color: rgb(0, 0, 0);\n"
+                                    "}\n"
+                                    "\n"
+                                    "QPushButton:disabled {\n"
+                                    "    background-color: rgb(192, 191, 188);\n"
+                                    "    color: rgb(0, 0, 0);\n"
+                                    "}\n"
+                                    "\n"
+                                    "QPushButton:hover {\n"
+                                    "    background-color: qlineargradient(spread:reflect, x1:0.493, y1:0.488545, x2:1, y2:1, stop:0.189055 rgba(255, 120, 0, 255), stop:1 rgba(255, 232, 214, 255));\n"
+                                    "}")
+        self.btn_start_target.setObjectName("btn_start_target")
         self.progress_bar = QtWidgets.QProgressBar(parent=self.centralwidget)
         self.progress_bar.setEnabled(True)
         self.progress_bar.setGeometry(QtCore.QRect(340, 640, 591, 41))
@@ -392,14 +439,14 @@ class Ui_MainWindow(object):
         self.l_videoname.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.l_videoname.setObjectName("l_videoname")
         self.l_appear = QtWidgets.QLabel(parent=self.centralwidget)
-        self.l_appear.setGeometry(QtCore.QRect(940, 640, 301, 31))
+        self.l_appear.setGeometry(QtCore.QRect(940, 650, 301, 31))
         self.l_appear.setStyleSheet("border-color: rgb(154, 153, 150);\n"
 "border-style: solid;\n"
 "border-width: 1px;\n"
 "background-color: rgb(255, 120, 0);")
         self.l_appear.setObjectName("l_appear")
         self.input_appear = QtWidgets.QTimeEdit(parent=self.centralwidget)
-        self.input_appear.setGeometry(QtCore.QRect(1102, 640, 139, 31))
+        self.input_appear.setGeometry(QtCore.QRect(1100, 650, 141, 31))
         font = QtGui.QFont()
         font.setBold(True)
         self.input_appear.setFont(font)
@@ -487,6 +534,7 @@ class Ui_MainWindow(object):
         self.l_videos.setText(_translate("MainWindow", "Видео"))
         self.btn_analyze.setText(_translate("MainWindow", "Распознать людей"))
         self.btn_prev.setText(_translate("MainWindow", "Показать анализ"))
+        self.btn_start_target.setText(_translate("MainWindow", "Таргет-анализ"))
         self.l_appear.setText(_translate("MainWindow", "Время начала видео:"))
         self.input_appear.setDisplayFormat(_translate("MainWindow", "HH:mm:ss"))
 
@@ -498,7 +546,52 @@ class Ui_MainWindow(object):
 
         self.list_view.currentRowChanged.connect(self.currentRowChanged_handler)
         self.btn_prev.clicked.connect(self.show_analysis)
+        self.btn_start_target.clicked.connect(self.start_target)
         self.btn_analyze.clicked.connect(self.start_analyze)
+
+    def target_error(self, error):
+        logger.critical(error)
+
+    def target_finished(self):
+        self.list_view.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
+        self.btn_dir.setEnabled(True)
+        self.btn_refresh.setEnabled(True)
+        self.btn_analyze.setEnabled(True)
+        self.btn_prev.setEnabled(True)
+        self.input_appear.setEnabled(True)
+        self.btn_start_target.setEnabled(True)
+
+    def start_target(self):
+        # Проверка на существование в БД, если нет то дететкируем и записываем
+        if check_target_exists(self.video_id):
+            self.target_form = QtWidgets.QMainWindow()
+            self.ui_target_form = Ui_TargetForm()
+            self.ui_target_form.setupUi(self.target_form)
+            self.target_form.show()
+        else:
+            self.list_view.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
+            self.btn_dir.setEnabled(False)
+            self.btn_refresh.setEnabled(False)
+            self.btn_analyze.setEnabled(False)
+            self.btn_prev.setEnabled(False)
+            self.btn_start_target.setEnabled(False)
+            self.input_appear.setEnabled(False)
+            self.progress_bar.setValue(0)
+
+            self.thread = QtCore.QThread()
+            self.worker_target = WorkerTarget(app_target_analyze, self.video_path, self.progress_bar)
+
+            self.worker_target.moveToThread(self.thread)
+            self.worker_target.signals.error.connect(self.target_error)
+            self.worker_target.signals.finished.connect(self.target_finished)
+            self.worker_target.signals.finished.connect(self.thread.quit)
+            self.worker_target.signals.finished.connect(self.worker_target.deleteLater)
+
+            self.thread.started.connect(self.worker_target.run)
+            self.thread.finished.connect(self.thread.deleteLater)
+
+            self.thread.start()
+
 
     def analyze_error(self, error):
         logger.critical(error)
@@ -513,8 +606,10 @@ class Ui_MainWindow(object):
         self.video_id, data_path = check_video_db_exists_bypath(self.video_path)
         if self.video_id:
             self.btn_prev.setEnabled(True)
+            self.btn_start_target.setEnabled(True)
         else:
             self.btn_prev.setEnabled(False)
+            self.btn_start_target.setEnabled(False)
 
     def start_analyze(self):
         self.appear_time = self.input_appear.text()
@@ -523,6 +618,7 @@ class Ui_MainWindow(object):
         self.btn_refresh.setEnabled(False)
         self.btn_analyze.setEnabled(False)
         self.btn_prev.setEnabled(False)
+        self.btn_start_target.setEnabled(False)
         self.input_appear.setEnabled(False)
 
         self.thread = QtCore.QThread()
@@ -538,8 +634,6 @@ class Ui_MainWindow(object):
         self.thread.finished.connect(self.thread.deleteLater)
 
         self.thread.start()
-
-        # self.threadpool.start(worker)
 
     def show_analysis(self):
         """
@@ -562,8 +656,10 @@ class Ui_MainWindow(object):
             self.video_id, data_path = check_video_db_exists_bypath(self.video_path)
             if self.video_id:
                 self.btn_prev.setEnabled(True)
+                self.btn_start_target.setEnabled(True)
             else:
                 self.btn_prev.setEnabled(False)
+                self.btn_start_target.setEnabled(False)
 
             self.cur_video_preview = self.get_preview(self.video_path)
             if self.cur_video_preview:
@@ -578,6 +674,7 @@ class Ui_MainWindow(object):
                 self.l_preview.clear()
             self.btn_analyze.setEnabled(False)
             self.btn_prev.setEnabled(False)
+            self.btn_start_target.setEnabled(False)
 
     def get_preview(self, video_path):
         fixed_width = self.l_preview.width()
