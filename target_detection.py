@@ -1,5 +1,4 @@
 import logging
-import os
 import numpy as np
 import cv2 as cv
 import pandas as pd
@@ -70,15 +69,21 @@ def target_video_detection(video_path, detections_path, progress_bar):
                 pb_value_int = round(pb_value)
                 progress_bar.setValue(pb_value_int)
         else:
+            ret, frame = cap.read()
+            if not ret:
+                logger.warning('Not ret')
+                break
             frame_counter += 1
             continue
 
         only_frame_df = detections_df.loc[detections_df.frame == frame_counter]
         if len(only_frame_df) == 0:
+            ret, frame = cap.read()
+            if not ret:
+                logger.warning('Not ret')
+                break
             frame_counter += 1
             continue
-
-        # print(only_frame_df)
 
         ret, frame = cap.read()
         if not ret:
@@ -151,6 +156,7 @@ def target_detection_emotions(photobox, fer_detector, mtcnn, ph_width, ph_height
         y2_bb = ph_height if int(boxes[0][3]) > ph_height else int(boxes[0][3])
 
         face_img = photobox[y1_bb:y2_bb, x1_bb:x2_bb]
+
         _, scores_hsemotions = fer_detector.predict_emotions(face_img, logits=False)
 
         fer_result = transform_emotions(scores_hsemotions)

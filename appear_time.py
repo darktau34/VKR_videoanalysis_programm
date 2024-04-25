@@ -25,6 +25,12 @@ class EntryTime:
         self._df = dataframe
         self._first_frame = None
 
+    def get_solo_entry_time(self, frame, fps):
+        seconds_to_frame = int(frame / fps)
+        self.update_time(seconds_to_frame)
+        entry_time = self.__format_to_time()
+        return entry_time
+
     def get_entry_time(self):
         """
         Main function, include calculate_first_time(),

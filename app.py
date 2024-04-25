@@ -565,7 +565,7 @@ class Ui_MainWindow(object):
         # Проверка на существование в БД, если нет то дететкируем и записываем
         if check_target_exists(self.video_id):
             self.target_form = QtWidgets.QMainWindow()
-            self.ui_target_form = Ui_TargetForm()
+            self.ui_target_form = Ui_TargetForm(self.video_id, self.video_path)
             self.ui_target_form.setupUi(self.target_form)
             self.target_form.show()
         else:

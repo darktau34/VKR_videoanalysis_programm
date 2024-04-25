@@ -1,5 +1,5 @@
 """
-Скрипт для теста анализа настроений
+Скрипт для теста чего-либо
 """
 import os
 
@@ -322,11 +322,48 @@ def fer_new():
     # mtcnn = MTCNN(select_largest=True, device='cuda:0')
     mtcnn = MTCNN(select_largest=True, min_face_size=20)
 
-    img = cv.imread('data/tokyo1/photoboxes/person2.png')
-    img = cv.cvtColor(img, cv.COLOR_BGR2RGB, img)
+    x1, y1, x2, y2 = 1105, 908, 1230, 1037
+
+    img = None
+    frame_number = 90
+    frame_counter = 2
+    cap = cv.VideoCapture('videos/27sec.mkv')
+    cap.set(cv.CAP_PROP_POS_FRAMES, 2)
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            print('not ret')
+            break
+
+        photobox = frame[y1:y2, x1:x2]
+        photobox = cv.cvtColor(photobox, cv.COLOR_BGR2RGB)
+        if frame_counter == frame_number:
+            plt.imshow(photobox)
+            plt.show()
+        boxes, probs = mtcnn.detect(photobox)
+        if boxes is not None:
+            x1_bb = 0 if int(boxes[0][0]) < 0 else int(boxes[0][0])
+            x2_bb = x2-x1 if int(boxes[0][2]) > x2-x1 else int(boxes[0][2])
+            y1_bb = 0 if int(boxes[0][1]) < 0 else int(boxes[0][1])
+            y2_bb = y2-y1 if int(boxes[0][3]) > y2-y1 else int(boxes[0][3])
+            print(x1_bb, y1_bb, x2_bb, y2_bb)
+            if x1_bb == 38 and y1_bb == 0 and x2_bb == 67 and y2_bb == 27:
+                face_img = photobox[y1_bb:y2_bb, x1_bb:x2_bb]
+                print(frame_counter)
+                plt.imshow(face_img)
+                plt.show()
+                break
+
+
+        frame_counter += 1
+
+
+    print('NOTNOTNOT')
+    # img = cv.imread('data/tokyo1/photoboxes/person2.png')
+    photobox = cv.cvtColor(photobox, cv.COLOR_BGR2RGB)
 
     start_time = time.time()
-    boxes, probs = mtcnn.detect(img)
+    boxes, probs = mtcnn.detect(photobox)
     end_time = time.time()
     print(f'MTCNN time: {end_time - start_time}')
     print(boxes)
@@ -334,9 +371,7 @@ def fer_new():
 
     if boxes is not None:
         y1, y2, x1, x2 = int(boxes[0][1]), int(boxes[0][3]), int(boxes[0][0]), int(boxes[0][2])
-        face_img = img[y1:y2, x1:x2]
-        plt.imshow(face_img)
-        plt.show()
+        face_img = photobox[y1:y2, x1:x2]
 
         emotion_name_dict = {
             0: 'Anger',
@@ -366,7 +401,9 @@ def fer_new():
         }]
         print(fer_result_dict)
 
-    #
+        cv.rectangle(photobox, (x1, y1), (x2, y2), (0, 255, 0), 1)
+        plt.imshow(photobox)
+        plt.show()
 
 
 

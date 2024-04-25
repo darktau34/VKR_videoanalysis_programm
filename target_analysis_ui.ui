@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
+    <width>501</width>
     <height>211</height>
    </rect>
   </property>
@@ -181,7 +181,7 @@ QRadioButton{
 	border-style: solid;
 	border-width: 1px;
 	border-color: rgb(0, 0, 0);
-	padding-right: 5px;
+	padding-right: 15px;
 }
 </string>
      </property>
@@ -197,7 +197,7 @@ QRadioButton{
       <rect>
        <x>10</x>
        <y>70</y>
-       <width>231</width>
+       <width>221</width>
        <height>41</height>
       </rect>
      </property>
@@ -264,7 +264,7 @@ QRadioButton{
    <widget class="QFrame" name="frame_2">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>250</x>
       <y>0</y>
       <width>251</width>
       <height>151</height>
@@ -315,7 +315,7 @@ QRadioButton{
 	border-style: solid;
 	border-width: 1px;
 	border-color: rgb(0, 0, 0);
-	padding-left: 5px;
+	padding-left: 15px;
 }
 </string>
      </property>
@@ -329,9 +329,9 @@ QRadioButton{
     <widget class="QComboBox" name="list_items">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>70</y>
-       <width>231</width>
+       <width>221</width>
        <height>41</height>
       </rect>
      </property>
@@ -425,7 +425,7 @@ QRadioButton{
      <rect>
       <x>0</x>
       <y>150</y>
-      <width>511</width>
+      <width>501</width>
       <height>61</height>
      </rect>
     </property>

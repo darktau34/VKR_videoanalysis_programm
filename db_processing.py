@@ -6,7 +6,7 @@ from psycopg2.extras import Json, DictCursor
 logger = logging.getLogger(__name__)
 
 
-def select_from_target_table(target_id):
+def select_from_target_table(video_id):
     try:
         connection = ps.connect(dbname='passersby', host='127.0.0.1', port='5432', user='postgres', password='postgres')
     except ps.Error as e:
@@ -15,22 +15,21 @@ def select_from_target_table(target_id):
     else:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT video_id, target_items_path, target_emotions_path " +
+            "SELECT target_items_path, target_emotions_path " +
             "FROM target " +
-            f"WHERE target_id = {target_id}")
+            f"WHERE video_id = {video_id}")
 
         row = cursor.fetchone()
 
-        video_id = row[0]
-        target_items_path = row[1]
-        target_emotions_path = row[2]
+        target_items_path = row[0]
+        target_emotions_path = row[1]
 
         connection.commit()
 
         cursor.close()
         connection.close()
 
-        return video_id, target_items_path, target_emotions_path
+        return target_items_path, target_emotions_path
 
 
 def insert_to_target_table(video_id, items_path, emotions_path):
